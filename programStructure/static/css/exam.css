@@ -1,0 +1,60 @@
+.examContainer {
+  margin: 15px auto;
+  width: 70%;
+  height: fit-content;
+  padding: 10px;
+  border: 0.5px solid #02ab3a;
+}
+.examContainer .head {
+  background-color: #02ab3a;
+  text-align: center;
+  padding: 15px;
+}
+.examContainer .head span {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+}
+.examContainer .Information {
+  text-align: center;
+}
+.examContainer .Information .infos {
+  display: grid;
+  grid-template-columns: repeat(2, 40%);
+  row-gap: 5px;
+}
+@media screen and (max-width:400px) {
+  .examContainer .Information .infos {
+    display: flex;
+    flex-direction: column;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .examContainer .Information .infos {
+    display: flex;
+    flex-direction: column;
+  }
+}
+@media screen and (max-width:400px) {
+  .examContainer .Information .infos span {
+    flex: 1;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .examContainer .Information .infos span {
+    flex: 1;
+  }
+}
+.examContainer .Information h3 {
+  font-weight: 700;
+}
+.examContainer .NEXT {
+  display: flex;
+}
+.examContainer .NEXT a {
+  margin: auto;
+  text-decoration: unset;
+  color : white;
+}
+
+/*# sourceMappingURL=exam.css.map */

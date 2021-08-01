@@ -1,0 +1,97 @@
+.si{
+margin-bottom: 45px;
+}
+.si h3 {
+  font-size: 20px;
+  font-weight: 400;
+  text-align: center;
+}
+.si .si-cont {
+  margin: 5px auto;
+  width: 60%;
+  padding: 10px;
+  box-shadow: 1px 5px 8px #6d6d6d;
+  background-color: white;
+}
+@media screen and (max-width:400px) {
+  .si .si-cont {
+    width: 95%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .si .si-cont {
+    width: 90%;
+  }
+}
+.si .si-cont form {
+  width: 95%;
+  margin: 0px auto;
+}
+.si .si-cont form .my-row {
+  margin: 5px auto;
+}
+.si .si-cont form .my-row input , .si .si-cont form .my-row select ,.si .si-cont form .form-group input {
+  width: 70%;
+  margin: 10px;
+  display: inline;
+}
+.si .si-cont form .my-row .si-addition{
+    width : 45%;
+}
+@media screen and (max-width:400px) {
+  .si .si-cont form .my-row input , .si .si-cont form .my-row select ,
+  .si .si-cont form .form-group input ,.si .si-cont form .my-row .si-addition {
+    width: 60%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .si .si-cont form .my-row input , .si .si-cont form .my-row select ,
+  .si .si-cont form .form-group input ,.si .si-cont form .my-row .si-addition{
+    width: 65%;
+  }
+}
+.si .si-cont form .my-row .colors {
+  display: inline-block;
+  margin-left: 10px;
+}
+.si .si-cont form .my-row .colors .c {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 0.5px solid #b4b3b3;
+  display: inline-block;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+.si .si-cont form .my-row .colors .c:hover {
+  transform: scale(1.2);
+}
+.si .si-cont form .my-row .colors .green {
+  background-color: #018b2f;
+}
+.si .si-cont form .my-row .colors .blue {
+  background-color: #0589c7;
+}
+.si .si-cont form .my-row .colors .red {
+  background-color: #d81313;
+}
+.si .si-cont form .my-row .colors .black {
+  background-color: #0c0c0c;
+}
+.si .si-cont form .my-row .colors .yellow {
+  background-color: rgb(255 203 37);
+}
+
+.SelectedColor {
+  transform: scale(1.2);
+}
+
+.show{
+display : block
+}
+.hide {
+display : none
+}
+
+/*# sourceMappingURL=settings.css.map */

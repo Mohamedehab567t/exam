@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{bootstrap}}">
+    <link rel="stylesheet" href="{{font}}">
+    <link rel="stylesheet" href="{{normalize}}">
+    <link rel="stylesheet" href="{{Admin}}">
+    <link rel="stylesheet" href="{{examCSS}}">
+    <title>Exams</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand Variable" href="#">{{Sett['site_name']}}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('dashboard')}}">Back</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+
+    </header>
+
+    <div class="welcome-part alert alert-success">
+        <p>Welcome admin : mohamed at <span>{{Sett['site_name']}}</span> Dashboard </p>
+        <p>this is Exams page you can control your Exams here (publish- see results - see who is absent and who attented)</p>
+
+    </div>
+
+    <div class="container">
+        {% for exam in Exams %}
+        <div class="examContainer">
+            <div class="head">
+                <span>Exam ({{exam['_id']}})</span>
+            </div>
+            <div class="Information">
+                <h3>Exam Information</h3>
+                <div class="infos">
+                {% for key in exam['ExamInformation'] %}
+                <span id="{{key}}">{{key}} : {{exam['ExamInformation'][key]}}</span>
+                {% endfor %}
+            </div>
+            </div>
+            <hr>
+            <div class="Information">
+                <h3>Question Information</h3>
+                <div class="infos">
+                {% for key in exam['QuestionInformation'] %}
+                <span id="{{key}}">{{key}} : {{exam['QuestionInformation'][key]}}</span>
+                {% endfor %}
+            </div>
+            </div>
+            <hr>
+            <div class="Information">
+                <h3>Student Information</h3>
+                <div class="infos">
+                {% for key in exam['StudentsInformation'] %}
+                {% if key != 'Absent' and key != 'Attended' %}
+                <span id="{{key}}">{{key}} : {{exam['StudentsInformation'][key]}}</span>
+                {% endif %}
+                {% endfor %}
+                <span id="Absent">Absent-students : {{exam['StudentsInformation']['Absent'] | length }}</span>
+                <span id="Attended">Attended-students : {{exam['StudentsInformation']['Attended'] | length }}</span>
+            </div>
+            </div>
+            <hr>
+            <div class="NEXT">
+                <a class="btn btn-success" href="{{ url_for('examDash' , exam_id = exam['_id'] ) }}"> Exam Dashboard </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+
+        <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/exam.js') }}"></script>
+</body>
+</html>

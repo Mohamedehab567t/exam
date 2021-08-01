@@ -1,0 +1,118 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC&display=swap" rel="stylesheet">
+    <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
+    <script src="{{ url_for('static' , filename='js/Theme.js') }}"></script>
+    <link rel="stylesheet" href="{{bootstrap}}">
+    <link rel="stylesheet" href="{{font}}">
+    <link rel="stylesheet" href="{{normalize}}">
+    <link rel="stylesheet" href="{{Admin}}">
+    <link rel="stylesheet" href="{{settings}}">
+    <title>Add Auto Exam</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand Variable" href="#">{{Sett['site_name']}}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('dashboard')}}">Back</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+    </header>
+<div class="parent">
+    <div class="welcome-part alert alert-success">
+        <p>Welcome admin : {{ user['first_name'] }} at <span class="Variable">{{Sett['site_name']}}</span> Dashboard </p>
+        <p>this is page is for adding an automatic exam
+        </p>
+    </div>
+     <div class="si">
+        <h3>Add Exam</h3>
+        <div class="si-cont">
+        <span>Fill the information</span>
+
+            <form action="" class="AddExamForm" method="POST">
+                <div class="my-row Q-Configuration">
+
+                    <h3 style="margin: 10px auto">Exam Requirements</h3>
+                    <div class="ExamRequirements">
+
+                    <div class="ExamInfo" style="margin: 0px auto">
+                    <small style="display : block;" class="hide" id="msg"></small>
+                    <input type="number" class="form-control si-addition" id="Q-no" data-number="{{ QNum }}" placeholder="Number of questions">
+                    <input type="number" class="form-control si-addition" id="Du" placeholder="duration">
+                    </div>
+
+                    <div class="ExamInfo" style="margin: 0px auto">
+                    <input type="time" class="form-control si-addition" id="from"  placeholder="From">
+                    <input type="time" class="form-control si-addition" id="to"  placeholder="To">
+                    </div>
+                    </div>
+                        <hr>
+                    <div class="QuestionPart">
+                    <h3 style="margin: 10px auto">Questions Requirements</h3>
+                    {% if Sett['Q-Configuration'] %}
+                    {% for q in Sett['Q-Configuration'] %}
+                    {% if q['type'] == 'select' %}
+                    <small style="display : block;" class="hide {{ q['label'] }}"></small>
+                    <select name="TypeOfQ" class="form-control si-addition" id="{{ q['label'] }}">
+                        <option value="" selected>select {{ q['label'] }}</option>
+                        {% for v in q['values'] %}
+                        <option value="{{v}}" >{{v}}</option>
+                        {% endfor %}
+                    </select>
+                    {% else %}
+                    <input type="text" class="form-control si-addition" id="{{ q['label'] }}"  placeholder="{{ q['label'] }}">
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    </div>
+                    <hr>
+                    <div class="StudentPart">
+                    <h3 style="margin: 10px auto">Students Requirements</h3>
+                    {% if Sett['Addition-Information'] %}
+                    {% for q in Sett['Addition-Information'] %}
+                    {% if q['InfoValue'] == "Exam" %}
+                    {% if q['type'] == 'select' %}
+                    <small style="display : block;" class="hide {{ q['label'] }}"></small>
+                    <select name="{{ q['label'] }}" class="form-control si-addition" id="{{ q['label'] }}">
+                        <option value="" selected>select {{ q['label'] }}</option>
+                        {% for v in q['values'] %}
+                        <option value="{{v}}" >{{v}}</option>
+                        {% endfor %}
+                    </select>
+                    {% else %}
+                    <input type="text" class="form-control si-addition" id="{{ q['label'] }}"  placeholder="{{ q['label'] }}">
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                </div>
+                  <button type="submit" class="btn btn-success" id="AddQToDataBase" style="margin: 5px auto;">Add Exam</button>
+            </form>
+
+        </div>
+    </div>
+    </div>
+
+
+
+        <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/AddAutoExam.js') }}"></script>
+</body>
+</html>
+
+

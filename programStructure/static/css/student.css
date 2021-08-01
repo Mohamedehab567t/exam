@@ -1,0 +1,174 @@
+body {
+  margin: 0px;
+  padding: 0px;
+  background-color: #fdfdfd;
+  display: flex;
+}
+
+.con {
+  width: 95%;
+  height: 85%;
+  display: flex;
+  flex-direction: row;
+  margin: 5px auto;
+}
+@media screen and (max-width:400px) {
+  .con {
+    flex-direction: column;
+    height: 98%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .con {
+    flex-direction: column;
+    height: 95%;
+  }
+}
+.con .infos {
+  flex: 8;
+  text-align: center;
+}
+@media screen and (max-width:400px) {
+  .con .infos {
+    order: 2;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .con .infos {
+    order: 2;
+  }
+}
+.con .infos .letter {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  margin: 0px auto;
+  background-color: #02ab3a;
+  padding: 10px;
+}
+.con .infos .letter span {
+  color: white;
+  margin: auto;
+  font-weight: 600;
+  font-size: 25px;
+}
+.con .infos .s-i {
+  background-color: white;
+  width: 100%;
+  height: fit-content;
+  overflow: auto;
+}
+.con .infos .s-i form input , .con .infos .s-i form select {
+  width: 80%;
+  margin: 0px auto;
+}
+.con .infos .s-i form .my-row {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  gap: 5px;
+  margin: 25px auto;
+}
+@media screen and (max-width:400px) {
+  .con .infos .s-i form .my-row {
+    flex-direction: column;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .con .infos .s-i form .my-row {
+    flex-direction: column;
+  }
+}
+.con .infos .s-i form .my-row .my-col {
+  flex: 1;
+}
+.con .infos .s-i form .my-row .my-col input {
+  margin: unset;
+  width: 100%;
+}
+.con .infos .s-i form button {
+  width: 20%;
+  margin: 0px auto;
+}
+@media screen and (max-width:400px) {
+  .con .infos .s-i form button {
+    width: 80%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .con .infos .s-i form button {
+    width: 70%;
+  }
+}
+.con .fixednav {
+  flex: 1;
+  margin: 10px auto;
+}
+@media screen and (max-width:400px) {
+  .con .fixednav {
+    order: 1;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .con .fixednav {
+    order: 1;
+  }
+}
+.con .fixednav a {
+  width: 50px;
+  height: 50px;
+  background-color: #02ab3a;
+  border-radius: 50%;
+  margin-top: 15px;
+  display: flex;
+  text-decoration : unset;
+}
+.con .fixednav a i {
+margin:auto;
+font-size:20px;
+color:white;
+}
+
+@media screen and (max-width:400px) {
+.con .fixednav a .i {
+margin:15px 17.44px;
+
+}
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+.con .fixednav a .i{
+margin:15px 17.44px;
+  }
+}
+
+@media screen and (max-width:400px) {
+.con .fixednav a i {
+margin:15px 15.44px;
+
+}
+}
+
+@media screen and (min-width:401px) and (max-width:768px) {
+.con .fixednav a i{
+margin:15px 15.44px;
+  }
+}
+
+
+@media screen and (max-width:400px) {
+  .con .fixednav a {
+    margin-top: 5px;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .con .fixednav a {
+    margin-top: 5px;
+    display: inline-block;
+  }
+}
+
+/*# sourceMappingURL=student.css.map */

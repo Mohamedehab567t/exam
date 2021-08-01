@@ -1,0 +1,118 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC&display=swap" rel="stylesheet">
+    <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
+    <script src="{{ url_for('static' , filename='js/Theme.js') }}"></script>
+    <link rel="stylesheet" href="{{bootstrap}}">
+    <link rel="stylesheet" href="{{font}}">
+    <link rel="stylesheet" href="{{normalize}}">
+    <link rel="stylesheet" href="{{Admin}}">
+    <link rel="stylesheet" href="{{settings}}">
+
+    <title>Settings</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand Variable" href="#">{{Sett['site_name']}}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('dashboard')}}">Back</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+    </header>
+    <div class="welcome-part alert alert-success">
+        <p>Welcome admin : {{user['first_name']}} at <span class="Variable">{{Sett['site_name']}}</span> Dashboard </p>
+        <p>this is settings page you can control your site here</p>
+    </div>
+
+    <div class="si">
+        <h3>Site main settings</h3>
+        <div class="si-cont">
+            <form action="" class="mainform">
+                <div class="my-row">
+                        <label for="exampleInputEmail1">Site name</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" value="{{Sett['site_name']}}">
+                </div>
+                  <div class="my-row">
+                    <label for="exampleInputEmail1">Site theme</label>
+                    <div class="colors">
+                        <div data-color="green" class="c green"></div>
+                        <div data-color="blue" class="c blue"></div>
+                        <div data-color="red" class="c red"></div>
+                        <div data-color="black" class="c black"></div>
+                        <div data-color="yellow" class="c yellow"></div>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-success" style="margin: 5px auto;">Save</button>
+            </form>
+        </div>
+    </div>
+
+        <div class="si">
+        <h3>Addition student information</h3>
+        <div class="si-cont">
+        <span>Add information inputs</span>
+            <form action="" class="AdditionStudentInformationForm" method="POST">
+                <div class="my-row">
+                    <input type="text" class="form-control si-addition" id="labelValue"  placeholder="Label of the input">
+                    <select name="TypeOfInputs" class="form-control si-addition" id="si-addition-input-for-students">
+                        <option value="text" selected>text</option>
+                        <option value="number" >number</option>
+                        <option value="select" >Multiple values</option>
+                    </select>
+                    <select name="TypeOfInputs" class="form-control si-addition" id="si-addition-input-for">
+                        <option value="Normal" selected>Normal Information</option>
+                        <option value="Exam" >Exam Information</option>
+                    </select>
+                </div>
+                <div class="form-group SelectValues hide">
+                    <input type="text" id="ValuesOfSelectBox" class="form-control" style="display:block" placeholder="Values">
+                    <small style="color:grey; margin : 0px auto">Write values and separate between each one with double space</small>
+                </div>
+                  <button type="submit" class="btn btn-success" style="margin: 5px auto;">Add</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="si">
+        <h3>Questions Configuration</h3>
+        <div class="si-cont">
+        <span>Add inputs</span>
+            <form action="" class="AdditionQuestionsConfigurationForm" method="POST">
+                <div class="my-row">
+                    <input type="text" class="form-control si-addition" id="labelValue2"  placeholder="Label of the input">
+                    <select name="TypeOfInputs" class="form-control si-addition" id="si-addition-input-for-Q">
+                        <option value="text" selected>text</option>
+                        <option value="number" >number</option>
+                        <option value="select" >Multiple values</option>
+                    </select>
+                </div>
+                <div class="form-group SelectValues2 hide">
+                    <input type="text" id="ValuesOfSelectBox2" class="form-control" style="display:block" placeholder="Values">
+                    <small style="color:grey; margin : 0px auto">Write values and separate between each one with double space</small>
+                </div>
+                  <button type="submit" class="btn btn-success" style="margin: 5px auto;">Add</button>
+            </form>
+        </div>
+    </div>
+
+
+
+        <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/Settings.js') }}"></script>
+</body>
+</html>

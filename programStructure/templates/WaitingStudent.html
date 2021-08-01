@@ -1,0 +1,31 @@
+    <div class="parent">
+    <div class="welcome-part alert alert-success">
+        <p>Welcome admin : {{ user['first_name'] }} at <span class="Variable">{{Sett['site_name']}}</span> Dashboard </p>
+        <p>this is the students page you will have here your actual students
+        whos have the access on your exams</p>
+    </div>
+    <div class="container-of-ws">
+        {% if WS_NUM == 0 %}
+        <span style="text-align:center; margin-top:10px">No Requests yet</span>
+        {% else %}
+        {% for one_s in waiting %}
+        <div class="ws">
+<div class="first_letter alert-success">
+    <span>{{one_s['firstletter']}}</span>
+            </div>
+            <div class="infos">
+                        <span>Name : {{one_s['first_name']}} {{one_s['last_name']}}</span>
+                        <span>Email : {{one_s['email']}}</span>
+                        <span>Gender : {{one_s['gender']}}</span>
+
+                        <div class="btns">
+                        <a href="#" class="btn btn-danger refuse_WS" data-sid="{{ one_s['_id'] }}"><i class="fa fa-times-circle refuse_WS" data-sid="{{ one_s['_id'] }}"></i></a>
+                        </div>
+
+                </div>
+            </div>
+        {% endfor %}
+        {% endif %}
+        </div>
+    </div>
+</div>

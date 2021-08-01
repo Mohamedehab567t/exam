@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{bootstrap}}">
+    <link rel="stylesheet" href="{{font}}">
+    <link rel="stylesheet" href="{{normalize}}">
+    <link rel="stylesheet" href="{{Admin}}">
+    <link rel="stylesheet" href="{{student}}">
+
+    <title>Profile</title>
+</head>
+<body>
+
+    <div class="con">
+    <div class="infos">
+            <div class="welcome-part alert alert-success">
+        <p>Welcome Student : {{ user['first_name'] }} at <span class="Variable">{{Sett['site_name']}}</span> Profile </p>
+        <p>here you can update your information , receive exams messages , see your results , monitor your progress  </p>
+    </div>
+        <h3>{{ user['first_name'] }} {{ user['last_name'] }}</h3>
+    <div class="letter alert-success">
+            <span>{{user['firstletter']}}</span>
+        </div>
+        <div class="s-i">
+            <form action="" method="POST" class="StudentInformation">
+                <div class="form-group">
+                    <input type="number" class="form-control"  placeholder="ID" value="{{ user['_id'] }}" disabled style="margin-top: 25px;">
+                  </div>
+                <div class="my-row">
+                    <div class="my-col">
+                        <input type="text" class="form-control" placeholder="First name" value="{{ user['first_name'] }}">
+                    </div>
+                    <div class="my-col">
+                        <input type="text" class="form-control" placeholder="Last name" value="{{ user['last_name'] }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" value="{{ user['email'] }}">
+                </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Gender" value="{{ user['gender'] }}">
+                  </div>
+                {% if Sett['Addition-Information'] %}
+                {% for input in Sett['Addition-Information'] %}
+                {% if input['type'] == 'text' %}
+                  <div class="form-group">
+                     {% if user['Addition'] %}
+                    <input type="text" class="form-control Adi"  placeholder="{{ input['label'] }}" data-label="{{ input['label'] }}" value="{{ user['Addition'][input['label']] }}">
+                    {% else %}
+                   <input type="text" class="form-control Adi"  placeholder="{{ input['label'] }}" data-label="{{ input['label'] }}">
+                    {% endif %}
+                  </div>
+                {% elif input['type'] == 'number' %}
+                <div class="form-group">
+                    {% if user['Addition'] %}
+                    <input type="number" class="form-control Adi"  placeholder="{{ input['label'] }}" data-label="{{ input['label'] }}" value="{{ user['Addition'][input['label']] }}">
+                    {% else %}
+                    <input type="number" class="form-control Adi"  placeholder="{{ input['label'] }}" data-label="{{ input['label'] }}">
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="form-group">
+
+                    <select name="TypeOfInputs" class="form-control Adi" data-label="{{ input['label'] }}">
+                        <option value="" selected>please choose {{ input['label'] }}</option>
+                        {% for val in input['values'] %}
+                        {% if user['Addition'] %}
+                        {% if val == user['Addition'][input['label']] %}
+                        <option value="{{ val }}" selected>{{val}} </option>
+                        {% else %}
+                        <option value="{{ val }}">{{val}}</option>
+                        {% endif %}
+                        {% else %}
+                        <option value="{{ val }}">{{val}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                  <button type="submit" class="btn btn-success">Update</button>
+            </form>
+        </div>
+    </div>
+    <div class="fixednav">
+        <a href="#" class="Variable"><i class="fa fa-user i"></i></a>
+        <a href="#" class="Variable message"><i class="fa fa-envelope"></i></a>
+        <a href="#" class="Variable"><i class="fa fa-certificate"></i></a>
+        <a href="{{url_for('logout')}}" class="Variable"><i class="fa fa-sign-out" ></i>
+</a>
+    </div>
+</div>
+
+
+        <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/student.js') }}"></script>
+
+</body>
+</html>

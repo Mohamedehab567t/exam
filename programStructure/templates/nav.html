@@ -1,0 +1,44 @@
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand Variable" href="#">{{Sett['site_name']}}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                  <a class="nav-link" id="WsNUMBER" href="#">Waiting student [{{ws}}]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="SNumber" href="#">Student [{{s}}]</a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Exams
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{url_for('AddingAutoExam')}}">Add automatic exam</a>
+                    <a class="dropdown-item" href="#">Add manual exam</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{url_for('exams')}}">Exams</a>
+                  </div>
+                </li>
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Questions
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ url_for('AddingQ') }}">Add Questions</a>
+                    <a class="dropdown-item" href="#">Questions</a>
+                  </div>
+                </li>
+               <li class="nav-item">
+                    <a class="nav-link" id="Si" href="{{url_for('Settings')}}">Settings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        <script src="{{ url_for('static' , filename='js/Theme.js') }}"></script>

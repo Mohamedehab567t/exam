@@ -1,0 +1,230 @@
+.TextQ .title {
+  max-width: 75%;
+  margin: 5px auto;
+  font-weight: 700;
+  text-align : center;
+}
+@media screen and (max-width:400px) {
+  .TextQ .title {
+    max-width: 85%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .TextQ .title {
+    max-width: 80%;
+  }
+}
+.TextQ .choices {
+  max-width: 55%;
+  margin: 5px auto;
+}
+@media screen and (max-width:400px) {
+  .TextQ .choices {
+    max-width: 85%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .TextQ .choices {
+    max-width: 80%;
+  }
+}
+.TextQ .choices .choice {
+  border: 0.4px solid black;
+  background-color: #096401;
+  text-align: center;
+  padding: 8px;
+  margin: 10px auto;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+.TextQ .choices .choice span {
+  color: white;
+}
+.TextQ .choices .choice:hover {
+  background-color: #064700;
+}
+.TextQ .choices .disabeld {
+  border: 0.4px solid #4d4c4c;
+  background-color: #83ff77;
+  text-align: center;
+  padding: 8px;
+  margin: 10px auto;
+  cursor: pointer;
+}
+.TextQ .choices .disabeld span {
+  color: white;
+}
+
+.ImageQ .title {
+  max-width: 75%;
+  margin: 5px auto;
+  font-weight: 700;
+  text-align : center;
+}
+@media screen and (max-width:400px) {
+  .ImageQ .title {
+    max-width: 85%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .ImageQ .title {
+    max-width: 80%;
+  }
+}
+.ImageQ .ImageContainer {
+  width: fit-content;
+  margin: 10px auto;
+  padding: 3px;
+  cursor: pointer;
+}
+.ImageQ .ImageContainer img {
+  max-width: 90%;
+  max-height: 200px;
+}
+.ImageQ .SHOWPHOTO {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  top: 0;
+  left: 0;
+  overflow: auto;
+}
+.ImageQ .SHOWPHOTO img {
+  margin: auto;
+}
+@media screen and (max-width:400px) {
+  .ImageQ .SHOWPHOTO img {
+    max-height: 85%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .ImageQ .SHOWPHOTO img {
+    max-height: 80%;
+  }
+}
+.ImageQ .SHOWCHOICEPHOTO {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  top: 0;
+  left: 0;
+  overflow: auto;
+}
+.ImageQ .SHOWCHOICEPHOTO img {
+  margin: auto;
+    max-height : 50%
+}
+@media screen and (max-width:400px) {
+  .ImageQ .SHOWCHOICEPHOTO img {
+    max-height: 85%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .ImageQ .SHOWCHOICEPHOTO img {
+    max-height: 85%;
+  }
+}
+.ImageQ .SHOWCHOICEPHOTOBOTH {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  top: 0;
+  left: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+.ImageQ .SHOWCHOICEPHOTOBOTH img {
+  margin: auto;
+  max-height : 50%
+}
+@media screen and (max-width:400px) {
+  .ImageQ .SHOWCHOICEPHOTOBOTH img {
+    max-height: 85%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .ImageQ .SHOWCHOICEPHOTOBOTH img {
+    max-height: 80%;
+  }
+}
+.ImageQ .SHOWCHOICEPHOTOBOTH span {
+  display: block;
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  margin: auto;
+  max-width: 50%;
+}
+@media screen and (max-width:400px) {
+  .ImageQ .SHOWCHOICEPHOTOBOTH span {
+    max-width: 85%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .ImageQ .SHOWCHOICEPHOTOBOTH span {
+    max-width: 80%;
+  }
+}
+.ImageQ .choices {
+  max-width: 55%;
+  margin: 5px auto;
+}
+@media screen and (max-width:400px) {
+  .ImageQ .choices {
+    max-width: 85%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .ImageQ .choices {
+    max-width: 80%;
+  }
+}
+.ImageQ .choices .ChoiceText {
+  border: 0.4px solid black;
+  background-color: #096401;
+  text-align: center;
+  padding: 8px;
+  margin: 10px auto;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+.ImageQ .choices .ChoiceText span {
+  color: white;
+}
+.ImageQ .choices .ChoiceText:hover {
+  background-color: #064700;
+}
+.ImageQ .choices .ChoiceImage, .ImageQ .choices .ChoiceBoth {
+  text-align: center;
+  margin: 10px auto;
+  cursor: pointer;
+  max-height: 80px;
+  max-width: 100%;
+}
+.ImageQ .choices .ChoiceImage img, .ImageQ .choices .ChoiceBoth img {
+  max-width: 90%;
+  max-height: 50px;
+}
+.ImageQ .choices .ChoiceBoth {
+  border: 0.4px solid #015708;
+}
+.ImageQ .choices .ChoiceImage {
+  border: 0.4px solid #015708;
+}
+.ImageQ .choices .Showing {
+  display: flex;
+}
+.ImageQ .choices .Showing button {
+  margin: auto;
+}
+.ImageQ .choices .Showing button i {
+  color: white;
+}
+
+/*# sourceMappingURL=ExamPR.css.map */

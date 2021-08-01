@@ -1,0 +1,50 @@
+body {
+  margin: 0px;
+  padding: 0px;
+  background-color: #fdfdfd;
+  display: flex;
+}
+
+.login {
+  width: 50%;
+  height: fit-content;
+  margin: auto;
+  padding: 10px;
+  text-align: center;
+  font-family: "Encode Sans SC", sans-serif;
+}
+@media screen and (max-width:400px) {
+  .login {
+    width: 95%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .login {
+    width: 90%;
+  }
+}
+.login h3 span {
+  color: #02ab3a;
+  font-weight: 700;
+}
+.login .user i {
+  font-size: 80px;
+  color: #cecece;
+}
+.login form {
+  margin-top: 5px;
+}
+.login form input {
+  width: 80%;
+  margin: 0px auto;
+}
+.login form button {
+  width: 80%;
+  margin: 0px auto;
+}
+.login a {
+  display: block;
+  margin-top: 5px;
+}
+
+/*# sourceMappingURL=login.css.map */

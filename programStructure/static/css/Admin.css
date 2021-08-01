@@ -1,0 +1,85 @@
+body {
+  margin: 0px;
+  padding: 0px;
+  background-color: #fdfdfd;
+  font-family: "Encode Sans SC", sans-serif;
+}
+
+.welcome-part {
+  margin: 10px auto;
+  width: 60%;
+}
+@media screen and (max-width:400px) {
+  .welcome-part {
+    width: 95%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .welcome-part {
+    width: 90%;
+  }
+}
+.welcome-part p {
+  color: #2a2a2a;
+}
+.container-of-ws {
+  width: 75%;
+  height: fit-content;
+  max-height: 40%;
+  padding: 20px;
+  border: 2px solid #02ab3a;
+  margin: 10px auto;
+  background-color: #fdfdfd;
+  overflow: auto;
+}
+@media screen and (max-width:400px) {
+  .container-of-ws {
+    width: 95%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .container-of-ws {
+    width: 90%;
+  }
+}
+.container-of-ws .ws {
+  border-bottom: 0.5px solid grey;
+}
+.container-of-ws .ws .first_letter {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  margin: 5px auto;
+}
+.container-of-ws .ws .first_letter span {
+  color: black;
+  font-weight: 600;
+  font-size: 25px;
+  margin: auto;
+}
+.container-of-ws .ws .infos span {
+  display: block;
+  margin-top: 5px;
+  text-align: center;
+}
+.container-of-ws .ws .infos .btns {
+  width: fit-content;
+  margin: 5px auto;
+}
+.container-of-ws .ws .infos .btns a {
+  margin: 5px auto;
+}
+.container-of-ws .ws .infos .btns a i {
+  color: white;
+}
+
+.navbar-brand, .welcome-part p span {
+  color: #02ab3a !important;
+  font-weight: 700;
+}
+.navbar-light .navbar-nav .show > .nav-link, .navbar-light .navbar-nav .active >
+ .nav-link, .navbar-light .navbar-nav .nav-link.show,
+  .navbar-light .navbar-nav .nav-link.active{
+color: #02ab3a !important;
+}
+/*# sourceMappingURL=Admin.css.map */

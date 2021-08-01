@@ -1,0 +1,67 @@
+body {
+  margin: 0px;
+  padding: 0px;
+  background-color: #fdfdfd;
+  display: flex;
+}
+
+.register {
+  width: 50%;
+  height: fit-content;
+  margin: auto;
+  padding: 10px;
+  text-align: center;
+  font-family: "Encode Sans SC", sans-serif;
+}
+@media screen and (max-width:400px) {
+  .register {
+    width: 95%;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .register {
+    width: 90%;
+  }
+}
+.register h3 span {
+  color: #02ab3a;
+  font-weight: 700;
+}
+.register .user i {
+  font-size: 80px;
+  color: #cecece;
+}
+.register form input, .register form select {
+  width: 80%;
+  margin: 0px auto;
+}
+.register form .my-row {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  gap: 5px;
+  margin: 15px auto;
+}
+@media screen and (max-width:400px) {
+  .register form .my-row {
+    flex-direction: column;
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .register form .my-row {
+    flex-direction: column;
+  }
+}
+.register form .my-row .my-col {
+  flex: 1;
+}
+.register form .my-row .my-col input, .register form .my-row .my-col select {
+  margin: unset;
+  width: 100%;
+}
+.register form button {
+  width: 80%;
+  margin: 0px auto;
+}
+
+/*# sourceMappingURL=register.css.map */

@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC&display=swap" rel="stylesheet">
+    <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
+    <script src="{{ url_for('static' , filename='js/Theme.js') }}"></script>
+    <link rel="stylesheet" href="{{bootstrap}}">
+    <link rel="stylesheet" href="{{font}}">
+    <link rel="stylesheet" href="{{normalize}}">
+    <link rel="stylesheet" href="{{Admin}}">
+    <link rel="stylesheet" href="{{settings}}">
+
+    <title>Add Questions</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand Variable" href="#">{{Sett['site_name']}}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('dashboard')}}">Back</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+    </header>
+<div class="parent">
+    <div class="welcome-part alert alert-success">
+        <p>Welcome admin : {{ user['first_name'] }} at <span class="Variable">{{Sett['site_name']}}</span> Dashboard </p>
+        <p>this is page is for adding a questions that you can use in (Add auto exam) or
+        (Add manual exam)
+        </p>
+    </div>
+     <div class="si">
+        <h3>Add Question</h3>
+        <div class="si-cont">
+        <span>Add one question per time</span>
+
+            <form action="/AddTheImage" class="AddQForm" method="POST" enctype="multipart/form-data">
+                <div class="my-row Q-Configuration">
+                    <input type="text" class="form-control si-addition" id="Q-title"  placeholder="Title of the question">
+
+                    <div  class="ImagePurpose hide">
+                    <input type="file" id="Fake" class="ImagePurpose" name="titleImage">
+                    </div>
+
+                    <select name="TypeOfQ" class="form-control si-addition" id="Q-type">
+                        <option value="" selected>select type</option>
+                        <option value="text" >text</option>
+                        <option value="images" >With images</option>
+                    </select>
+                    {% if Sett['Q-Configuration'] %}
+                    {% for q in Sett['Q-Configuration'] %}
+                    {% if q['type'] == 'select' %}
+                    <select name="TypeOfQ" class="form-control si-addition" id="{{ q['label'] }}">
+                        <option value="" selected>select {{ q['label'] }}</option>
+                        {% for v in q['values'] %}
+                        <option value="{{v}}" >{{v}}</option>
+                        {% endfor %}
+                    </select>
+                    {% else %}
+                    <input type="text" class="form-control si-addition" id="{{ q['label'] }}"  placeholder="{{ q['label'] }}">
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                  <button type="button" id="AddChoiceBtn" class="btn btn-success hide">Add Choice</button>
+                </div>
+
+                <div class="form-group QChoices hide">
+
+                </div>
+                  <button type="submit" class="btn btn-success" id="AddQToDataBase" style="margin: 5px auto;">Add Question</button>
+            </form>
+
+        </div>
+    </div>
+    </div>
+
+
+
+        <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/AddQ.js') }}"></script>
+</body>
+</html>
+
+
