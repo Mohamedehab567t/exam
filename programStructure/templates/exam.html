@@ -1,3 +1,4 @@
+{% if Language == 'English' or Language is none %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -16,12 +17,21 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand Variable" href="#">{{Sett['site_name']}}</a>
+            <a class="navbar-brand Variable" href="{{ url_for('dashboard') }}">{{Sett['site_name']}}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
+                <li id="Active" class="nav-item">
+                    <a class="nav-link" href="#">Active Exams</a>
+                </li>
+                <li id="Published" class="nav-item">
+                    <a class="nav-link" href="#">Published Exams</a>
+                </li>
+                <li id="Submitted" class="nav-item">
+                    <a class="nav-link" href="#">Submitted Exams</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('dashboard')}}">Back</a>
                 </li>
@@ -36,9 +46,23 @@
         <p>this is Exams page you can control your Exams here (publish- see results - see who is absent and who attented)</p>
 
     </div>
+        {% with m = get_flashed_messages()%}
+        {% if m %}
+        {% for message in m %}
+        <div class="alert alert-success" style="
+    color: #00795c;
+    width: fit-content;
+    margin: 10px auto;
+        ">
+        {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
 
-    <div class="container">
+    <div id="ExamCon" class="container">
         {% for exam in Exams %}
+        {% if exam['ExamInformation']['Status'] == 'Active' %}
         <div class="examContainer">
             <div class="head">
                 <span>Exam ({{exam['_id']}})</span>
@@ -65,7 +89,7 @@
                 <h3>Student Information</h3>
                 <div class="infos">
                 {% for key in exam['StudentsInformation'] %}
-                {% if key != 'Absent' and key != 'Attended' %}
+                {% if key != 'Absent' and key != 'Attended' and key != 'Submitted' %}
                 <span id="{{key}}">{{key}} : {{exam['StudentsInformation'][key]}}</span>
                 {% endif %}
                 {% endfor %}
@@ -78,9 +102,20 @@
                 <a class="btn btn-success" href="{{ url_for('examDash' , exam_id = exam['_id'] ) }}"> Exam Dashboard </a>
             </div>
         </div>
+        {% else %}
+        {% if loop.index == Exams|length%}
+        <div class="SpaCon" style="text-align:center">
+            <span>No Active Exams More</span>
+        </div>
+        {% endif %}
+        {% endif %}
         {% endfor %}
     </div>
-
+    <div class="d-flex justify-content-center Loading">
+        <div class="spinner-border text-success" style="margin:auto" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
 
 
         <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
@@ -89,3 +124,131 @@
         <script src="{{ url_for('static' , filename='js/exam.js') }}"></script>
 </body>
 </html>
+{% elif Language =="Arabic" %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{bootstrap}}">
+    <link rel="stylesheet" href="{{font}}">
+    <link rel="stylesheet" href="{{normalize}}">
+    <link rel="stylesheet" href="{{Admin}}">
+    <link rel="stylesheet" href="{{examCSS}}">
+    <title>الامتحانات</title>
+</head>
+<body style="direction : rtl">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand Variable" href="{{ url_for('dashboard') }}">{{Sett['site_name']}}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto" style="margin-right : unset !important; margin-left: auto !important">
+                <li id="Active" class="nav-item">
+                    <a class="nav-link" href="#">امتحانات نشطة</a>
+                </li>
+                <li id="Published" class="nav-item">
+                    <a class="nav-link" href="#">امتحانات منشورة</a>
+                </li>
+                <li id="Submitted" class="nav-item">
+                    <a class="nav-link" href="#">امتحانات منتهية</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('dashboard')}}">رجوع</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+
+    </header>
+
+    <div class="welcome-part alert alert-success">
+        <p style="float:right">مرحبا بك يا  : {{user['first_name']}} في  لوحة تحكم <span class="Variable">{{Sett['site_name']}}</span></p>
+        <div class="clearfix"></div>
+        <p style="float:right">هنا تستطيع التحكم بامتحاناتك ومعرفة الغائب والحاضر والدرجات المرسلة</p>
+        <div class="clearfix"></div>
+    </div>
+        {% with m = get_flashed_messages()%}
+        {% if m %}
+        {% for message in m %}
+        <div class="alert alert-success" style="
+    color: #00795c;
+    width: fit-content;
+    margin: 10px auto;
+        ">
+        {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+    <div id="ExamCon" class="container">
+        {% for exam in Exams %}
+        {% if exam['ExamInformation']['Status'] == 'Active' %}
+        <div class="examContainer">
+            <div class="head">
+                <span>امتحان ({{exam['_id']}})</span>
+            </div>
+            <div class="Information">
+                <h3>معلومات الامتحان</h3>
+                <div class="infos">
+                {% for key in exam['ExamInformation'] %}
+                <span id="{{key}}">{{key}} : {{exam['ExamInformation'][key]}}</span>
+                {% endfor %}
+            </div>
+            </div>
+            <hr>
+            <div class="Information">
+                <h3>معلومات الاسئلة</h3>
+                <div class="infos">
+                {% for key in exam['QuestionInformation'] %}
+                <span id="{{key}}">{{key}} : {{exam['QuestionInformation'][key]}}</span>
+                {% endfor %}
+            </div>
+            </div>
+            <hr>
+            <div class="Information">
+                <h3>معلومات الطلاب</h3>
+                <div class="infos">
+                {% for key in exam['StudentsInformation'] %}
+                {% if key != 'Absent' and key != 'Attended' and key != 'Submitted' %}
+                <span id="{{key}}">{{key}} : {{exam['StudentsInformation'][key]}}</span>
+                {% endif %}
+                {% endfor %}
+                <span id="Absent">الغائبين : {{exam['StudentsInformation']['Absent'] | length }}</span>
+                <span id="Attended">الحاضرين : {{exam['StudentsInformation']['Attended'] | length }}</span>
+            </div>
+            </div>
+            <hr>
+            <div class="NEXT">
+                <a class="btn btn-success" href="{{ url_for('examDash' , exam_id = exam['_id'] ) }}"> لوحة التحكم </a>
+            </div>
+        </div>
+        {% else %}
+        {% if loop.index == Exams|length%}
+        <div class="SpaCon" style="text-align:center">
+            <span>لا يوجد امتحانات نشطة</span>
+        </div>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+    </div>
+    <div class="d-flex justify-content-center Loading">
+        <div class="spinner-border text-success" style="margin:auto" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
+
+        <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/exam.js') }}"></script>
+</body>
+</html>
+{% endif %}

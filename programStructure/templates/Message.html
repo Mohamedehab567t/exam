@@ -1,0 +1,167 @@
+{% if Language == 'English' or Language is none %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{bootstrap}}">
+    <link rel="stylesheet" href="{{font}}">
+    <link rel="stylesheet" href="{{normalize}}">
+    <link rel="stylesheet" href="{{Admin}}">
+    <link rel="stylesheet" href="{{student}}">
+    <link rel="stylesheet" href="{{message}}">
+    <title>{{ user['first_name'] }} Messages</title>
+</head>
+<body>
+    <div class="con">
+    <div class="infos">
+        <h3>{{ user['first_name'] }} {{ user['last_name'] }}</h3>
+    <div class="letter alert-success">
+            <span>{{user['firstletter']}}</span>
+        </div>
+
+    {% set Mes = user['Messages'] %}
+    {% if Mes|length == 0 %}
+        <div class="SpaCon" style="text-align:center">
+            <span>No Messages yet</span>
+        </div>
+    {% else %}
+    {% for m in user['Messages'] %}
+        <div class="s-i">
+            <form class="formToJoin" action="">
+                <span data-sid="{{ current_user.id }}" id="EXAM" style="display : none">{{m}}</span>
+                <div class="my-row">
+                    <div class="my-col">
+                    <span>From {{m['ExamInformation']['From']}} To {{m['ExamInformation']['To']}}</span>
+                    </div>
+                    <div class="my-col">
+                    <span>Access-code : {{m['ExamInformation']['AccessCode']}}</span>
+                    </div>
+                </div>
+                    <div class="my-row">
+                    <div class="my-col">
+                    <span>Question number : {{m['QuestionInformation']['QNO']}}</span>
+                    </div> 
+                    <div class="my-col">
+                        <span>Duration : {{m['ExamInformation']['Duration']}} Minute</span>
+                    </div>
+                    </div>
+                <small class="mb-3" id="msg"></small>
+                <button type="submit" id="join" class="btn btn-success mb-3">Join exam</button>
+                  <button type="button" class="btn btn-danger mb-3 deleteMSG">Delete</button>
+            </form>
+        </div>
+        <hr>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="fixednav">
+        <a href="{{url_for('profile')}}" class="Variable"><i class="fa fa-user i"></i></a>
+        {% if user['Messages']|length > 0 %}
+        <a href="{{url_for('Messages')}}" style="background-color : red" class="Variable message"><i class="fa fa-envelope"></i></a>
+        {% else %}
+        <a href="{{url_for('Messages')}}" class="Variable message"><i class="fa fa-envelope"></i></a>
+        {% endif %}
+        <a href="{{url_for('results')}}" id="RES" class="Variable"><i class="fa fa-certificate"></i></a>
+        <a href="{{url_for('logout')}}" class="Variable"><i class="fa fa-sign-out" ></i></a>
+
+    </div>
+
+</div>
+
+
+        <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/message.js') }}"></script>
+
+</body>
+</html>
+{% elif Language =="Arabic" %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{bootstrap}}">
+    <link rel="stylesheet" href="{{font}}">
+    <link rel="stylesheet" href="{{normalize}}">
+    <link rel="stylesheet" href="{{Admin}}">
+    <link rel="stylesheet" href="{{student}}">
+    <link rel="stylesheet" href="{{message}}">
+    <title>{{ user['first_name'] }} رسائل</title>
+</head>
+<body style="direction : rtl">
+    <div class="con">
+    <div class="infos">
+        <h3>{{ user['first_name'] }} {{ user['last_name'] }}</h3>
+    <div class="letter alert-success">
+            <span>{{user['firstletter']}}</span>
+        </div>
+
+    {% set Mes = user['Messages'] %}
+    {% if Mes|length == 0 %}
+        <div class="SpaCon" style="text-align:center">
+            <span>لا يوجد رسائل</span>
+        </div>
+    {% else %}
+    {% for m in user['Messages'] %}
+        <div class="s-i">
+            <form class="formToJoin" action="">
+                <span data-sid="{{ current_user.id }}" id="EXAM" style="display : none">{{m}}</span>
+                <div class="my-row">
+                    <div class="my-col">
+                    <span>من {{m['ExamInformation']['From']}} الي {{m['ExamInformation']['To']}}</span>
+                    </div>
+                    <div class="my-col">
+                    <span>رمز الدخول : {{m['ExamInformation']['AccessCode']}}</span>
+                    </div>
+                </div>
+                    <div class="my-row">
+                    <div class="my-col">
+                    <span>عدد الاسئلة : {{m['QuestionInformation']['QNO']}}</span>
+                    </div>
+                    <div class="my-col">
+                        <span>مدة الامتحان : {{m['ExamInformation']['Duration']}} دقائق</span>
+                    </div>
+                    </div>
+                <small class="mb-3" id="msg"></small>
+                <button type="submit" id="join" class="btn btn-success mb-3">دخول</button>
+                  <button type="button" class="btn btn-danger mb-3 deleteMSG">حذف</button>
+            </form>
+        </div>
+        <hr>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="fixednav">
+        <a href="{{url_for('profile')}}" class="Variable"><i class="fa fa-user i"></i></a>
+        {% if user['Messages']|length > 0 %}
+        <a href="{{url_for('Messages')}}" style="background-color : red" class="Variable message"><i class="fa fa-envelope"></i></a>
+        {% else %}
+        <a href="{{url_for('Messages')}}" class="Variable message"><i class="fa fa-envelope"></i></a>
+        {% endif %}
+        <a href="{{url_for('results')}}" id="RES" class="Variable"><i class="fa fa-certificate"></i></a>
+        <a href="{{url_for('logout')}}" class="Variable"><i class="fa fa-sign-out" ></i></a>
+
+    </div>
+
+</div>
+
+
+        <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/message.js') }}"></script>
+
+</body>
+</html>
+{% endif %}

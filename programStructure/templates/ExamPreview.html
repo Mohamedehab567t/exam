@@ -1,3 +1,4 @@
+{% if Language == 'English' or Language is none %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -30,7 +31,6 @@
           </nav>
 
     </header>
-
     <div class="container">
         {% for q in QU %}
         {% if q['Q-type'] == "text"  %}
@@ -113,6 +113,7 @@
         <hr>
     {% endfor %}
     </div>
+
     
         <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
@@ -120,3 +121,127 @@
         <script src="{{ url_for('static' , filename='js/examPR.js') }}"></script>
 </body>
 </html>
+{% elif Language =="Arabic" %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{bootstrap}}">
+    <link rel="stylesheet" href="{{font}}">
+    <link rel="stylesheet" href="{{normalize}}">
+    <link rel="stylesheet" href="{{Admin}}">
+    <link rel="stylesheet" href="{{examCSS}}">
+    <title>امتحانات</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand Variable" href="#">{{Sett['site_name']}}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto" style="margin-right : unset !important; margin-left: auto !important">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('examDash' , exam_id= exam['_id'])}}">رجوع</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+
+    </header>
+    <div class="container">
+        {% for q in QU %}
+        {% if q['Q-type'] == "text"  %}
+        <div class="TextQ">
+            <p class="title">
+            {{q['Q-title']}}
+            </p>
+            <div class="choices">
+                {% for choice in q['Choices'] %}
+                {% for c in choice %}
+                <div class="choice C">
+                    <span>{{c}}</span>
+                </div>
+                {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+        {% elif q['Q-type'] == "images" %}
+
+        <div class="ImageQ">
+
+            <p class="title">
+                {{q['Q-title']}}
+            </p>
+            {% if q['TitleImage'] %}
+            <div class="ImageContainer titlImage{{q['_id']}}">
+                <img src="{{ url_for( 'static' , filename='images/' ) }}{{q['TitleImage']}}" alt="">
+            </div>
+            <div class="SHOWPHOTO" id="titlImage{{q['_id']}}">
+               <img src="{{url_for('static' , filename='images/')}}{{q['TitleImage']}}" alt="">
+            </div>
+            {% endif %}
+
+            <div class="choices">
+                {% for choice in q['Choices'] %}
+
+                {% for c in choice %}
+
+                {% if choice|length == 1 %}
+
+                {% if c['type'] == 'text' %}
+                <div class="ChoiceText">
+                    <span> {{c['value']}} </span>
+                </div>
+                {% elif c['type'] == 'image' %}
+
+                <div class="ChoiceImage">
+                    <img src="{{url_for('static' , filename='images/')}}{{c['value']}}{{q['_id']}}{{c['Extension']}}"  alt="">
+                </div>
+                <div class="SHOWCHOICEPHOTO" id="{{c['value']}}">
+                    <img src="{{url_for('static' , filename='images/')}}{{c['value']}}{{q['_id']}}{{c['Extension']}}" alt="">
+                </div>
+                <div class="Showing {{c['value']}}">
+                <button class="btn btn-success"><i class="fa fa-eye"></i></button>
+                </div>
+                {% endif %}
+
+                {% else %}
+
+                {% if c['type'] == 'image' %}
+                <div class="ChoiceBoth">
+                    <img src="{{url_for('static' , filename='images/')}}{{c['value']}}{{q['_id']}}{{c['Extension']}}" alt="">
+                </div>
+                <div class="SHOWCHOICEPHOTO" id="{{c['value']}}">
+                    <img src="{{url_for('static' , filename='images/')}}{{c['value']}}{{q['_id']}}{{c['Extension']}}" alt="">
+                </div>
+                <div class="Showing {{c['value']}}">
+                    <button class="btn btn-success"><i class="fa fa-eye"></i></button>
+                </div>
+
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
+                </div>
+        </div>
+
+
+    {% endif %}
+        <hr>
+    {% endfor %}
+    </div>
+
+
+        <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/examPR.js') }}"></script>
+</body>
+</html>
+{% endif %}

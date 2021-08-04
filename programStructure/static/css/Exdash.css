@@ -38,5 +38,11 @@
   text-decoration : unset;
   color : white;
 }
+.ExamButtons button {
+  flex: 1;
+  margin: auto;
+  text-decoration : unset;
+  color : white;
+}
 
 /*# sourceMappingURL=Exdash.css.map */

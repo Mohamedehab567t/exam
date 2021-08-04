@@ -1,3 +1,4 @@
+{% if Language == 'English' or Language is none %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -68,7 +69,81 @@
         <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
-<script src="{{ url_for('static' , filename='js/Theme.js') }}"></script>
 
 </body>
 </html>
+{% elif Language =="Arabic" %}
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{bootstrap}}">
+    <link rel="stylesheet" href="{{font}}">
+    <link rel="stylesheet" href="{{normalize}}">
+    <link rel="stylesheet" href="{{registerCss}}">
+    <title>تسجيل</title>
+</head>
+<body style="direction : rtl;">
+
+    <div class="register">
+        <h3>سجل الان في <span class="Variable">{{Sett['site_name']}}</span></h3>
+        <div class="user">
+            <i class="fa fa-user-circle"></i>
+        </div>
+
+        <form action="" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="my-row">
+                <div class="my-col">
+                  {{ form.first_name(class='form-control' , placeholder='الاسم الاول') }}
+                </div>
+                <div class="my-col">
+                    {{ form.last_name(class='form-control' , placeholder='الاسم الثاني') }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form.email(class='form-control' , id='exampleInputEmail1'  ,placeholder='البريد الالكتروني') }}
+            </div>
+
+              <div class="my-row">
+                <div class="my-col">
+                    {{ form.password(class='form-control' , placeholder="كلمة المرور") }}
+                </div>
+                <div class="my-col">
+                    {{ form.confirm(class='form-control' , placeholder="تأكيد كلمة المرور") }}
+                </div>
+                </div>
+
+              <div class="form-group">
+                  {{ form.gender(class="form-control") }}
+              </div>
+                {{ form.submit(class="btn btn-success") }}
+        </form>
+
+        <div class="ask">
+            <a href="{{ url_for('login') }}">لديك حساب ؟ سجل دخول الان</a>
+            {% if errorM %}
+        <div class="alert alert-danger" style="
+    color: #77000b;
+    width: fit-content;
+    margin: 10px auto;
+        ">{{ errorM }}</div>
+        {% endif %}
+        </div>
+    </div>
+
+
+
+
+
+        <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+
+</body>
+</html>
+{% endif %}

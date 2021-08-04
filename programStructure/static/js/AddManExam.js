@@ -4,56 +4,22 @@ $('#Q-no').on('keyup' , function(){
     num = $(this).data("number")
     if(this.value > num){
         $(this).css('border' , '0.5px solid red')
-
-        var IsHere = checkCookie('Language')
-        if(IsHere){
-        var Cookie = getCookie('Language')
-        if(Cookie == "English"){
         $('#msg').text('This number is out of range')
-        }else if (Cookie == "Arabic"){
-        $('#msg').text('هذا الرقم خارج النطاق')
-        }
-
-
-
         $('#msg').css('color' , 'red')
         $('#AddQToDataBase').prop('disabled' , true)
-        }
-        }
-    else if (this.value < num && this.value != 0 || this.value == num ){
+    }else if (this.value < num && this.value != 0 || this.value == num ){
         $(this).css('border' , '0.5px solid green')
-
-        var IsHere = checkCookie('Language')
-        if(IsHere){
-        var Cookie = getCookie('Language')
-        if(Cookie == "English"){
         $('#msg').text('Valid Number')
-        }else if (Cookie == "Arabic"){
-        $('#msg').text('رقم متاح')
-        }
-
-    }
-
         $('#msg').css('color' , 'green')
         $('#AddQToDataBase').prop('disabled' , false)
     }else if (this.value == 0) {
         $(this).css('border' , '0.5px solid grey')
-
-        var IsHere = checkCookie('Language')
-        if(IsHere){
-        var Cookie = getCookie('Language')
-        if(Cookie == "English"){
-        $('#msg').text('Zero is unavailable')
-        }else if (Cookie == "Arabic"){
-        $('#msg').text('الصفر غير متاح')
-        }
-
-        }
+        $('#msg').text('We do not accept zero')
         $('#msg').css('color' , 'red')
         $('#AddQToDataBase').prop('disabled' , true)
     }
-
 })
+
 $('.si-addition').on('change' , function(){
 if($(this).is('select')){
 var SmallClass = $(this).attr('id')
@@ -64,9 +30,8 @@ $('.'+SmallClass).text("")
 }
 })
 
-
-
-
+$('#bu').hide()
+var E_ID;
  $('.AddExamForm').on('submit',function(e){
         e.preventDefault()
     var si_addition = Array.from($('.si-addition'))
@@ -123,24 +88,83 @@ $('.'+SmallClass).text("")
         Exam_Information['to'] = to
         Exam_Information['Question_Part'] = Question_Information
         Exam_Information['Student_Part'] = Student_Information
+        var LISTQ;
                 $.ajax({
                 type: 'POST',
-                url: '/AddAutoExam',
+                url: '/AddManualExam',
                 data: JSON.stringify(Exam_Information),
                 contentType: 'application/json;charset=UTF-8',
                 beforeSend : function(){
-                $('#AddQToDataBase').text('Loading . . .')
+                $('#AddQToDataBase').text('Searching . . .')
                 },
                 complete: function(){
-                $('#AddQToDataBase').text('Done')
+                $('#AddQToDataBase').text($('#AddQToDataBase').attr('data-text'))
+                },
+                success : function(Data){
+                LISTQ = {
+                'list' : Data['list']
+                }
+                E_ID = Data['id']
+               $.ajax({
+                type: 'POST',
+                url: '/GetQuestions',
+                data: JSON.stringify(LISTQ),
+                contentType: 'application/json;charset=UTF-8',
+                beforeSend : function(){
+                $('#AddQToDataBase').text('Getting Questions . . .')
+                },
+                complete: function(){
+                $('#AddQToDataBase').text('Add exam')
                 },
                 success : function(data){
-                    window.location.reload()
+                $('#QuestionChoose').html(data)
+                $('#bu').show()
                 }
                 });
+                }
+                });
+
         }
         })
 
+$(window).on('click' , function(e){
+if($(e.target).hasClass('ManAdd')){
+var Qid = $(e.target).data('sid')
+var te = $('#Array_of_Question').text()
+if(te == ""){
+$('#Array_of_Question').text(Qid)
+}else{
+$('#Array_of_Question').text($('#Array_of_Question').text() +"  "+Qid )
+}
+}
+
+})
+
+
+$('#addExam').on('click' , function(){
+var Array_od_ids = $('#Array_of_Question').text().split("  ")
+var DATA = {
+'list' : Array_od_ids ,
+'id' : E_ID
+}
+console.log(Array_od_ids)
+             $.ajax({
+              type: 'POST',
+              url: '/UpQOfManToMongo',
+              data: JSON.stringify(DATA),
+              contentType: 'application/json;charset=UTF-8',
+              beforeSend : function(){
+              $('#addExam').text('Uploading  . . .')
+              },
+              complete: function(){
+              $('#addExam').text('Add exam')
+              },
+              success : function(data){
+              window.location.reload()
+              }
+              });
+
+})
 
 function DeleteEmptyValue(arr){
 var indexOfEmpty = 0
@@ -171,7 +195,6 @@ break
 return bool
 }
 
-
 function getCookie(cname) {
   let name = cname + "=";
   let decodedCookie = decodeURIComponent(document.cookie);
@@ -196,5 +219,4 @@ function checkCookie(cname) {
     return true
     }
   }
-
 })

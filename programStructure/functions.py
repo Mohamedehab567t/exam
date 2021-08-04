@@ -14,6 +14,12 @@ def Validate_account(self, email):
         raise ValidationError('No user with these email')
 
 
+def Validate_account_Arabic(self, email):
+    user = Student.find_one({'email': email.data})
+    if not user:
+        raise ValidationError('لا يجود مستخدم بهذا البريد')
+
+
 def Validate_password(self, password):
     user = Student.find_one({'email': self.email.data})
     if not user:
@@ -23,10 +29,25 @@ def Validate_password(self, password):
             raise ValidationError('Wrong Password')
 
 
+def Validate_password_Arabic(self, password):
+    user = Student.find_one({'email': self.email.data})
+    if not user:
+        raise ValidationError('لا يوجد حساب بهذا البريد')
+    else:
+        if user['password'] != password.data:
+            raise ValidationError('كلمة مرور خاطئة')
+
+
 def Validate_if_waiting(self, email):
     user = WS.find_one({'email': email.data})
     if user:
-        raise ValidationError(' This email is used and waiting For Approval')
+        raise ValidationError('This email is used and waiting For Approval')
+
+
+def Validate_if_waiting_Arabic(self, email):
+    user = WS.find_one({'email': email.data})
+    if user:
+        raise ValidationError('هذا الاميل مستخدم ومنتظر القبول')
 
 
 def SendWaitingRequest(form):
@@ -69,6 +90,20 @@ def ReturnNewStudentNumber():
         'AdminHead': AdminHead,
         'num1': "Waiting student [ " + str(WS_NUM) + " ]",
         'num2': "Student [ " + str(S_NUM) + "]"
+    }
+    return data
+
+
+def ReturnExamsStatus():
+    Exams = ActiveExamsDB.find()
+    temp1 = render_template('ActiveExams.html', Exams=Exams)
+    temp2 = render_template('PublishedExam.html', Exams=Exams)
+    temp3 = render_template('SubmittedExam.html', Exams=Exams)
+
+    data = {
+        'temp': temp1,
+        'temp2': temp2,
+        'temp3': temp3
     }
     return data
 
@@ -181,3 +216,74 @@ def CreateAutoExamObject(INFO):
     Exam['Questions'] = E_Q
 
     ActiveExamsDB.insert_one(Exam)
+
+
+def CreateManualExamObject(INFO):
+    Exam = {}
+    E_Q = []
+    Absent = []
+    AndExpressionForQuestion = []
+    AndExpressionForStudent = []
+    ExamObject = {}
+    QuestionObject = {}
+    StudentsObject = {}
+    FullMark = 0
+    id = random.randint(10000000, 99999999)
+    Exam['_id'] = id
+    QuestionsObject = list(INFO['Question_Part'])
+    StudentObject = list(INFO['Student_Part'])
+
+    for obj in QuestionsObject:
+        if isinstance(INFO['Question_Part'][obj], list):
+            expression = {obj: {
+                '$in': INFO['Question_Part'][obj]
+            }}
+            AndExpressionForQuestion.append(expression)
+            QuestionObject[obj] = INFO['Question_Part'][obj]
+        else:
+            expression = {
+                obj: INFO['Question_Part'][obj]
+            }
+            QuestionObject[obj] = INFO['Question_Part'][obj]
+            AndExpressionForQuestion.append(expression)
+
+    Multiple_Content = list(QDB.find({
+        '$and': AndExpressionForQuestion
+    }))
+
+    for obj in StudentObject:
+        if isinstance(INFO['Student_Part'][obj], list):
+            expression = {"Addition." + obj: {
+                '$in': INFO['Student_Part'][obj]
+            }}
+            StudentsObject[obj] = INFO['Student_Part'][obj]
+            AndExpressionForStudent.append(expression)
+        else:
+            expression = {
+                "Addition." + obj: INFO['Student_Part'][obj]
+            }
+            StudentsObject[obj] = INFO['Student_Part'][obj]
+            AndExpressionForStudent.append(expression)
+
+    Absent = list(Student.find({
+        '$and': AndExpressionForStudent
+    }))
+
+    ExamObject['Duration'] = INFO['duration']
+    ExamObject['From'] = INFO['from']
+    ExamObject['To'] = INFO['to']
+    ExamObject['Status'] = 'Active'
+    ExamObject['FullMark'] = FullMark
+    ExamObject['AccessCode'] = GenerateAccessCode(2)
+    StudentsObject['Absent'] = Absent
+    StudentsObject['Attended'] = []
+
+    Exam['ExamInformation'] = ExamObject
+    Exam['QuestionInformation'] = QuestionObject
+    Exam['StudentsInformation'] = StudentsObject
+    ActiveExamsDB.insert_one(Exam)
+    data = {
+        'list': Multiple_Content,
+        'id': id
+    }
+    return data

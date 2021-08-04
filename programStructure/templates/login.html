@@ -1,3 +1,4 @@
+{% if Language == 'English' or Language is none %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,9 +18,9 @@
 <body>
 
     <div class="login">
-        <h3>welcome to <span class="Variable">{{Sett['site_name']}}</span></h3>
+        <h3 class="mb-3">welcome to <span class="Variable">{{Sett['site_name']}}</span></h3>
         <div class="user">
-            <i class="fa fa-user-circle"></i>
+            <i style="font-size: 80px;" class="fa fa-user-circle"></i>
         </div>
         <form action="" method="POST">
             {{ form.hidden_tag() }}
@@ -62,7 +63,77 @@
         <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
-<script src="{{ url_for('static' , filename='js/Theme.js') }}"></script>
 
 </body>
 </html>
+
+{% elif Language == 'Arabic' %}
+
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{bootstrap}}">
+    <link rel="stylesheet" href="{{font}}">
+    <link rel="stylesheet" href="{{normalize}}">
+    <link rel="stylesheet" href="{{loginCss}}">
+
+    <title>تسجيل دخول</title>
+</head>
+<body style="direction : rtl">
+
+    <div class="login">
+        <h3 class="mb-3">مرحبا بك في <span class="Variable">{{Sett['site_name']}}</span></h3>
+        <div class="user">
+            <i style="font-size: 80px;" class="fa fa-user-circle"></i>
+        </div>
+        <form action="" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+            {{ form.email(class='form-control' , id='exampleInputEmail1'  ,placeholder='ادخل بريدك الالكتروني') }}
+            </div>
+              <div class="form-group">
+                  {{ form.password(class='form-control' , placeholder="كلمة المرور") }}
+              </div>
+            {{ form.submit(class="btn btn-success") }}
+        </form >
+        <div class="ask">
+            <a href="{{ url_for('register') }}">ليس لك حساب ؟ سجل الان</a>
+            <a href="#">هل نسيت كلمة المرور؟</a>
+        </div>
+        {% with m = get_flashed_messages()%}
+        {% if m %}
+        {% for message in m %}
+        <div class="alert alert-success" style="
+    color: #00795c;
+    width: fit-content;
+    margin: 10px auto;
+        ">
+        {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+                    {% if errorM %}
+        <div class="alert alert-danger" style="
+    color: #77000b;
+    width: fit-content;
+    margin: 10px auto;
+        ">{{ errorM }}</div>
+        {% endif %}
+    </div>
+
+
+
+        <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+
+</body>
+</html>
+{% endif %}

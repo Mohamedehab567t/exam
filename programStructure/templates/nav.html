@@ -1,4 +1,5 @@
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+{% if Language == 'English' or Language is none %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand Variable" href="#">{{Sett['site_name']}}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
@@ -18,7 +19,7 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{url_for('AddingAutoExam')}}">Add automatic exam</a>
-                    <a class="dropdown-item" href="#">Add manual exam</a>
+                    <a class="dropdown-item" href="{{url_for('AddingManExam')}}">Add manual exam</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{url_for('exams')}}">Exams</a>
                   </div>
@@ -29,7 +30,6 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ url_for('AddingQ') }}">Add Questions</a>
-                    <a class="dropdown-item" href="#">Questions</a>
                   </div>
                 </li>
                <li class="nav-item">
@@ -41,4 +41,47 @@
               </ul>
             </div>
           </nav>
-        <script src="{{ url_for('static' , filename='js/Theme.js') }}"></script>
+        {% elif Language =="Arabic" %}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand Variable" href="#">{{Sett['site_name']}}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto" style="margin-right : unset !important; margin-left: auto !important">
+                <li class="nav-item">
+                  <a class="nav-link" id="WsNUMBER" href="#">طلاب منتظرين [{{ws}}]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="SNumber" href="#">طلابي [{{s}}]</a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    الامتحانات
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{url_for('AddingAutoExam')}}">اضافة امتحان تلقائي</a>
+                    <a class="dropdown-item" href="{{url_for('AddingManExam')}}">اضافة امتحان يدوي</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{url_for('exams')}}">الامتحانات</a>
+                  </div>
+                </li>
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    الاسئلة
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ url_for('AddingQ') }}">اضافة اسئلة</a>
+                  </div>
+                </li>
+               <li class="nav-item">
+                    <a class="nav-link" id="Si" href="{{url_for('Settings')}}">الاعدادات</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">تسجيل الخروج</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        {% endif %}

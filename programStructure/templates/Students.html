@@ -1,3 +1,4 @@
+{% if Language == 'English' or Language is none %}
     <div class="parent">
     <div class="welcome-part alert alert-success">
         <p>Welcome admin : {{ user['first_name'] }} at <span class="Variable">{{Sett['site_name']}}</span> Dashboard </p>
@@ -29,3 +30,37 @@
         </div>
     </div>
 </div>
+    {% elif Language =="Arabic" %}
+        <div class="parent">
+    <div class="welcome-part alert alert-success">
+        <p style="float:right">مرحبا بك يا  : {{user['first_name']}} في  لوحة تحكم <span class="Variable">{{Sett['site_name']}}</span></p>
+        <div class="clearfix"></div>
+        <p style="float:right">هذه صفحة تعرض طلابك الحاليين بالموقع</p>
+        <div class="clearfix"></div>
+    </div>
+    <div class="container-of-ws" style="text-align : center">
+        {% if S_NUM == 0 %}
+        <span style="text-align:center; margin-top:10px">ليس لك طلاب</span>
+        {% else %}
+        {% for one_s in students %}
+        <div class="ws">
+<div class="first_letter alert-success">
+    <span>{{one_s['firstletter']}}</span>
+            </div>
+            <div class="infos">
+                        <span>Name : {{one_s['first_name']}} {{one_s['last_name']}}</span>
+                        <span>Email : {{one_s['email']}}</span>
+                        <span>Gender : {{one_s['gender']}}</span>
+
+                        <div class="btns">
+                        <a href="#" class="btn btn-danger deleteSt" data-sid="{{ one_s['_id'] }}"><i class="fa fa-times-circle deleteSt" data-sid="{{ one_s['_id'] }}"></i></a>
+                        </div>
+
+                </div>
+            </div>
+        {% endfor %}
+        {% endif %}
+        </div>
+    </div>
+</div>
+    {% endif %}

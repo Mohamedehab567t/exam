@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{{normalize}}">
     <link rel="stylesheet" href="{{Admin}}">
     <link rel="stylesheet" href="{{settings}}">
-    <title>Add Auto Exam</title>
+    <title>Add Manual Exam</title>
 </head>
 <body>
     <header>
@@ -34,7 +34,7 @@
 <div class="parent">
     <div class="welcome-part alert alert-success">
         <p>Welcome admin : {{ user['first_name'] }} at <span class="Variable">{{Sett['site_name']}}</span> Dashboard </p>
-        <p>this is page is for adding an automatic exam
+        <p>this is page is for adding a manual exam
         </p>
     </div>
      <div class="si">
@@ -50,7 +50,6 @@
 
                     <div class="ExamInfo" style="margin: 0px auto">
                     <small style="display : block;" class="hide" id="msg"></small>
-                    <input type="number" class="form-control si-addition" id="Q-no" data-number="{{ QNum }}" placeholder="Number of questions">
                     <input type="number" class="form-control si-addition" id="Du" placeholder="duration">
                     </div>
 
@@ -106,12 +105,18 @@
         </div>
     </div>
     </div>
+        <div id="QuestionChoose" class="container">
 
+        </div>
+        <div id="bu" class="mt-4 mb-4" style="display:flex; flex-direction:column">
+            <small class="mb-2" id="Array_of_Question"  style="margin : auto;"></small>
+            <button id="addExam" class="btn btn-success" style="margin : auto;"> Add Questions </button>
+        </div>
 
 
         <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
-        <script src="{{ url_for('static' , filename='js/AddAutoExam.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/AddManExam.js') }}"></script>
 </body>
 </html>
 {% elif Language =="Arabic" %}
@@ -129,9 +134,9 @@
     <link rel="stylesheet" href="{{normalize}}">
     <link rel="stylesheet" href="{{Admin}}">
     <link rel="stylesheet" href="{{settings}}">
-    <title>Add Auto Exam</title>
+    <title>Add Manual Exam</title>
 </head>
-<body style="direction : rtl">
+<body style="direction:rtl">
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand Variable" href="#">{{Sett['site_name']}}</a>
@@ -151,7 +156,7 @@
     <div class="welcome-part alert alert-success">
         <p style="float:right">مرحبا يا : {{ user['first_name'] }} في لوحة تحكم <span class="Variable">{{Sett['site_name']}}</span>  </p>
         <div class="clearfix"></div>
-        <p style="float:right">هذه الصفحة لاضافة امتحانات تلقائية
+        <p style="float:right">هذه الصفحة لاضافة امتحانات يدوية
         </p>
     <div class="clearfix"></div>
     </div>
@@ -166,11 +171,9 @@
                     <h3 style="margin: 10px auto">متطلبات الامتحان</h3>
                     <div class="ExamRequirements">
 
-                    <div class="ExamInfo" style="margin: 0px auto">
-                    <small style="display : block;float:right" class="hide" id="msg"></small>
-                    <div class="clearfix"></div>
-                    <input type="number" class="form-control si-addition" id="Q-no" data-number="{{ QNum }}" placeholder="عدد الاسئلة">
-                    <input type="number" class="form-control si-addition" id="Du" placeholder="مدة الامتحان بالدقائق">
+                    <div class="ExamInfo" style="margin: 0px auto;width: 50%;">
+                    <small style="display : block;" class="hide" id="msg"></small>
+                    <input style="width:100%" type="number" class="form-control si-addition" id="Du" placeholder="مدة الامتحان بالدقائق">
                     </div>
 
                     <div class="ExamInfo" style="margin: 0px auto">
@@ -225,20 +228,26 @@
                     {% endif %}
                 </div>
                 </div>
-                  <button type="submit" class="btn btn-success" id="AddQToDataBase" style="margin: 5px auto; float:right">اضافة الامتحان</button>
+                  <button type="submit" data-text="اضافة امتحان" class="btn btn-success" id="AddQToDataBase" style="margin: 5px auto; float:right">اضافة الامتحان</button>
                     <div class="clearfix"></div>
             </form>
-
         </div>
     </div>
     </div>
+        <div id="QuestionChoose" class="container">
 
+        </div>
+        <div id="bu" class="mt-4 mb-4" style="display:flex; flex-direction:column">
+            <small class="mb-2" id="Array_of_Question"  style="margin : auto;"></small>
+            <button id="addExam" class="btn btn-success" style="margin : auto;"> اضاقة الاسئلة </button>
+        </div>
 
 
         <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
-        <script src="{{ url_for('static' , filename='js/AddAutoExam.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/AddManExam.js') }}"></script>
 </body>
 </html>
-{% endif %}
+    {% endif %}
+
 

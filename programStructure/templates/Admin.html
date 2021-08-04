@@ -1,3 +1,4 @@
+{% if Language == 'English' or Language is none %}
 <html lang="en">
 <head>
 {% include 'AdminHead.html' %}
@@ -48,3 +49,60 @@
 
 </body>
 </html>
+{% elif Language == "Arabic" %}
+<html lang="ar">
+<head>
+{% include 'AdminHead.html' %}
+</head>
+<body style="direction : rtl">
+    <header>
+
+        {% include 'nav.html' %}
+
+    </header>
+ <div class="parent">
+    <div class="welcome-part alert alert-success">
+        <p style="float:right">مرحبا بك يا  : {{user['first_name']}} في  لوحة تحكم <span class="Variable">{{Sett['site_name']}}</span></p>
+        <div class="clearfix"></div>
+        <p style="float:right">هذه صفحة الطلاب المنتظرين سيكون لك هنا بعد الطلاب المنتظرين قبولك للدخول الي الامتحانات</p>
+        <div class="clearfix"></div>
+    </div>
+    <div class="container-of-ws" style="text-align : center">
+        {% if ws == 0 %}
+        <span style="text-align:center; margin-top:10px">لا يوجد طلبات</span>
+        {% else %}
+        {% for one_s in waiting %}
+        <div class="ws">
+            <div class="first_letter alert-success">
+                <span>{{one_s['firstletter']}}</span>
+            </div>
+            <div class="infos">
+                        <span>Name : {{one_s['first_name']}} {{one_s['last_name']}}</span>
+                        <span>Email : {{one_s['email']}}</span>
+                        <span>Gender : {{one_s['gender']}}</span>
+
+                        <div class="btns">
+                        <a href="#" class="btn btn-success accept_WS" data-sid="{{ one_s['_id'] }}"><i class="fa fa-check-circle accept_WS" data-sid="{{ one_s['_id'] }}"></i></a>
+                        <a href="#" class="btn btn-danger refuse_WS" data-sid="{{ one_s['_id'] }}"><i class="fa fa-times-circle refuse_WS" data-sid="{{ one_s['_id'] }}"></i></a>
+                        </div>
+
+                </div>
+            </div>
+        {% endfor %}
+        {% endif %}
+        </div>
+    </div>
+</div>
+    <div class="d-flex justify-content-center Loading">
+        <div class="spinner-border text-success" style="margin:auto" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+        <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/admin.js') }}"></script>
+
+
+</body>
+</html>
+{% endif %}

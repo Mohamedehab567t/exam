@@ -1,0 +1,101 @@
+       {% if Language == 'English' or Language is none %}
+        {% for exam in Exams %}
+        {% if exam['ExamInformation']['Status'] == 'Submitted' %}
+        <div class="examContainer">
+            <div class="head">
+                <span>Exam ({{exam['_id']}})</span>
+            </div>
+            <div class="Information">
+                <h3>Exam Information</h3>
+                <div class="infos">
+                {% for key in exam['ExamInformation'] %}
+                <span id="{{key}}">{{key}} : {{exam['ExamInformation'][key]}}</span>
+                {% endfor %}
+            </div>
+            </div>
+            <hr>
+            <div class="Information">
+                <h3>Question Information</h3>
+                <div class="infos">
+                {% for key in exam['QuestionInformation'] %}
+                <span id="{{key}}">{{key}} : {{exam['QuestionInformation'][key]}}</span>
+                {% endfor %}
+            </div>
+            </div>
+            <hr>
+            <div class="Information">
+                <h3>Student Information</h3>
+                <div class="infos">
+                {% for key in exam['StudentsInformation'] %}
+                {% if key != 'Absent' and key != 'Attended' and key != 'Submitted' %}
+                <span id="{{key}}">{{key}} : {{exam['StudentsInformation'][key]}}</span>
+                {% endif %}
+                {% endfor %}
+                <span id="Absent">Absent-students : {{exam['StudentsInformation']['Absent'] | length }}</span>
+                <span id="Attended">Attended-students : {{exam['StudentsInformation']['Attended'] | length }}</span>
+            </div>
+            </div>
+            <hr>
+            <div class="NEXT">
+                <a class="btn btn-success" href="{{ url_for('examDash' , exam_id = exam['_id'] ) }}"> Exam Dashboard </a>
+            </div>
+        </div>
+        {% else %}
+        {% if loop.index == Exams|length%}
+        <div class="SpaCon" style="text-align:center">
+            <span>No Submitted Exams More</span>
+        </div>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+       {% elif Language =="Arabic" %}
+           {% for exam in Exams %}
+        {% if exam['ExamInformation']['Status'] == 'Submitted' %}
+        <div class="examContainer">
+            <div class="head">
+                <span>امتحان ({{exam['_id']}})</span>
+            </div>
+            <div class="Information">
+                <h3>معلومات الامتحان</h3>
+                <div class="infos">
+                {% for key in exam['ExamInformation'] %}
+                <span id="{{key}}">{{key}} : {{exam['ExamInformation'][key]}}</span>
+                {% endfor %}
+            </div>
+            </div>
+            <hr>
+            <div class="Information">
+                <h3>معلومات الاسئلة</h3>
+                <div class="infos">
+                {% for key in exam['QuestionInformation'] %}
+                <span id="{{key}}">{{key}} : {{exam['QuestionInformation'][key]}}</span>
+                {% endfor %}
+            </div>
+            </div>
+            <hr>
+            <div class="Information">
+                <h3>معلومات الطلاب</h3>
+                <div class="infos">
+                {% for key in exam['StudentsInformation'] %}
+                {% if key != 'Absent' and key != 'Attended' and key != 'Submitted' %}
+                <span id="{{key}}">{{key}} : {{exam['StudentsInformation'][key]}}</span>
+                {% endif %}
+                {% endfor %}
+                <span id="Absent">الغائبين : {{exam['StudentsInformation']['Absent'] | length }}</span>
+                <span id="Attended">الحاضرين : {{exam['StudentsInformation']['Attended'] | length }}</span>
+            </div>
+            </div>
+            <hr>
+            <div class="NEXT">
+                <a class="btn btn-success" href="{{ url_for('examDash' , exam_id = exam['_id'] ) }}"> Exam Dashboard </a>
+            </div>
+        </div>
+        {% else %}
+        {% if loop.index == Exams|length%}
+        <div class="SpaCon" style="text-align:center">
+            <span>لا يوجد امتحانات منتهية بعد</span>
+        </div>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+        {% endif %}

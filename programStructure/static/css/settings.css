@@ -41,13 +41,13 @@ margin-bottom: 45px;
 @media screen and (max-width:400px) {
   .si .si-cont form .my-row input , .si .si-cont form .my-row select ,
   .si .si-cont form .form-group input ,.si .si-cont form .my-row .si-addition {
-    width: 60%;
+    width: 100%;
   }
 }
 @media screen and (min-width:401px) and (max-width:768px) {
   .si .si-cont form .my-row input , .si .si-cont form .my-row select ,
   .si .si-cont form .form-group input ,.si .si-cont form .my-row .si-addition{
-    width: 65%;
+    width: 100%;
   }
 }
 .si .si-cont form .my-row .colors {

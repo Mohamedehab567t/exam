@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/Admin.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/settings.css')}}">
     <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
-    <script src="{{ url_for('static' , filename='js/Theme.js') }}"></script>
+    {% if Language == 'English' or Language is none %}
     <title>Admin Panel</title>
+    {% elif Language =="Arabic" %}
+    <title>لوحة تحكم الادمن</title>
+    {% endif %}
 </head>

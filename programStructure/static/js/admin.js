@@ -1,10 +1,16 @@
 $(document).ready(function(){
+$('.Loading').attr('style' , 'display : none !important;')
 
     $('#SNumber').on('click' , function(){
                 $.ajax({
                 type: 'POST',
                 url: '/Students',
                 contentType: 'application/json;charset=UTF-8',
+                beforeSend : function(){
+                $('.Loading').attr('style' , '')},
+                complete: function(){
+                $('.Loading').attr('style' , 'display : none !important;')
+                },
                 success : function(data){
                     $('.parent').fadeOut(100).fadeIn(100)
                     $('.parent').html(data['temp'])
@@ -18,6 +24,11 @@ $(document).ready(function(){
                 type: 'POST',
                 url: '/Waiting_Students',
                 contentType: 'application/json;charset=UTF-8',
+                beforeSend : function(){
+                $('.Loading').attr('style' , '')},
+                complete: function(){
+                $('.Loading').attr('style' , 'display : none !important;')
+                },
                 success : function(data){
                     $('.parent').fadeOut(100).fadeIn(100)
                     $('.parent').html(data['temp'])
