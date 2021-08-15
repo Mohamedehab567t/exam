@@ -29,7 +29,7 @@ def login():
     Sett = SiDB.find_one({'_id': Setting_ID})
     Language = request.cookies.get('Language')
     global form
-    if Language == "English" or Language == "None":
+    if Language == "English" or Language is None:
         form = LoginForm()
     elif Language == "Arabic":
         form = LoginFormInArabic()
@@ -60,7 +60,7 @@ def register():
     Sett = SiDB.find_one({'_id': Setting_ID})
     Language = request.cookies.get('Language')
     global form
-    if Language == "English" or Language == "None":
+    if Language == "English" or Language is None:
         form = SignUp()
     elif Language == "Arabic":
         form = SignUpInArabic()
