@@ -125,7 +125,12 @@ $('.'+SmallClass).text("")
         Exam_Information['to'] = to
         Exam_Information['Question_Part'] = Question_Information
         Exam_Information['Student_Part'] = Student_Information
-                $.ajax({
+
+        var f = from.split('T')
+        var t = to.split('T')
+        var o = CheckTime(f,t)
+        if(o){
+               $.ajax({
                 type: 'POST',
                 url: '/AddAutoExam',
                 data: JSON.stringify(Exam_Information),
@@ -140,6 +145,21 @@ $('.'+SmallClass).text("")
                     window.location = '/exams'
                 }
                 });
+        }else{
+        var IsHere = checkCookie('Language')
+        if(IsHere){
+        var Cookie = getCookie('Language')
+        if(Cookie == "English"){
+        alert('There is error in data')
+        }else if (Cookie == "Arabic"){
+        alert('هناك خطأ في التاريخ')
+        }
+        }else{
+        alert('There is error in data')
+        }
+        }
+
+
         }
         })
 
@@ -188,6 +208,25 @@ function getCookie(cname) {
     }
   }
   return "";
+}
+function CheckTime(from , to){
+var DateFrom = from[0]
+var TimeFrom = from[1]
+var DateTo = to[0]
+var TimeTo = to[1]
+var partsFrom = DateFrom.split('-')
+var partsTo = DateTo.split('-')
+var partsFromTime = TimeFrom.split(':')
+var partsToTime = TimeTo.split(':')
+
+var FromDate = new Date(partsFrom[0], partsFrom[1] - 1 , partsFrom[2],partsFromTime[0] , partsFromTime[1])
+var ToDate = new Date(partsTo[0], partsTo[1] - 1 , partsTo[2],partsToTime[0] , partsToTime[1])
+var Current = new Date()
+if (ToDate < FromDate || FromDate < Current){
+return false
+}else{
+return true
+}
 }
 
 function checkCookie(cname) {
