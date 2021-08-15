@@ -3,7 +3,7 @@
         {% if exam['ExamInformation']['Status'] == 'Active' %}
         <div class="examContainer">
             <div class="head">
-                <span>Exam ({{exam['_id']}})</span>
+                <span>{{ exam['ExamInformation']['title'] }}</span>
             </div>
             <div class="Information">
                 <h3>Exam Information</h3>
@@ -53,7 +53,7 @@
         {% if exam['ExamInformation']['Status'] == 'Active' %}
         <div class="examContainer">
             <div class="head">
-                <span>امتحان ({{exam['_id']}})</span>
+                <span>{{ exam['ExamInformation']['title'] }}</span>
             </div>
             <div class="Information">
                 <h3>معلومات الامتحان</h3>

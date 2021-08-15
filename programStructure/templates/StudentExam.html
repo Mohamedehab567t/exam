@@ -43,7 +43,7 @@
         {% for q in QU %}
         <h5 id="Qid" data-sid="{{ q['_id'] }}" style="text-align: center;" class="mb-1">Question {{ loop.index }}</h5>
         {% if q['Q-type'] == "text"  %}
-        <div class="TextQ">
+        <div class="TextQ mt-3" style="padding: 5px; border: .5px solid grey;">
             <p class="title">
             {{q['Q-title']}}
             </p>
@@ -61,7 +61,7 @@
         </div>
         {% elif q['Q-type'] == "images" %}
 
-        <div class="ImageQ">
+        <div class="ImageQ mt-3" style="padding: 5px; border: .5px solid grey;">
 
             <p class="title">
                 {{q['Q-title']}}
@@ -132,7 +132,14 @@
         <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
-            <script src="{{ url_for('static' , filename='js/examPR.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/examPR.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/inExam.js') }}"></script>
+    <script>
+  window.onbeforeunload = confirmExit;
+  function confirmExit()
+  {
+    return "You have attempted to leave this page.  If you have made any changes to the fields without clicking the Save button, your changes will be lost.  Are you sure you want to exit this page?";
+  }
+    </script>
 </body>
 </html>

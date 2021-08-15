@@ -47,16 +47,20 @@
 
                     <h3 style="margin: 10px auto">Exam Requirements</h3>
                     <div class="ExamRequirements">
-
+                    <div class="ExamInfo" style="margin: 0px auto">
+                    <input style="width: 100%;" type="text" class="form-control si-addition" id="Q-title"  placeholder="exam title">
+                    </div>
                     <div class="ExamInfo" style="margin: 0px auto">
                     <small style="display : block;" class="hide" id="msg"></small>
                     <input type="number" class="form-control si-addition" id="Q-no" data-number="{{ QNum }}" placeholder="Number of questions">
                     <input type="number" class="form-control si-addition" id="Du" placeholder="duration">
                     </div>
 
-                    <div class="ExamInfo" style="margin: 0px auto">
-                    <input type="time" class="form-control si-addition" id="from"  placeholder="From">
-                    <input type="time" class="form-control si-addition" id="to"  placeholder="To">
+                    <div class="ExamInfo" style="margin: 0px auto; text-align:center">
+                    <small style="display:block; font-weight : 700">From</small>
+                        <input type="datetime-local" class="form-control si-addition" id="from"  placeholder="From">
+                    <small style="display:block">To</small>
+                        <input type="datetime-local" class="form-control si-addition" id="to"  placeholder="To">
                     </div>
                     </div>
                         <hr>
@@ -129,7 +133,7 @@
     <link rel="stylesheet" href="{{normalize}}">
     <link rel="stylesheet" href="{{Admin}}">
     <link rel="stylesheet" href="{{settings}}">
-    <title>Add Auto Exam</title>
+    <title>اضافة امتحان تلقائي</title>
 </head>
 <body style="direction : rtl">
     <header>
@@ -165,7 +169,9 @@
 
                     <h3 style="margin: 10px auto">متطلبات الامتحان</h3>
                     <div class="ExamRequirements">
-
+                    <div class="ExamInfo" style="margin: 0px auto">
+                    <input style="width: 100%;" type="text" class="form-control si-addition" id="Q-title"  placeholder="عنوان الامتحان">
+                    </div>
                     <div class="ExamInfo" style="margin: 0px auto">
                     <small style="display : block;float:right" class="hide" id="msg"></small>
                     <div class="clearfix"></div>
@@ -173,9 +179,13 @@
                     <input type="number" class="form-control si-addition" id="Du" placeholder="مدة الامتحان بالدقائق">
                     </div>
 
-                    <div class="ExamInfo" style="margin: 0px auto">
-                    <input type="time" class="form-control si-addition" id="from"  placeholder="من">
-                    <input type="time" class="form-control si-addition" id="to"  placeholder="الي">
+
+
+                    <div class="ExamInfo" style="margin: 0px auto; text-align:center">
+                    <small style="display:block; font-weight : 700">من</small>
+                        <input type="datetime-local" class="form-control si-addition" id="from"  placeholder="من">
+                    <small style="display:block">الي</small>
+                        <input type="datetime-local" class="form-control si-addition" id="to"  placeholder="الي">
                     </div>
                     </div>
                         <hr>

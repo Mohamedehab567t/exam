@@ -22,7 +22,19 @@
     <div class="letter alert-success">
             <span>{{user['firstletter']}}</span>
         </div>
-
+        {% with m = get_flashed_messages()%}
+        {% if m %}
+        {% for message in m %}
+        <div class="alert alert-success" style="
+    color: #00795c;
+    width: fit-content;
+    margin: 10px auto;
+        ">
+        {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
     {% set Mes = user['Messages'] %}
     {% if Mes|length == 0 %}
         <div class="SpaCon" style="text-align:center">
@@ -35,8 +47,15 @@
                 <span data-sid="{{ current_user.id }}" id="EXAM" style="display : none">{{m}}</span>
                 <div class="my-row">
                     <div class="my-col">
-                    <span>From {{m['ExamInformation']['From']}} To {{m['ExamInformation']['To']}}</span>
-                    </div>
+                    {% set from = m['ExamInformation']['From'].split('T')[1] %}
+                    {% set to = m['ExamInformation']['To'].split('T')[1] %}
+                    {% set FROM = from.split(':') %}
+                    {% set TO = to.split(':') %}
+                    {% if FROM[0]|int > 12 or TO[0]|int > 12 %}
+                    <span>from {{FROM[0]|int - 12 }}:{{FROM[1]}} PM to {{TO[0]|int - 12}}:{{TO[1]}} PM</span>
+                    {% else %}
+                    <span>from {{from}} AM to {{to}} AM</span>
+                    {% endif %}                    </div>
                     <div class="my-col">
                     <span>Access-code : {{m['ExamInformation']['AccessCode']}}</span>
                     </div>
@@ -77,6 +96,7 @@
         <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.jss"></script>
         <script src="{{ url_for('static' , filename='js/message.js') }}"></script>
 
 </body>
@@ -105,6 +125,19 @@
     <div class="letter alert-success">
             <span>{{user['firstletter']}}</span>
         </div>
+        {% with m = get_flashed_messages()%}
+        {% if m %}
+        {% for message in m %}
+        <div class="alert alert-success" style="
+    color: #00795c;
+    width: fit-content;
+    margin: 10px auto;
+        ">
+        {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
 
     {% set Mes = user['Messages'] %}
     {% if Mes|length == 0 %}
@@ -118,7 +151,15 @@
                 <span data-sid="{{ current_user.id }}" id="EXAM" style="display : none">{{m}}</span>
                 <div class="my-row">
                     <div class="my-col">
-                    <span>من {{m['ExamInformation']['From']}} الي {{m['ExamInformation']['To']}}</span>
+                    {% set from = m['ExamInformation']['From'].split('T')[1] %}
+                    {% set to = m['ExamInformation']['To'].split('T')[1] %}
+                    {% set FROM = from.split(':') %}
+                    {% set TO = to.split(':') %}
+                    {% if FROM[0]|int > 12 or TO[0]|int > 12 %}
+                    <span>من {{FROM[0]|int - 12 }}:{{FROM[1]}} PM الي {{TO[0]|int - 12}}:{{TO[1]}} PM</span>
+                    {% else %}
+                    <span>من {{from}} AM الي {{to}} AM</span>
+                    {% endif %}
                     </div>
                     <div class="my-col">
                     <span>رمز الدخول : {{m['ExamInformation']['AccessCode']}}</span>
@@ -160,6 +201,7 @@
         <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
         <script src="{{ url_for('static' , filename='js/message.js') }}"></script>
 
 </body>

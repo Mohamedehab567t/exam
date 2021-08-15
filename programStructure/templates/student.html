@@ -103,6 +103,7 @@
 
         <div class="fixednav">
             <a href="#" class="Variable"><i class="fa fa-user i"></i></a>
+            <a href="#" id="langChange" class="Variable"><i style="font-weight:800">AR</i></a>
             {% if user['Messages']|length > 0 %}
             <a href="{{url_for('Messages')}}" style="background-color : red" class="Variable message"><i class="fa fa-envelope"></i></a>
             {% else %}
@@ -230,6 +231,7 @@
 
         <div class="fixednav">
             <a href="#" class="Variable"><i class="fa fa-user i"></i></a>
+            <a href="#" id="langChange" class="Variable"><i style="font-weight:800">EN</i></a>
             {% if user['Messages']|length > 0 %}
             <a href="{{url_for('Messages')}}" style="background-color : red" class="Variable message"><i class="fa fa-envelope"></i></a>
             {% else %}

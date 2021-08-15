@@ -34,7 +34,7 @@
     <div class="container">
         {% for q in QU %}
         {% if q['Q-type'] == "text"  %}
-        <div class="TextQ">
+        <div class="TextQ mt-3" style="padding: 5px; border: .5px solid grey;">
             <p class="title">
             {{q['Q-title']}}
             </p>
@@ -50,7 +50,7 @@
         </div>
         {% elif q['Q-type'] == "images" %}
 
-        <div class="ImageQ">
+        <div class="ImageQ mt-3" style="padding: 5px; border: .5px solid grey;">
 
             <p class="title">
                 {{q['Q-title']}}
@@ -157,7 +157,7 @@
     <div class="container">
         {% for q in QU %}
         {% if q['Q-type'] == "text"  %}
-        <div class="TextQ">
+        <div class="TextQ mt-3" style="padding: 5px; border: .5px solid grey;">
             <p class="title">
             {{q['Q-title']}}
             </p>
@@ -173,7 +173,7 @@
         </div>
         {% elif q['Q-type'] == "images" %}
 
-        <div class="ImageQ">
+        <div class="ImageQ mt-3" style="padding: 5px; border: .5px solid grey;">
 
             <p class="title">
                 {{q['Q-title']}}
