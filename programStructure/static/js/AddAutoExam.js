@@ -93,6 +93,7 @@ $('.'+SmallClass).text("")
         duration = $('#Du').val()
         from = $('#from').val()
         to = $('#to').val()
+        title = $('#Q-title').val()
         QuestionPartInputs = Array.from($('.QuestionPart').children())
         StudentPart = Array.from($('.StudentPart').children())
 
@@ -118,6 +119,7 @@ $('.'+SmallClass).text("")
         }
         })
         Exam_Information['NoQ'] = No
+        Exam_Information['title'] = title
         Exam_Information['duration'] = duration
         Exam_Information['from'] = from
         Exam_Information['to'] = to
@@ -135,7 +137,7 @@ $('.'+SmallClass).text("")
                 $('#AddQToDataBase').text('Done')
                 },
                 success : function(data){
-                    window.location.reload()
+                    window.location = '/exams'
                 }
                 });
         }

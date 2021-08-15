@@ -23,7 +23,7 @@ $(e).attr('data-selected' , 'false')
 $(e).css('background-color' , '#83ff77')
 }
 })
-$(clicked).css('background-color' , 'white')
+$(clicked).css('background-color' , 'green')
 })
 
 

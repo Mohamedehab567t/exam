@@ -24,5 +24,21 @@ $(window).on('click' , function(e){
         $(e.target).hide()
     }
 })
+coloring()
+function coloring(){
+var D = []
+var Container = Array.from($('.container').children())
+Container.forEach(e => {
+if($(e).hasClass('TextQ') || $(e).hasClass('ImageQ')){
+D.push(e)
+}
+})
+D.forEach(e => {
+var index = D.indexOf(e)
+if(index % 2 == 0 ){
+$(e).css('background-color' , 'aliceblue')
+}
+})
+}
 
 })

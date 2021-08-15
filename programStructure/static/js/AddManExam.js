@@ -58,6 +58,7 @@ var E_ID;
         duration = $('#Du').val()
         from = $('#from').val()
         to = $('#to').val()
+        title = $('#Q-title').val()
         QuestionPartInputs = Array.from($('.QuestionPart').children())
         StudentPart = Array.from($('.StudentPart').children())
 
@@ -83,6 +84,7 @@ var E_ID;
         }
         })
         Exam_Information['NoQ'] = No
+        Exam_Information['title'] = title
         Exam_Information['duration'] = duration
         Exam_Information['from'] = from
         Exam_Information['to'] = to
@@ -160,7 +162,7 @@ console.log(Array_od_ids)
               $('#addExam').text('Add exam')
               },
               success : function(data){
-              window.location.reload()
+              window.location = '/exams'
               }
               });
 

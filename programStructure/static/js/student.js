@@ -5,10 +5,27 @@ $(document).ready(function(){
         UpdateInformation(arr)
         e.preventDefault()
     })
+
+
+    $('#langChange').on('click' , function(){
+    var textLang = $(this).text()
+    if(textLang == 'AR'){
+    setCookie('Language' , 'Arabic' , 100000)
+    window.location.reload()
+    }else if (textLang == 'EN'){
+    setCookie('Language' , 'English' , 100000)
+    window.location.reload()
+    }
     })
 
+  function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
 
-
+})
 function CheckIfEmpty(el){
 var eVal = []
 el.forEach(e => {
