@@ -204,6 +204,7 @@ def CreateAutoExamObject(INFO):
     ExamObject['Duration'] = INFO['duration']
     ExamObject['From'] = INFO['from']
     ExamObject['To'] = INFO['to']
+    ExamObject['title'] = INFO['title']
     ExamObject['Status'] = 'Active'
     ExamObject['FullMark'] = FullMark
     ExamObject['AccessCode'] = GenerateAccessCode(2)
@@ -272,6 +273,7 @@ def CreateManualExamObject(INFO):
     ExamObject['Duration'] = INFO['duration']
     ExamObject['From'] = INFO['from']
     ExamObject['To'] = INFO['to']
+    ExamObject['title'] = INFO['title']
     ExamObject['Status'] = 'Active'
     ExamObject['FullMark'] = FullMark
     ExamObject['AccessCode'] = GenerateAccessCode(2)

@@ -77,7 +77,7 @@ def register():
             for errorM in form[ferror].errors:
                 errorC = errorM
         return render_template('register.html', errorM=errorC, form=form, font=font, bootstrap=bootstrap,
-                               normalize=normalize,Language=Language, registerCss=registerCss, Sett=Sett)
+                               normalize=normalize, registerCss=registerCss, Sett=Sett)
 
     return render_template("register.html", bootstrap=bootstrap, normalize=normalize,
                            registerCss=registerCss, form=form, Language=Language ,font=font, Sett=Sett)
@@ -422,7 +422,7 @@ def examQ(exam_id):
     if current_user.is_anonymous:
         return redirect(url_for('login'))
     return render_template('ExamPreview.html', bootstrap=bootstrap, normalize=normalize,
-                           Admin=Admin, Language=Language ,Sett=Sett, exam=exam, QU=Questions, font=font, examCSS=examCSS)
+                           Admin=Admin, Language=Language ,Sett=Sett, exam=exam ,QU=Questions, font=font, examCSS=examCSS)
 
 
 @app.route('/ExamPublish/<int:exam_id>', methods=['GET', 'POST'])
@@ -492,24 +492,11 @@ def Messages():
                            Admin=Admin, Language=Language ,student=student, Sett=Sett, user=user, font=font, message=message)
 
 
-@app.route('/CheckIfAttending', methods=['POST', 'GET'])
-@login_required
-def CheckIfAttending():
-    E_info = request.get_json()
-    exam = ActiveExamsDB.find_one({'_id': E_info['id']})
-    for S in exam['StudentsInformation']['Attended']:
-        if S['_id'] == current_user.id:
-            return 'You Attended before'
-
-    return 'Done'
-
-
 @app.route('/DeleteMSG', methods=['POST', 'GET'])
 @login_required
 def DeleteMSG():
     E_info = request.get_json()
     user = Student.find_one({'_id': current_user.id})
-
     for m in user['Messages']:
         if m['_id'] == E_info['id']:
             Student.update(user,
@@ -528,7 +515,6 @@ def GoToExam():
     E_info = request.get_json()
     exam = ActiveExamsDB.find_one({'_id': E_info['id']})
     user = Student.find_one({'_id': current_user.id})
-
     ActiveExamsDB.update(exam,
                          {'$pull': {
                              'StudentsInformation.Absent': {
@@ -536,11 +522,13 @@ def GoToExam():
                              }
                          }})
 
-    ActiveExamsDB.update({'_id': exam['_id']}, {
-        '$push': {
-            'StudentsInformation.Attended': user
-        }
-    })
+    if user not in exam['StudentsInformation']['Attended']:
+        ActiveExamsDB.update({'_id': exam['_id']}, {
+            '$push': {
+                'StudentsInformation.Attended': user
+            }
+        })
+
     for m in user['Messages']:
         if m['_id'] == E_info['id']:
             Student.update(user,
@@ -563,9 +551,18 @@ def StudentExam(exam_id):
     normalize = url_for('static', filename='css/normalize.css')
     Admin = url_for('static', filename='css/Admin.css')
     examCSS = url_for('static', filename='css/ExamPR.css')
+    user = Student.find_one({'_id' : current_user.id})
     Sett = SiDB.find_one({'_id': Setting_ID})
+    Language = request.cookies.get('Language')
     if current_user.is_anonymous:
         return redirect(url_for('login'))
+    if user in exam['StudentsInformation']['Attended']:
+        if Language == 'English' or Language is None:
+            flash('You attended before')
+            return redirect(url_for('Messages'))
+        elif Language == 'Arabic':
+            flash('لقد حضرت من قبل')
+            return redirect(url_for('Messages'))
     return render_template('StudentExam.html', bootstrap=bootstrap, normalize=normalize,
                            Admin=Admin, Sett=Sett, exam=exam, QU=Questions, font=font, examCSS=examCSS)
 
@@ -631,17 +628,22 @@ def results():
     Language = request.cookies.get('Language')
     if current_user.is_anonymous:
         return redirect(url_for('login'))
-
-    for i, r in enumerate(list(user['Results'])):
-        if r['status'] == 'Unseen':
-            Student.update_one({'_id': current_user.id}, {
-                '$set': {
-                    'Results.' + str(i) + '.status': 'seen'
-                }
-            })
+    try:
+        for i, r in enumerate(list(user['Results'])):
+            if r['status'] == 'Unseen':
+                Student.update_one({'_id': current_user.id}, {
+                    '$set': {
+                        'Results.' + str(i) + '.status': 'seen'
+                    }
+                })
+    except KeyError:
+        if Language == 'English' or Language is None:
+            flash('No Results yet')
+        elif Language == 'Arabic':
+            flash('لا يوجد درجات بعد')
+        return redirect(url_for('profile'))
     return render_template('Result.html', bootstrap=bootstrap, normalize=normalize,
                            Admin=Admin, Language=Language ,student=student, Sett=Sett, user=user, font=font, message=message)
-
 
 @app.route('/AddingManExam', methods=['POST', 'GET'])
 @login_required
