@@ -67,8 +67,11 @@
                     <div class="my-col">
                         <span>Duration : {{m['ExamInformation']['Duration']}} Minute</span>
                     </div>
+                    <div class="my-col">
+                        <span>will end in : {{m['ExamInformation']['To'].split('T')[0]}}</span>
                     </div>
-                <small class="mb-3" id="msg"></small>
+                    </div>
+                <small class="mb-3" style="display:block;color:red" id="msg"></small>
                 <button type="submit" id="join" class="btn btn-success mb-3">Join exam</button>
                   <button type="button" class="btn btn-danger mb-3 deleteMSG">Delete</button>
             </form>
@@ -172,8 +175,11 @@
                     <div class="my-col">
                         <span>مدة الامتحان : {{m['ExamInformation']['Duration']}} دقائق</span>
                     </div>
+                    <div class="my-col">
+                        <span>سينتهي يوم : {{m['ExamInformation']['To'].split('T')[0]}}</span>
                     </div>
-                <small class="mb-3" id="msg"></small>
+                    </div>
+                <small class="mb-3" style="display:block;color:red" id="msg"></small>
                 <button type="submit" id="join" class="btn btn-success mb-3">دخول</button>
                   <button type="button" class="btn btn-danger mb-3 deleteMSG">حذف</button>
             </form>
