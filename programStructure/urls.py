@@ -2,7 +2,7 @@ import werkzeug
 from programStructure import app, log, Setting_ID
 from flask import render_template, url_for, redirect, flash, request, session
 from .models import GetUser, Student, WS, SiDB, QDB, ActiveExamsDB
-from .forms import SignUp, LoginForm , LoginFormInArabic , SignUpInArabic
+from .forms import SignUp, LoginForm, LoginFormInArabic, SignUpInArabic
 from .functions import SendWaitingRequest, savepic, CreateAutoExamObject, AddStudent, \
     DeleteWaitingStudent, \
     ReturnNewStudentNumber, \
@@ -29,9 +29,9 @@ def login():
     Sett = SiDB.find_one({'_id': Setting_ID})
     Language = request.cookies.get('Language')
     global form
-    if Language == "English" or Language == "None" :
+    if Language == "English" or Language == "None":
         form = LoginForm()
-    elif Language == "Arabic" :
+    elif Language == "Arabic":
         form = LoginFormInArabic()
 
     if form.validate_on_submit():
@@ -46,9 +46,9 @@ def login():
                 errorC = errorM
                 return render_template('login.html', errorM=errorC, form=form, bootstrap=bootstrap,
                                        normalize=normalize,
-                                       loginCss=loginCss,Language=Language, Sett=Sett)
+                                       loginCss=loginCss, Language=Language, Sett=Sett)
     return render_template("login.html", bootstrap=bootstrap, normalize=normalize,
-                           loginCss=loginCss, form=form,Language=Language, font=font, Sett=Sett)
+                           loginCss=loginCss, form=form, Language=Language, font=font, Sett=Sett)
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -80,7 +80,7 @@ def register():
                                normalize=normalize, registerCss=registerCss, Sett=Sett)
 
     return render_template("register.html", bootstrap=bootstrap, normalize=normalize,
-                           registerCss=registerCss, form=form, Language=Language ,font=font, Sett=Sett)
+                           registerCss=registerCss, form=form, Language=Language, font=font, Sett=Sett)
 
 
 @app.route('/redirectto')
@@ -105,7 +105,7 @@ def profile():
     Sett = SiDB.find_one({'_id': Setting_ID})
     Language = request.cookies.get('Language')
     return render_template("student.html", bootstrap=bootstrap, normalize=normalize,
-                           student=student,Language=Language, font=font, Admin=Admin, Sett=Sett, user=user)
+                           student=student, Language=Language, font=font, Admin=Admin, Sett=Sett, user=user)
 
 
 @app.route('/dashboard', methods=['POST', 'GET'])
@@ -126,7 +126,7 @@ def dashboard():
         Language = request.cookies.get('Language')
         return render_template("Admin.html", bootstrap=bootstrap, normalize=normalize,
                                Admin=Admin, user=user, font=font, students=students, waiting=waiting, s=S_NUM,
-                               ws=WS_NUM, Language=Language ,Sett=Sett)
+                               ws=WS_NUM, Language=Language, Sett=Sett)
     else:
         return redirect(url_for('redirectto'))
 
@@ -166,7 +166,8 @@ def Students():
     AdminHead = render_template('AdminHead.html')
     Language = request.cookies.get('Language')
     data = {
-        'temp': render_template('Students.html', Language=Language ,user=user, S_NUM=S_NUM, students=students, Sett=Sett),
+        'temp': render_template('Students.html', Language=Language, user=user, S_NUM=S_NUM, students=students,
+                                Sett=Sett),
         'AdminHead': AdminHead
     }
     return data
@@ -182,7 +183,8 @@ def Waiting_Students():
     AdminHead = render_template('AdminHead.html')
     Language = request.cookies.get('Language')
     data = {
-        'temp': render_template('WaitingStudent.html', Language=Language ,user=user, WS_NUM=WS_NUM, waiting=waiting, Sett=Sett),
+        'temp': render_template('WaitingStudent.html', Language=Language, user=user, WS_NUM=WS_NUM, waiting=waiting,
+                                Sett=Sett),
         'AdminHead': AdminHead
     }
     return data
@@ -201,7 +203,7 @@ def Settings():
     user = Student.find_one({'_id': current_user.id})
     Sett = SiDB.find_one({'_id': Setting_ID})
     Language = request.cookies.get('Language')
-    return render_template('Settings.html', Language=Language ,bootstrap=bootstrap, normalize=normalize,
+    return render_template('Settings.html', Language=Language, bootstrap=bootstrap, normalize=normalize,
                            Admin=Admin, user=user, font=font, settings=settings, Sett=Sett)
 
 
@@ -337,7 +339,8 @@ def AddingAutoExam():
     Sett = SiDB.find_one({'_id': Setting_ID})
     QNum = len(list(QDB.find()))
     return render_template('AddingAutoExam.html', bootstrap=bootstrap, normalize=normalize,
-                           Admin=Admin, QNum=QNum, Language=Language ,user=user, font=font, settings=settings, Sett=Sett)
+                           Admin=Admin, QNum=QNum, Language=Language, user=user, font=font, settings=settings,
+                           Sett=Sett)
 
 
 @app.route('/AddAutoExam', methods=['POST', 'GET'])
@@ -348,8 +351,9 @@ def AddAutoExam():
     Language = request.cookies.get('Language')
     if Language == 'English' or Language is None:
         return 'Exam Added'
-    elif Language == 'Arabic' :
+    elif Language == 'Arabic':
         return 'تمت اضافة الامتحان'
+
 
 @app.route('/exams', methods=['POST', 'GET'])
 @login_required
@@ -365,8 +369,14 @@ def exams():
     Sett = SiDB.find_one({'_id': Setting_ID})
     Exams = list(ActiveExamsDB.find())
     Language = request.cookies.get('Language')
+    try:
+        ActiveExamsDB.delete_many({'ExamInformation.Status': 'Without'})
+    except TypeError:
+        print('Error')
+
     return render_template('exam.html', bootstrap=bootstrap, normalize=normalize,
-                           Admin=Admin, Language=Language ,Exams=Exams, user=user, font=font, examCSS=examCSS, Sett=Sett)
+                           Admin=Admin, Language=Language, Exams=Exams, user=user, font=font, examCSS=examCSS,
+                           Sett=Sett)
 
 
 @app.route('/returnExams', methods=['POST', 'GET'])
@@ -374,9 +384,9 @@ def exams():
 def returnExams():
     Exams = list(ActiveExamsDB.find())
     Language = request.cookies.get('Language')
-    temp1 = render_template('ActiveExams.html', Language=Language ,Exams=Exams)
-    temp2 = render_template('PublishedExam.html', Language=Language ,Exams=Exams)
-    temp3 = render_template('SubmittedExam.html',Language=Language , Exams=Exams)
+    temp1 = render_template('ActiveExams.html', Language=Language, Exams=Exams)
+    temp2 = render_template('PublishedExam.html', Language=Language, Exams=Exams)
+    temp3 = render_template('SubmittedExam.html', Language=Language, Exams=Exams)
 
     data = {
         'temp': temp1,
@@ -404,7 +414,8 @@ def examDash(exam_id):
     if current_user.is_anonymous:
         return redirect(url_for('login'))
     return render_template('ExamDashboard.html', bootstrap=bootstrap, normalize=normalize,
-                           Admin=Admin, Language=Language ,Sett=Sett, exam=exam, ST=StudentInformation, font=font, examCSS=examCSS)
+                           Admin=Admin, Language=Language, Sett=Sett, exam=exam, ST=StudentInformation, font=font,
+                           examCSS=examCSS)
 
 
 @app.route('/ExamQuestions/<int:exam_id>', methods=['GET', 'POST'])
@@ -422,7 +433,8 @@ def examQ(exam_id):
     if current_user.is_anonymous:
         return redirect(url_for('login'))
     return render_template('ExamPreview.html', bootstrap=bootstrap, normalize=normalize,
-                           Admin=Admin, Language=Language ,Sett=Sett, exam=exam ,QU=Questions, font=font, examCSS=examCSS)
+                           Admin=Admin, Language=Language, Sett=Sett, exam=exam, QU=Questions, font=font,
+                           examCSS=examCSS)
 
 
 @app.route('/ExamPublish/<int:exam_id>', methods=['GET', 'POST'])
@@ -443,7 +455,7 @@ def ExamPublish(exam_id):
     Language = request.cookies.get('Language')
     if Language == 'English' or Language is None:
         flash('Your exam published')
-    elif Language == 'Arabic' :
+    elif Language == 'Arabic':
         flash('تم نشر امتحانك')
 
     return redirect(url_for('exams'))
@@ -453,13 +465,14 @@ def ExamPublish(exam_id):
 @login_required
 def ExamDelete(exam_id):
     exam = ActiveExamsDB.find_one({'_id': exam_id})
+
     for s in exam['StudentsInformation']['Absent']:
-        if s:
-            Student.update_one(s, {
-                '$pull': {
-                    'Messages': exam
-                }
-            })
+        Student.update_one({'_id': s['_id']}, {
+            '$pull': {
+                'Messages': {'_id': exam['_id']}
+            }
+        })
+
     ActiveExamsDB.update_one(exam, {
         '$set': {
             'ExamInformation.Status': 'Submitted'
@@ -468,7 +481,7 @@ def ExamDelete(exam_id):
     Language = request.cookies.get('Language')
     if Language == 'English' or Language is None:
         flash('Your exam deleted from students')
-    elif Language == 'Arabic' :
+    elif Language == 'Arabic':
         flash('تم حذف الامتحان من عند الطلاب')
 
     return redirect(url_for('exams'))
@@ -481,15 +494,16 @@ def Messages():
     bootstrap = url_for('static', filename='css/bootstrap.css')
     normalize = url_for('static', filename='css/normalize.css')
     Admin = url_for('static', filename='css/Admin.css')
-    message = url_for('static', filename='css/message.css')
     student = url_for('static', filename='css/student.css')
+    message = url_for('static', filename='css/message.css')
     Sett = SiDB.find_one({'_id': Setting_ID})
     user = Student.find_one({'_id': current_user.id})
     Language = request.cookies.get('Language')
     if current_user.is_anonymous:
         return redirect(url_for('login'))
     return render_template('Message.html', bootstrap=bootstrap, normalize=normalize,
-                           Admin=Admin, Language=Language ,student=student, Sett=Sett, user=user, font=font, message=message)
+                           Admin=Admin, Language=Language, student=student, Sett=Sett, user=user, font=font,
+                           message=message)
 
 
 @app.route('/DeleteMSG', methods=['POST', 'GET'])
@@ -551,7 +565,7 @@ def StudentExam(exam_id):
     normalize = url_for('static', filename='css/normalize.css')
     Admin = url_for('static', filename='css/Admin.css')
     examCSS = url_for('static', filename='css/ExamPR.css')
-    user = Student.find_one({'_id' : current_user.id})
+    user = Student.find_one({'_id': current_user.id})
     Sett = SiDB.find_one({'_id': Setting_ID})
     Language = request.cookies.get('Language')
     if current_user.is_anonymous:
@@ -609,7 +623,7 @@ def SendingResult(exam_id):
     Language = request.cookies.get('Language')
     if Language == 'English' or Language is None:
         flash('The results sent')
-    elif Language == 'Arabic' :
+    elif Language == 'Arabic':
         flash('تم ارسال الدرجات')
     return redirect(url_for('exams'))
 
@@ -643,7 +657,9 @@ def results():
             flash('لا يوجد درجات بعد')
         return redirect(url_for('profile'))
     return render_template('Result.html', bootstrap=bootstrap, normalize=normalize,
-                           Admin=Admin, Language=Language ,student=student, Sett=Sett, user=user, font=font, message=message)
+                           Admin=Admin, Language=Language, student=student, Sett=Sett, user=user, font=font,
+                           message=message)
+
 
 @app.route('/AddingManExam', methods=['POST', 'GET'])
 @login_required
@@ -660,7 +676,8 @@ def AddingManExam():
     QNum = len(list(QDB.find()))
     Language = request.cookies.get('Language')
     return render_template('AddManualExam.html', bootstrap=bootstrap, normalize=normalize,
-                           Admin=Admin, Language=Language ,QNum=QNum, user=user, font=font, settings=settings, Sett=Sett)
+                           Admin=Admin, Language=Language, QNum=QNum, user=user, font=font, settings=settings,
+                           Sett=Sett)
 
 
 @app.route('/AddManualExam', methods=['POST', 'GET'])
@@ -677,7 +694,7 @@ def GetQuestions():
     E_info = request.get_json()
     questions = E_info['list']
     Language = request.cookies.get('Language')
-    return render_template('QuestionChoose.html', Language=Language,question=questions)
+    return render_template('QuestionChoose.html', Language=Language, question=questions)
 
 
 @app.route('/UpQOfManToMongo', methods=['POST', 'GET'])
@@ -700,6 +717,7 @@ def UpQOfManToMongo():
     ActiveExamsDB.update_one(exam, {
         '$set': {
             'ExamInformation.FullMark': FullMark,
+            'ExamInformation.Status': 'Active',
             'QuestionInformation.QNO': len(E_Q),
             'Questions': E_Q
         }

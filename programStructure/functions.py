@@ -274,7 +274,7 @@ def CreateManualExamObject(INFO):
     ExamObject['From'] = INFO['from']
     ExamObject['To'] = INFO['to']
     ExamObject['title'] = INFO['title']
-    ExamObject['Status'] = 'Active'
+    ExamObject['Status'] = 'Without'
     ExamObject['FullMark'] = FullMark
     ExamObject['AccessCode'] = GenerateAccessCode(2)
     StudentsObject['Absent'] = Absent
