@@ -77,7 +77,7 @@ def register():
             for errorM in form[ferror].errors:
                 errorC = errorM
         return render_template('register.html', errorM=errorC, form=form, font=font, bootstrap=bootstrap,
-                               normalize=normalize, registerCss=registerCss, Sett=Sett)
+                               normalize=normalize, registerCss=registerCss,Language=Language, Sett=Sett)
 
     return render_template("register.html", bootstrap=bootstrap, normalize=normalize,
                            registerCss=registerCss, form=form, Language=Language, font=font, Sett=Sett)
