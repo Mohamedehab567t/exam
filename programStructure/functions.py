@@ -1,53 +1,53 @@
 import os
 import random
 import secrets
-from programStructure import app
+from programStructure import app, Setting_ID
 from flask import render_template
 
-from .models import Student, WS, QDB, ActiveExamsDB
+from .models import Student, WS, QDB, ActiveExamsDB, SiDB
 from wtforms.validators import ValidationError
 
 
 def Validate_account(self, email):
-    user = Student.find_one({'email': email.data})
+    user = Student.find_one({'phone_number': email.data})
     if not user:
-        raise ValidationError('No user with these email')
+        raise ValidationError('No user with these Number')
 
 
 def Validate_account_Arabic(self, email):
-    user = Student.find_one({'email': email.data})
+    user = Student.find_one({'phone_number': email.data})
     if not user:
-        raise ValidationError('لا يجود مستخدم بهذا البريد')
+        raise ValidationError('لا يجود مستخدم بهذا الرقم')
 
 
 def Validate_password(self, password):
-    user = Student.find_one({'email': self.email.data})
+    user = Student.find_one({'phone_number': self.email.data})
     if not user:
-        raise ValidationError('No user with these email or you waiting an approval')
+        raise ValidationError('No user with these phone or you waiting an approval')
     else:
         if user['password'] != password.data:
             raise ValidationError('Wrong Password')
 
 
 def Validate_password_Arabic(self, password):
-    user = Student.find_one({'email': self.email.data})
+    user = Student.find_one({'phone_number': self.email.data})
     if not user:
-        raise ValidationError('لا يوجد حساب بهذا البريد')
+        raise ValidationError('لا يوجد حساب بهذا الرقم')
     else:
         if user['password'] != password.data:
             raise ValidationError('كلمة مرور خاطئة')
 
 
 def Validate_if_waiting(self, email):
-    user = WS.find_one({'email': email.data})
+    user = WS.find_one({'phone_number': email.data})
     if user:
-        raise ValidationError('This email is used and waiting For Approval')
+        raise ValidationError('This phone is used and waiting For Approval')
 
 
 def Validate_if_waiting_Arabic(self, email):
-    user = WS.find_one({'email': email.data})
+    user = WS.find_one({'phone_number': email.data})
     if user:
-        raise ValidationError('هذا الاميل مستخدم ومنتظر القبول')
+        raise ValidationError('هذا الرقم مستخدم ومنتظر القبول')
 
 
 def SendWaitingRequest(form):
@@ -57,10 +57,16 @@ def SendWaitingRequest(form):
                'firstletter': firstletter,
                'first_name': form.first_name.data,
                'last_name': form.last_name.data,
-               'email': form.email.data,
+               'phone_number': form.email.data,
                'gender': form.gender.data,
                'password': form.password.data,
-               'type': 'student'
+               'type': 'student',
+               'Messages' : [],
+               'Rank': {
+                   'FullMark': 1,
+                   'score': 0,
+                   'rank': "0.0"
+               }
                }
     WS.insert_one(student)
 
@@ -88,8 +94,22 @@ def ReturnNewStudentNumber():
         'temp': temp1,
         'temp2': temp2,
         'AdminHead': AdminHead,
-        'num1': "Waiting student [ " + str(WS_NUM) + " ]",
-        'num2': "Student [ " + str(S_NUM) + "]"
+        'num1': "الطلاب المنتظرين [ " + str(WS_NUM) + " ]",
+        'num2': "طلابي [ " + str(S_NUM) + "]"
+    }
+    return data
+
+
+def ReturnNewStudentNumberVersionOfSearch(List):
+    students = List
+    S_NUM = len(students)
+    temp2 = render_template('StudentsPart.html', students=students, S_NUM=S_NUM)
+    AdminHead = render_template('AdminHead.html')
+    data = {
+        'temp2': temp2,
+        'AdminHead': AdminHead,
+        'Nav': "طلابي [ " + str(S_NUM) + "]",
+        'num2': str(S_NUM)
     }
     return data
 
@@ -289,3 +309,110 @@ def CreateManualExamObject(INFO):
         'id': id
     }
     return data
+
+
+def DoRank(user, exam, Submit):
+    try:
+        if user['Rank']:
+            FullMark = exam['ExamInformation']['FullMark'] + user['Rank']['FullMark']
+            Score = Submit['score'] + user['Rank']['score']
+            Student.update_one({'_id': Submit['_id']}, {
+                '$set': {
+                    'Rank.FullMark': FullMark,
+                    'Rank.score': Score,
+                    'Rank.rank': "%.1f" % (((Score / FullMark) * 100) / 10)
+
+                }
+            })
+    except KeyError:
+        FullMark = exam['ExamInformation']['FullMark']
+        Score = Submit['score']
+        Rank = {
+            'FullMark': FullMark,
+            'score': Score,
+            'rank': "%.1f" % (((Score / FullMark) * 100) / 10)
+        }
+        Student.update_one({'_id': Submit['_id']}, {
+            '$set': {
+                'Rank': Rank
+            }
+        })
+
+
+def GetExamDetailsFromMessagesId(user):
+    ExamsMessages = []
+    if 'Messages' in user:
+        for id in user['Messages']:
+            exam = ActiveExamsDB.find_one({'_id': id['_id']})
+            ExamsMessages.append(exam)
+        return ExamsMessages
+    else:
+        return []
+
+
+def find_index(lst, value):
+    for i in range(0, len(lst)):
+        if lst[i] == value:
+            return i
+    return -1
+
+
+def GetKeysFromQ_Configuration():
+    Si = SiDB.find_one({'_id': Setting_ID})
+    QC = Si['Q-Configuration']
+    return QC
+
+
+def GetFilteredListOnSearchQ(val, DB):
+    AndExpressionForQuestion = []
+    for obj in val:
+        expression = {obj: val[obj]}
+        AndExpressionForQuestion.append(expression)
+    List = list(DB.find({
+        '$and': AndExpressionForQuestion
+    }))
+    return List
+
+
+def GetFilteredListOnSearchS(val, DB):
+    AndExpressionForQuestion = []
+    for obj in val:
+        expression = {'Addition.' + str(obj): val[obj]}
+        AndExpressionForQuestion.append(expression)
+    List = list(DB.find({
+        '$and': AndExpressionForQuestion
+    }))
+    return List
+
+
+def GetFilteredListOnDeleteQ(val):
+    QuestionsToGet = []
+    QDB.delete_one({'_id': val['id']})
+    if 'AndExpression' in val:
+        AndExpressionForQuestion = []
+        for obj in val['AndExpression']:
+            expression = {obj: val['AndExpression'][obj]}
+            AndExpressionForQuestion.append(expression)
+
+        QuestionsToGet = list(QDB.find({
+            '$and': AndExpressionForQuestion
+        }))
+    else:
+        QuestionsToGet = list(QDB.find())
+    return QuestionsToGet
+
+
+def GetFilteredListOnDeleteS(val):
+    DS = []
+    if 'AndExpression' in val:
+        AndExpressionForQuestion = []
+        for obj in val['AndExpression']:
+            expression = {obj: val['AndExpression'][obj]}
+            AndExpressionForQuestion.append(expression)
+
+        DS = list(Student.find({'type': 'student'},{
+            '$and': AndExpressionForQuestion
+        }))
+    else:
+        DS = list(Student.find({'type': 'student'}))
+    return DS

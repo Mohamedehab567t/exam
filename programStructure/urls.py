@@ -6,7 +6,10 @@ from .forms import SignUp, LoginForm, LoginFormInArabic, SignUpInArabic
 from .functions import SendWaitingRequest, savepic, CreateAutoExamObject, AddStudent, \
     DeleteWaitingStudent, \
     ReturnNewStudentNumber, \
-    DeleteStudent, ReturnExamsStatus, CreateManualExamObject
+    DeleteStudent, DoRank, CreateManualExamObject, \
+    GetExamDetailsFromMessagesId, GetKeysFromQ_Configuration \
+    , GetFilteredListOnDeleteQ, GetFilteredListOnSearchQ, \
+    ReturnNewStudentNumberVersionOfSearch, GetFilteredListOnSearchS, GetFilteredListOnDeleteS
 
 from flask_login import login_user, current_user, logout_user, login_required
 from .User import User
@@ -35,7 +38,7 @@ def login():
         form = LoginFormInArabic()
 
     if form.validate_on_submit():
-        user = Student.find_one({'email': form.email.data})
+        user = Student.find_one({'phone_number': form.email.data})
         this_user = User(user['_id'])
         login_user(this_user)
         next_page = request.args.get('next')
@@ -77,7 +80,7 @@ def register():
             for errorM in form[ferror].errors:
                 errorC = errorM
         return render_template('register.html', errorM=errorC, form=form, font=font, bootstrap=bootstrap,
-                               normalize=normalize, registerCss=registerCss,Language=Language, Sett=Sett)
+                               normalize=normalize, Language=Language, registerCss=registerCss, Sett=Sett)
 
     return render_template("register.html", bootstrap=bootstrap, normalize=normalize,
                            registerCss=registerCss, form=form, Language=Language, font=font, Sett=Sett)
@@ -104,8 +107,16 @@ def profile():
     user = Student.find_one({'_id': current_user.id})
     Sett = SiDB.find_one({'_id': Setting_ID})
     Language = request.cookies.get('Language')
+    global Ranked
+    if current_user.is_anonymous:
+        return redirect(url_for('login'))
+    try:
+        Ranked = Student.find({'type': 'student'}).sort([("Rank.rank", -1), ("Rank.FullMark", -1)])
+    except KeyError:
+        pass
     return render_template("student.html", bootstrap=bootstrap, normalize=normalize,
-                           student=student, Language=Language, font=font, Admin=Admin, Sett=Sett, user=user)
+                           student=student, Language=Language, Ranked=Ranked, font=font, Admin=Admin, Sett=Sett,
+                           user=user)
 
 
 @app.route('/dashboard', methods=['POST', 'GET'])
@@ -118,6 +129,7 @@ def dashboard():
         bootstrap = url_for('static', filename='css/bootstrap.css')
         normalize = url_for('static', filename='css/normalize.css')
         Admin = url_for('static', filename='css/Admin.css')
+        Bank = url_for('static', filename='css/Bank.css')
         WS_NUM = len(list(WS.find()))
         S_NUM = len(list(Student.find({'type': 'student'})))
         waiting = list(WS.find())
@@ -126,7 +138,7 @@ def dashboard():
         Language = request.cookies.get('Language')
         return render_template("Admin.html", bootstrap=bootstrap, normalize=normalize,
                                Admin=Admin, user=user, font=font, students=students, waiting=waiting, s=S_NUM,
-                               ws=WS_NUM, Language=Language, Sett=Sett)
+                               ws=WS_NUM, Language=Language, Bank=Bank, Sett=Sett)
     else:
         return redirect(url_for('redirectto'))
 
@@ -163,11 +175,12 @@ def Students():
     S_NUM = len(list(Student.find({'type': 'student'})))
     students = list(Student.find({'type': 'student'}))
     Sett = SiDB.find_one({'_id': Setting_ID})
+    ConfigS = Sett['Addition-Information']
     AdminHead = render_template('AdminHead.html')
     Language = request.cookies.get('Language')
     data = {
         'temp': render_template('Students.html', Language=Language, user=user, S_NUM=S_NUM, students=students,
-                                Sett=Sett),
+                                Sett=Sett, ConfigS=ConfigS),
         'AdminHead': AdminHead
     }
     return data
@@ -212,7 +225,8 @@ def Settings():
 def deleteSt():
     sid = request.get_json()
     DeleteStudent(sid['id'])
-    data = ReturnNewStudentNumber()
+    StudentsAfterDelete = GetFilteredListOnDeleteS(sid)
+    data = ReturnNewStudentNumberVersionOfSearch(StudentsAfterDelete)
     return data
 
 
@@ -243,9 +257,17 @@ def Addition():
 def UpdateInformation():
     sid = request.get_json()
     Student.update_one({'_id': current_user.id}, {'$set': {
-        'Addition': sid
+        'first_name': sid['f'],
+        'last_name': sid['l'],
+        'phone_number': sid['p'],
+        'gender': sid['g'],
+        'Addition': sid['i']
     }})
-    return "Information Updated"
+    Language = request.cookies.get('Language')
+    if Language == 'English' or Language is None:
+        return "Information Updated"
+    else:
+        return "تم التعديل"
 
 
 @app.route('/AddingQ', methods=['POST', 'GET'])
@@ -260,8 +282,9 @@ def AddingQ():
         return redirect(url_for('login'))
     user = Student.find_one({'_id': current_user.id})
     Sett = SiDB.find_one({'_id': Setting_ID})
+    Language = request.cookies.get('Language')
     return render_template('AddQ.html', bootstrap=bootstrap, normalize=normalize,
-                           Admin=Admin, user=user, font=font, settings=settings, Sett=Sett)
+                           Admin=Admin, user=user, font=font, Language=Language, settings=settings, Sett=Sett)
 
 
 @app.route('/QConfiguration', methods=['POST', 'GET'])
@@ -442,9 +465,9 @@ def examQ(exam_id):
 def ExamPublish(exam_id):
     exam = ActiveExamsDB.find_one({'_id': exam_id})
     for s in exam['StudentsInformation']['Absent']:
-        Student.update_one(s, {
+        Student.update_one({'_id': s['_id']}, {
             '$push': {
-                'Messages': exam
+                'Messages': {'_id': exam['_id']}
             }
         })
     ActiveExamsDB.update_one(exam, {
@@ -469,7 +492,9 @@ def ExamDelete(exam_id):
     for s in exam['StudentsInformation']['Absent']:
         Student.update_one({'_id': s['_id']}, {
             '$pull': {
-                'Messages': {'_id': exam['_id']}
+                'Messages': {
+                    '_id': exam['_id']
+                }
             }
         })
 
@@ -498,12 +523,13 @@ def Messages():
     message = url_for('static', filename='css/message.css')
     Sett = SiDB.find_one({'_id': Setting_ID})
     user = Student.find_one({'_id': current_user.id})
+    ExamsMessages = GetExamDetailsFromMessagesId(user)
     Language = request.cookies.get('Language')
     if current_user.is_anonymous:
         return redirect(url_for('login'))
     return render_template('Message.html', bootstrap=bootstrap, normalize=normalize,
                            Admin=Admin, Language=Language, student=student, Sett=Sett, user=user, font=font,
-                           message=message)
+                           message=message, ExamsMessages=ExamsMessages)
 
 
 @app.route('/DeleteMSG', methods=['POST', 'GET'])
@@ -586,6 +612,7 @@ def StudentExam(exam_id):
 def SendingSubmitting():
     E_info = request.get_json()
     exam = ActiveExamsDB.find_one({'_id': E_info['id']})
+
     user = Student.find_one({'_id': current_user.id})
     Submitting = {
         '_id': current_user.id,
@@ -619,6 +646,7 @@ def SendingResult(exam_id):
                 }
             }
         })
+        DoRank(user, exam, Submit)
 
     Language = request.cookies.get('Language')
     if Language == 'English' or Language is None:
@@ -727,3 +755,105 @@ def UpQOfManToMongo():
         return 'Exam Added'
     elif Language == 'Arabic':
         return 'تمت اضافة الامتحان'
+
+
+@app.route('/RankingAdmin')
+def RankingA():
+    font = url_for('static', filename='css/font-awesome.min.css')
+    bootstrap = url_for('static', filename='css/bootstrap.css')
+    normalize = url_for('static', filename='css/normalize.css')
+    user = Student.find_one({'_id': current_user.id})
+    A = url_for('static', filename='css/Admin.css')
+    Sett = SiDB.find_one({'_id': Setting_ID})
+    ConfigS = Sett['Addition-Information']
+    global Ranked
+    if current_user.is_anonymous:
+        return redirect(url_for('login'))
+    try:
+        Ranked = Student.find({'type': 'student'}).sort([("Rank.rank", -1), ("Rank.FullMark", -1)])
+    except KeyError:
+        pass
+    return render_template('RankingInAdmin.html', ConfigS=ConfigS ,font=font, Sett=Sett, user=user, Ranked=Ranked, bootstrap=bootstrap,
+                           normalize=normalize, A=A)
+
+
+@app.route('/CheckSettings', methods=['POST', 'GET'])
+@login_required
+def CheckSettings():
+    E_info = request.get_json()
+    SiDB.update_one({'_id': Setting_ID}, {
+        '$set': {
+            'ShowPiece': E_info['ShowPiece']
+        }
+    })
+    return 'Done'
+
+
+@app.route('/StudentInformation/<int:id>', methods=['POST', 'GET'])
+@login_required
+def StudentInformation(id):
+    font = url_for('static', filename='css/font-awesome.min.css')
+    bootstrap = url_for('static', filename='css/bootstrap.css')
+    normalize = url_for('static', filename='css/normalize.css')
+    user = Student.find_one({'_id': id})
+    A = url_for('static', filename='css/Admin.css')
+    student = url_for('static', filename='css/student.css')
+    Sett = SiDB.find_one({'_id': Setting_ID})
+    return render_template('StudentInformation.html', font=font, Sett=Sett, user=user, bootstrap=bootstrap,
+                           normalize=normalize, student=student, A=A)
+
+
+@app.route('/BankOfQuestion', methods=['POST', 'GET'])
+@login_required
+def BankOfQuestion():
+    font = url_for('static', filename='css/font-awesome.min.css')
+    bootstrap = url_for('static', filename='css/bootstrap.css')
+    normalize = url_for('static', filename='css/normalize.css')
+    A = url_for('static', filename='css/Admin.css')
+    Bank = url_for('static', filename='css/Bank.css')
+    user = Student.find_one({'_id': current_user.id})
+    Sett = SiDB.find_one({'_id': Setting_ID})
+    Q = list(QDB.find())
+    ConfigQ = GetKeysFromQ_Configuration()
+    return render_template('BankOfQuestion.html', font=font, Sett=Sett, user=user, bootstrap=bootstrap,
+                           normalize=normalize, A=A, Bank=Bank, Q=Q, ConfigQ=ConfigQ)
+
+
+@app.route('/UpdateQuestionFromBank/<int:id>', methods=['POST', 'GET'])
+@login_required
+def UpdateQuestionFromBank(id):
+    E_info = request.get_json()
+    QDB.update_one({'_id': id}, {
+        '$set': {
+            'Q-title' : E_info['title'],
+            'Choices': E_info['Choices'],
+            'score': E_info['score']
+        }
+    })
+    q = QDB.find_one({'_id': id})
+
+    return render_template('ReturnOneQuestionAfetrUpdate.html', q=q)
+
+
+@app.route('/GetFilteredQuestion', methods=['POST', 'GET'])
+@login_required
+def GetFilteredQuestion():
+    val = request.get_json()
+    Questions = GetFilteredListOnSearchQ(val,QDB)
+    return render_template('ReturnOneQuestionAfterFiltered.html', Questions=Questions)
+
+
+@app.route('/DeleteBankQ', methods=['POST', 'GET'])
+@login_required
+def DeleteBankQ():
+    val = request.get_json()
+    QuestionsToGet = GetFilteredListOnDeleteQ(val)
+    return render_template('ReturnOneQuestionAfterFiltered.html', Questions=QuestionsToGet)
+
+
+@app.route('/GetFilteredStudent', methods=['POST', 'GET'])
+@login_required
+def GetFilteredStudent():
+    val = request.get_json()
+    FS = GetFilteredListOnSearchS(val, Student)
+    return ReturnNewStudentNumberVersionOfSearch(FS)
