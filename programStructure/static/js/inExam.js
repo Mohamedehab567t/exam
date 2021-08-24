@@ -2,7 +2,6 @@ $(document).ready(function(){
 
 
 
-
 $('.C').on('click' , function(){
     $(this).attr('data-selected' , true)
     $(this).siblings().attr('data-selected' , false)
@@ -34,9 +33,11 @@ SubmitFunction()
 })
 
 var IDInterval = setInterval(myFunc , 1000)
+
 function myFunc(){
 var text = parseInt($('#timer').text())
 var New = text - 1
+sessionStorage.setItem("Timer", $('#timer').text());
 $('#timer').text(New)
 if(text <= 0){
 clearInterval(IDInterval)
@@ -68,6 +69,17 @@ score += eScore
     window.location = '/profile'
     }
     });
+}
+const pageAccessedByReload = (
+  (window.performance.navigation && window.performance.navigation.type === 1) ||
+    window.performance
+      .getEntriesByType('navigation')
+      .map((nav) => nav.type)
+      .includes('reload')
+);
+console.log(sessionStorage.getItem("Timer"))
+if(pageAccessedByReload){
+$('#timer').text(sessionStorage.getItem("Timer"))
 }
 
 })

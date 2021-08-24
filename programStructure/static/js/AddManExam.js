@@ -1,6 +1,6 @@
 $(document).ready(function(){
 var Exam_Information = {}
-
+$('.ShowQ').hide()
 $('#Q-no').on('keyup' , function(){
     num = $(this).data("number")
     if(this.value > num){
@@ -83,13 +83,13 @@ var E_ID;
         Student_Information[$(e).attr('id')] = ArrOfContent
         }
         })
-        Exam_Information['NoQ'] = No
-        Exam_Information['title'] = title
-        Exam_Information['duration'] = duration
-        Exam_Information['from'] = from
-        Exam_Information['to'] = to
-        Exam_Information['Question_Part'] = Question_Information
-        Exam_Information['Student_Part'] = Student_Information
+        Exam_Information["NoQ"] = No
+        Exam_Information["title"] = title
+        Exam_Information["duration"] = duration
+        Exam_Information["from"] = from
+        Exam_Information["to"] = to
+        Exam_Information["Question_Part"] = Question_Information
+        Exam_Information["Student_Part"] = Student_Information
         var LISTQ;
         var f = from.split('T')
         var t = to.split('T')
@@ -125,6 +125,7 @@ var E_ID;
             success : function(data){
             $('#QuestionChoose').html(data)
             $('#bu').show()
+            $('.ShowQ').show()
             }
             });
             }
@@ -148,20 +149,57 @@ var E_ID;
 
 $(window).on('click' , function(e){
 if($(e.target).hasClass('ManAdd')){
-var Qid = $(e.target).data('sid')
-var te = $('#Array_of_Question').text()
-if(te == ""){
-$('#Array_of_Question').text(Qid)
-}else{
-$('#Array_of_Question').text($('#Array_of_Question').text() +"  "+Qid )
-}
+var Non = $('body').find('#NoNAdded')
+var NotNon = $('#AddedQ')
+var TR = $(e.target).parents("tr:first");
+$(Non).append(TR)
+$(NotNon).prepend(TR)
+
+$(e.target).addClass('ManDelete').removeClass('ManAdd')
+$(e.target).addClass('btn-danger').removeClass('btn-success')
+        var IsHere = checkCookie('Language')
+        if(IsHere){
+        var Cookie = getCookie('Language')
+        if(Cookie == "English"){
+        $(e.target).text('Delete')
+        }else if (Cookie == "Arabic"){
+        $(e.target).text('الغاء اضافة')
+        }
+        }else{
+        $(e.target).text('Delete')
+        }
+}else if($(e.target).hasClass('ManDelete')){
+var Non = $('body').find('#NoNAdded')
+var NotNon = $('#AddedQ')
+var TR = $(e.target).parents("tr:first");
+
+$(NotNon).append(TR)
+$(Non).prepend(TR)
+
+$(e.target).addClass('ManAdd').removeClass('ManDelete')
+$(e.target).addClass('btn-success').removeClass('btn-danger')
+        var IsHere = checkCookie('Language')
+        if(IsHere){
+        var Cookie = getCookie('Language')
+        if(Cookie == "English"){
+        $(e.target).text('Add')
+        }else if (Cookie == "Arabic"){
+        $(e.target).text('اضافة')
+        }
+        }else{
+        $(e.target).text('Add')
+        }
 }
 
 })
 
 
 $('#addExam').on('click' , function(){
-var Array_od_ids = $('#Array_of_Question').text().split("  ")
+var btn = Array.from($('#AddedQ').find('.ManDelete'))
+var Array_od_ids = []
+btn.forEach(e => {
+Array_od_ids.push($(e).data('sid'))
+})
 var DATA = {
 'list' : Array_od_ids ,
 'id' : E_ID

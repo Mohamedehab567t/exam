@@ -3,7 +3,29 @@ $(document).ready(function(){
 
     $('.mainform').on('submit' , function(e){
     var SelectedLang = $('#lang').val()
-    setCookie('Language' , SelectedLang , 1000000)
+    if(SelectedLang != ""){
+        setCookie('Language' , SelectedLang , 1000000)
+    }else{
+        setCookie('Language' , 'Arabic' , 1000000)
+    }
+    var ShowPiece = $('#ShowPiece').is(":checked") ? true : false
+    var SettingsUpdate = {
+    'ShowPiece' : ShowPiece
+    }
+    $.ajax({
+    type: 'POST',
+    url: '/CheckSettings',
+    data: JSON.stringify(SettingsUpdate),
+    contentType: 'application/json;charset=UTF-8',
+    success : function(data){
+        alert('تم التغيير')
+    },
+    error : function(data){
+        alert('هناك خطأ ما')
+    }
+    });
+
+
     })
 
   // addition information settings
@@ -23,6 +45,23 @@ $(document).ready(function(){
     var labelValue = $('#labelValue').val()
     var typeValue = $('#si-addition-input-for-students').val()
     var InfoValue = $('#si-addition-input-for').val()
+
+
+    var si_addition = Array.from($('.Stu'))
+    var bool = CheckIfEmpty(si_addition)
+    if(bool == false){
+        var IsHere = checkCookie('Language')
+        if(IsHere){
+        var Cookie = getCookie('Language')
+        if(Cookie == "English"){
+        alert('Fill All Information')
+        }else if (Cookie == "Arabic"){
+        alert('املئ كل الخانات')
+        }
+        }else{
+        alert('Fill All Information')
+        }
+    }else{
     if(typeValue =='select'){
     var Values = $('#ValuesOfSelectBox').val().split("  ")
 
@@ -55,7 +94,7 @@ $(document).ready(function(){
     }
     });
     }
-
+    }
 
 
     e.preventDefault()
@@ -77,6 +116,23 @@ $('#si-addition-input-for-Q').on('change' , function(){
     $('.AdditionQuestionsConfigurationForm').on('submit' , function(e){
     var labelValue = $('#labelValue2').val()
     var typeValue = $('#si-addition-input-for-Q').val()
+
+    var si_addition = Array.from($('.Que'))
+    var bool = CheckIfEmpty(si_addition)
+    if(bool == false){
+        var IsHere = checkCookie('Language')
+        if(IsHere){
+        var Cookie = getCookie('Language')
+        if(Cookie == "English"){
+        alert('Fill All Information')
+        }else if (Cookie == "Arabic"){
+        alert('املئ كل الخانات')
+        }
+        }else{
+        alert('Fill All Information')
+        }
+    }else{
+
     if(typeValue =='select'){
     var Values = $('#ValuesOfSelectBox2').val().split("  ")
 
@@ -107,11 +163,28 @@ $('#si-addition-input-for-Q').on('change' , function(){
     }
     });
     }
+    }
 
     e.preventDefault()
     })
 
-
+function CheckIfEmpty(el){
+var eVal = []
+var bool = true
+el.forEach(e => {
+if($(e).is('input') || $(e).is('select')){
+var val = $(e).val()
+eVal.push(val)
+}
+})
+for(var i = 0; i < eVal.length; i++){
+if(eVal[i] == ""){
+bool = false
+break
+}
+}
+return bool
+}
 
  // cookie function
   function setCookie(cname, cvalue, exdays) {
@@ -119,5 +192,30 @@ $('#si-addition-input-for-Q').on('change' , function(){
   d.setTime(d.getTime() + (exdays*24*60*60*1000));
   let expires = "expires="+ d.toUTCString();
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function checkCookie(cname) {
+  let username = getCookie(cname);
+  if (!username) {
+   return false
+  } else {
+    return true
+    }
+  }
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
 }
 })

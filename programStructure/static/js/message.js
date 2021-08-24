@@ -1,14 +1,15 @@
 $(document).ready(function(){
-
+history.pushState(null,  document.title, location.href);
 $('.formToJoin').on('submit' , function(e){
 
 
 var examTwo = $(this).find('#EXAM').text().replace(/'/g,'"')
 var exam = JSON.parse(examTwo)
-var EndOfExamHours = exam['ExamInformation']['From'].split('T')
-var o = CheckTime(EndOfExamHours)
+var StartOfExamHours = exam['ExamInformation']['From'].split('T')
+var EndOfExamHours = exam['ExamInformation']['To'].split('T')
+var o = CheckTime(StartOfExamHours,EndOfExamHours)
 
-if(o){
+if(o['join']){
    var bu = $(this).find('#join')
    $.ajax({
    type: 'POST',
@@ -27,12 +28,12 @@ var IsHere = checkCookie('Language')
 if(IsHere){
 var Cookie = getCookie('Language')
 if(Cookie == "English"){
-MSG.text('The exam does not start yet')
+MSG.text(''+o['MessageE'])
 }else if (Cookie == "Arabic"){
-MSG.text('لم يبدأ الامتحان بعد')
+MSG.text(''+o['MessageA'])
 }
 }else{
-MSG.text('The exam does not start yet')
+MSG.text(''+o['MessageE'])
 }
 }
 e.preventDefault()
@@ -62,19 +63,30 @@ $('.deleteMSG').on('click' , function(){
 
 
 
-function CheckTime(from){
+function CheckTime(from,to){
 var DateFrom = from[0]
 var TimeFrom = from[1]
+
+var DateTo = to[0]
+var TimeTo = to[1]
 
 var partsFrom = DateFrom.split('-')
 var partsFromTime = TimeFrom.split(':')
 
+var partsTo = DateTo.split('-')
+var partsToTime = TimeTo.split(':')
+
 var FromDate = new Date(partsFrom[0], partsFrom[1] - 1 , partsFrom[2],partsFromTime[0] , partsFromTime[1])
+
+var ToDate = new Date(partsTo[0], partsTo[1] - 1 , partsTo[2],partsToTime[0] , partsToTime[1])
+
 var Current = new Date()
 if (FromDate > Current){
-return false
+return {'join' : false , 'MessageE' : 'The exam doesnt start yet' , 'MessageA' : 'الامتحان لم يبدأ بعد'}
+}else if (ToDate < Current){
+return {'join' : false , 'MessageE' : 'The exam finished' , 'MessageA' : 'لقد انتهي وقت الامتحان'}
 }else{
-return true
+return {'join' : true}
 }
 
 }

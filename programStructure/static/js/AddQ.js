@@ -77,7 +77,20 @@ $(document).ready(function(){
         var q_right = document.createElement('button')
         $(q_right).addClass('btn btn-success MakeItRight')
         $(q_right).attr('type' , 'button')
+        
+        var IsHere = checkCookie('Language')
+        if(IsHere){
+        var Cookie = getCookie('Language')
+        if(Cookie == "English"){
         $(q_right).text('Right')
+        }else if (Cookie == "Arabic"){
+        $(q_right).text('صح')
+        }
+        }else{
+       $(q_right).text('Right')
+        }
+
+        
         $(q_right).css({"margin-left" : "5px" ,
         "font-size" : "11px"})
 
@@ -156,7 +169,6 @@ $(document).ready(function(){
     }
     }
 
-    console.log($(e).parent("div"))
 }
     function DeleteParentOrParentOfParent(e){
      if($(e.target).is('button')){
@@ -243,10 +255,11 @@ function AddTextedQuestion(){
             $('#AddQToDataBase').text('Loading . . .')
             },
             complete: function(){
-            $('#AddQToDataBase').text('Done')
+            $('#AddQToDataBase').text('اضافة السؤال')
             },
             success : function(data){
-            window.location.reload()
+            $('#Q-title').val('')
+            $('body').find('.ConForSingleChoice').remove()
             }
             });
         }else{
@@ -357,4 +370,29 @@ function AddImagedQuestion(){
         console.log('you Canceled')
         }
 }
+    function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function checkCookie(cname) {
+  let username = getCookie(cname);
+  if (!username) {
+   return false
+  } else {
+    return true
+    }
+  }
+    
 })

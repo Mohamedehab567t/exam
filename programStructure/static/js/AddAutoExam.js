@@ -118,13 +118,13 @@ $('.'+SmallClass).text("")
         Student_Information[$(e).attr('id')] = ArrOfContent
         }
         })
-        Exam_Information['NoQ'] = No
-        Exam_Information['title'] = title
-        Exam_Information['duration'] = duration
-        Exam_Information['from'] = from
-        Exam_Information['to'] = to
-        Exam_Information['Question_Part'] = Question_Information
-        Exam_Information['Student_Part'] = Student_Information
+        Exam_Information["NoQ"] = No
+        Exam_Information["title"] = title
+        Exam_Information["duration"] = duration
+        Exam_Information["from"] = from
+        Exam_Information["to"] = to
+        Exam_Information["Question_Part"] = Question_Information
+        Exam_Information["Student_Part"] = Student_Information
 
         var f = from.split('T')
         var t = to.split('T')
