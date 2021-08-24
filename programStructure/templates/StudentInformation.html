@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{bootstrap}}">
+    <link rel="stylesheet" href="{{font}}">
+    <link rel="stylesheet" href="{{normalize}}">
+    <link rel="stylesheet" href="{{Admin}}">
+    <link rel="stylesheet" href="{{student}}">
+
+    <title> معلومات عن {{user['first_name']}} {{ user['last_name'] }}</title>
+</head>
+<body style="direction : rtl">
+
+    <div class="con">
+    <div class="infos">
+
+
+        <h3>{{ user['first_name'] }} {{ user['last_name'] }}</h3>
+        <h6 style="tex-align:center"> النسبة </h6>
+    <div class="letter alert-success">
+            <span>{{user['Rank']['rank']}}</span>
+        </div>
+
+        <div class="s-i">
+            <form action="" method="POST" class="StudentInformation">
+                <div class="form-group">
+                    <input type="number" class="form-control"  placeholder="ID" value="{{ user['_id'] }}" disabled style="margin-top: 25px;">
+                  </div>
+                <div class="my-row">
+                    <div class="my-col">
+                        <input type="text" class="form-control" id="f" placeholder="First name" value="{{ user['first_name'] }}">
+                    </div>
+                    <div class="my-col">
+                        <input type="text" class="form-control" id="l" placeholder="Last name" value="{{ user['last_name'] }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="p" aria-describedby="emailHelp" placeholder="Enter number" value="{{ user['phone_number'] }}">
+                </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="g" placeholder="Gender" value="{{ user['gender'] }}">
+                  </div>
+                {% if user['Addition'] %}
+                <div class="AdditionInformation">
+                {% for key in user['Addition'] %}
+                  <div class="form-group">
+                    <input type="text" style="width: 80%;margin: 0px auto;" class="form-control"placeholder="{{key}}" value="{{ user['Addition'][key] }}">
+                  </div>
+                {% endfor %}
+                </div>
+                {% endif %}
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+        <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/student.js') }}"></script>
+</body>
+</html>

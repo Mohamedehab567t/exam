@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{{examCSS}}">
     <title>Exams</title>
 </head>
-<body>
+<body style="direction:rtl">
     <header>
         <div style="border: .5px solid black; padding : 5px" id="ExamInformation" class="m-2">
             <h3 data-sid="{{ exam['_id'] }}" id="EXID" style="text-align : center"> Exam No : {{ exam['_id'] }} </h3>
@@ -135,11 +135,7 @@
         <script src="{{ url_for('static' , filename='js/examPR.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/inExam.js') }}"></script>
     <script>
-  window.onbeforeunload = confirmExit;
-  function confirmExit()
-  {
-    return "You have attempted to leave this page.  If you have made any changes to the fields without clicking the Save button, your changes will be lost.  Are you sure you want to exit this page?";
-  }
+
     </script>
 </body>
 </html>

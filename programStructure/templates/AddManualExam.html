@@ -1,4 +1,4 @@
-{% if Language == 'English' or Language is none %}
+{% if Language == 'English'  %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,19 +17,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand Variable" href="{{ url_for('dashboard') }}">{{Sett['site_name']}}</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('dashboard')}}">Back</a>
-                </li>
-              </ul>
-            </div>
-          </nav>
+{% include 'BackNav.html' %}
     </header>
 <div class="parent">
     <div class="welcome-part alert alert-success">
@@ -108,11 +96,29 @@
         </div>
     </div>
     </div>
-        <div id="QuestionChoose" class="container">
+        <div id="QuestionChoose" class="container ShowQ mb-3" style="padding : 10px; border: .3px solid grey; max-height :550px; overflow:auto">
 
         </div>
+
+    <hr class="mt-5">
+    <div class="container ShowQ mb-3" style="padding : 10px; border: .3px solid grey; max-height :550px; overflow:auto">
+        <div class="col-sm-12 mt-4 mb-3" style="text-align: center; overflow: auto;">
+      <h3>Added Questions</h3>
+      <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">title</th>
+              <th scope="col">type</th>
+              <th scope="col">...</th>
+            </tr>
+          </thead>
+          <tbody id="AddedQ">
+
+          </tbody>
+        </table>
+    </div>
+        </div>
         <div id="bu" class="mt-4 mb-4" style="display:flex; flex-direction:column">
-            <small class="mb-2" id="Array_of_Question"  style="margin : auto;"></small>
             <button id="addExam" class="btn btn-success" style="margin : auto;"> Add Questions </button>
         </div>
 
@@ -123,7 +129,7 @@
         <script src="{{ url_for('static' , filename='js/AddManExam.js') }}"></script>
 </body>
 </html>
-{% elif Language =="Arabic" %}
+{% elif Language =="Arabic" or Language is none %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -197,7 +203,7 @@
                     <small style="display : block;" class="hide {{ q['label'] }}"></small>
                             <div class="clearfix"></div>
                         <select style="float:right" name="TypeOfQ" class="form-control si-addition" id="{{ q['label'] }}">
-                        <option value="" selected>select {{ q['label'] }}</option>
+                        <option value="" selected>اختر {{ q['label'] }}</option>
                         {% for v in q['values'] %}
                         <option value="{{v}}" >{{v}}</option>
                         {% endfor %}
@@ -220,7 +226,7 @@
                     <small style="display : block;" class="hide {{ q['label'] }}"></small>
                         <div class="clearfix"></div>
                         <select style="float:right" name="{{ q['label'] }}" class="form-control si-addition" id="{{ q['label'] }}">
-                        <option value="" selected>select {{ q['label'] }}</option>
+                        <option value="" selected>اختر {{ q['label'] }}</option>
                         {% for v in q['values'] %}
                         <option value="{{v}}" >{{v}}</option>
                         {% endfor %}
@@ -241,11 +247,28 @@
         </div>
     </div>
     </div>
-        <div id="QuestionChoose" class="container">
+        <div id="QuestionChoose" class="container ShowQ mb-3" style="padding : 10px; border: .3px solid grey; max-height :550px; overflow:auto">
 
         </div>
+
+    <div class="container ShowQ mb-3" style="padding : 10px; border: .3px solid grey; max-height :550px; overflow:auto">
+        <div class="col-sm-12 mt-4 mb-3 container" style="text-align: center; overflow: auto;">
+      <h3>اسئلة مضافة</h3>
+      <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">عنوان</th>
+              <th scope="col">نوع</th>
+              <th scope="col">...</th>
+            </tr>
+          </thead>
+          <tbody id="AddedQ">
+
+          </tbody>
+        </table>
+    </div>
+</div>
         <div id="bu" class="mt-4 mb-4" style="display:flex; flex-direction:column">
-            <small class="mb-2" id="Array_of_Question"  style="margin : auto;"></small>
             <button id="addExam" class="btn btn-success" style="margin : auto;"> اضاقة الاسئلة </button>
         </div>
 

@@ -1,4 +1,4 @@
-{% if Language == 'English' or Language is none %}
+{% if Language == 'English'  %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -25,7 +25,7 @@
         <form action="" method="POST">
             {{ form.hidden_tag() }}
             <div class="form-group">
-            {{ form.email(class='form-control' , id='exampleInputEmail1'  ,placeholder='Enter your email') }}
+            {{ form.email(class='form-control' , id='exampleInputEmail1'  ,placeholder='Enter your phone') }}
             </div>
               <div class="form-group">
                   {{ form.password(class='form-control' , placeholder="Password") }}
@@ -67,7 +67,7 @@
 </body>
 </html>
 
-{% elif Language == 'Arabic' %}
+{% elif Language =="Arabic" or Language is none %}
 
 <html lang="ar">
 <head>
@@ -95,7 +95,7 @@
         <form action="" method="POST">
             {{ form.hidden_tag() }}
             <div class="form-group">
-            {{ form.email(class='form-control' , id='exampleInputEmail1'  ,placeholder='ادخل بريدك الالكتروني') }}
+            {{ form.email(class='form-control' , id='exampleInputEmail1'  ,placeholder='ادخل رقم هاتفك') }}
             </div>
               <div class="form-group">
                   {{ form.password(class='form-control' , placeholder="كلمة المرور") }}
@@ -133,6 +133,15 @@
         <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
         <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script>
+  function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+setCookie('Language' , "Arabic" , 1000000)
+        </script>
 
 </body>
 </html>

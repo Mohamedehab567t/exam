@@ -1,4 +1,4 @@
-{% if Language == 'English' or Language is none %}
+{% if Language == 'English'  %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,19 +17,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand Variable" href="#">{{Sett['site_name']}}</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('dashboard')}}">Back</a>
-                </li>
-              </ul>
-            </div>
-          </nav>
+    {% include 'BackNav.html' %}
     </header>
 <div class="parent">
     <div class="welcome-part alert alert-success">
@@ -118,7 +106,7 @@
         <script src="{{ url_for('static' , filename='js/AddAutoExam.js') }}"></script>
 </body>
 </html>
-{% elif Language =="Arabic" %}
+{% elif Language =="Arabic" or Language is none %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -137,19 +125,8 @@
 </head>
 <body style="direction : rtl">
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand Variable" href="#">{{Sett['site_name']}}</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mr-auto" style="margin-right : unset !important; margin-left: auto !important">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('dashboard')}}">رجوع</a>
-                </li>
-              </ul>
-            </div>
-          </nav>
+    {% include 'BackNav.html' %}
+
     </header>
 <div class="parent">
     <div class="welcome-part alert alert-success">
@@ -197,7 +174,7 @@
                     <small style="display : block;" class="hide {{ q['label'] }}"></small>
                             <div class="clearfix"></div>
                         <select style="float:right" name="TypeOfQ" class="form-control si-addition" id="{{ q['label'] }}">
-                        <option value="" selected>select {{ q['label'] }}</option>
+                        <option value="" selected>اختر {{ q['label'] }}</option>
                         {% for v in q['values'] %}
                         <option value="{{v}}" >{{v}}</option>
                         {% endfor %}
@@ -220,7 +197,7 @@
                     <small style="display : block;" class="hide {{ q['label'] }}"></small>
                         <div class="clearfix"></div>
                         <select style="float:right" name="{{ q['label'] }}" class="form-control si-addition" id="{{ q['label'] }}">
-                        <option value="" selected>select {{ q['label'] }}</option>
+                        <option value="" selected>اختر {{ q['label'] }}</option>
                         {% for v in q['values'] %}
                         <option value="{{v}}" >{{v}}</option>
                         {% endfor %}

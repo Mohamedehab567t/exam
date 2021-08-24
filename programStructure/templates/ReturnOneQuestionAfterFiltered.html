@@ -1,0 +1,44 @@
+           {% if Questions|length == 0 %}
+           <div style="text-align:center" class="ConSpan">
+               <span>لا يوجد تصنيف بهذا الاسم</span>
+           </div>
+             {% else %}
+            {% for q in Questions %}
+        <div class="card mb-2" id="{{q['_id']}}card">
+              <div class="card-header" style="text-align:center">
+                  <span style="font-weight:700">{{loop.index}}</span>
+              </div>
+              <div class="card-body">
+                  <h6 style="text-align:center">عنوان السؤال</h6>
+                  <div class="form-group">
+                      <input style="width : 100%" type="text" id="{{q['_id']}}title" value="{{q['Q-title']}}" class="form-control">
+                  </div>
+
+                  <div class="clearfix"></div>
+                {% if q['Q-type'] == 'text' %}
+                  {% for choice in q['Choices'] %}
+                  <div class="row">
+                      <div class="col">
+                  <div class="form-group">
+                      <input  type="text" value="{{choice[0]}}" class="form-control {{q['_id']}}choice">
+                  </div>
+                      </div>
+                      <div class="col">
+                <div class="form-group">
+                      <input type="text" value="{{q['score'][loop.index -1 ]}}" class="form-control {{q['_id']}}score">
+                  </div>
+                      </div>
+                  </div>
+
+                  {% endfor %}
+                  {% endif %}
+                  <div class="conOfBtn" style="display:flex; flex-direction:row; gap:5px; justify-content: center;">
+                <button class="btn btn-success UpdateQ" data-sid="{{q['_id']}}">تعديل</button>
+                <button class="btn btn-danger  DeleteQ"  data-sid="{{q['_id']}}">حذف</button>
+                  </div>
+              </div>
+        </div>
+             <hr>
+            {% endfor %}
+             {% endif %}
+

@@ -1,4 +1,4 @@
-{% if Language == 'English' or Language is none %}
+{% if Language == 'English'  %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,19 +17,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand Variable" href="#">{{Sett['site_name']}}</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('dashboard')}}">Back</a>
-                </li>
-              </ul>
-            </div>
-          </nav>
+{% include 'BackNav.html' %}
     </header>
 
     <div class="welcome-part alert alert-success">
@@ -110,7 +98,7 @@
         <script src="{{ url_for('static' , filename='js/Settings.js') }}"></script>
 </body>
 </html>
-{% elif Language == 'Arabic' %}
+{% elif Language =="Arabic" or Language is none %}
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
@@ -129,19 +117,7 @@
 </head>
 <body style="direction : rtl">
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand Variable" href="#">{{Sett['site_name']}}</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mr-auto" style="margin-right : unset !important; margin-left: auto !important">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('dashboard')}}">رجوع</a>
-                </li>
-              </ul>
-            </div>
-          </nav>
+{% include 'BackNav.html' %}
     </header>
 
     <div class="welcome-part alert alert-success">
@@ -156,13 +132,22 @@
         <div class="si-cont">
             <form action="" class="mainform">
                   <div class="my-row">
-                    <label for="lang">لغة الموقع</label>
-                      <select class="form-control" name="" id="lang">
+                      <select style="float:right" class="form-control" name="" id="lang">
                           <option value="" selected>اختر لغة</option>
                           <option value="English">English</option>
                           <option value="Arabic">Arabic</option>
                       </select>
                   </div>
+                <div class="clearfix"></div>
+              <div class="form-check">
+                {% if Sett['ShowPiece'] == True %}
+                <input style="position:absolute; right:0" type="checkbox" checked class="form-check-input" id="ShowPiece">
+                {% elif Sett['ShowPiece'] == False  %}
+                <input style="position:absolute; right:0" type="checkbox" class="form-check-input" id="ShowPiece">
+                {% endif %}
+                <label style="position:absolute; right:25px; top : -2px" class="form-check-label" for="ShowPiece">اظهار اضافة قطعة</label>
+              </div>
+                    <div style="height: 30px;" class="clearfix"></div>
                   <button type="submit" class="btn btn-success" style="margin: 5px auto;">حفظ</button>
             </form>
         </div>
@@ -175,13 +160,13 @@
             <div class="clearfix"></div>
             <form action="" class="AdditionStudentInformationForm" method="POST">
                 <div class="my-row">
-                    <input type="text" class="form-control si-addition" id="labelValue"  placeholder="اسم الحقل">
-                    <select name="TypeOfInputs" class="form-control si-addition" id="si-addition-input-for-students">
+                    <input type="text" class="form-control si-addition Stu" id="labelValue"  placeholder="اسم الحقل">
+                    <select name="TypeOfInputs" class="form-control si-addition Stu" id="si-addition-input-for-students">
                         <option value="text" selected>جملة</option>
                         <option value="number" >رقم</option>
                         <option value="select" >متعدد</option>
                     </select>
-                    <select name="TypeOfInputs" class="form-control si-addition" id="si-addition-input-for">
+                    <select name="TypeOfInputs" class="form-control si-addition Stu" id="si-addition-input-for">
                         <option value="Normal" selected>معلومة شخصية</option>
                         <option value="Exam" >معلومة امتحان</option>
                     </select>
@@ -204,8 +189,8 @@
             <div class="clearfix"></div>
             <form action="" class="AdditionQuestionsConfigurationForm" method="POST">
                 <div class="my-row">
-                    <input type="text" class="form-control si-addition" id="labelValue2"  placeholder="اسم الحقل">
-                    <select name="TypeOfInputs" class="form-control si-addition" id="si-addition-input-for-Q">
+                    <input type="text" class="form-control si-addition Que" id="labelValue2"  placeholder="اسم الحقل">
+                    <select name="TypeOfInputs" class="form-control si-addition Que" id="si-addition-input-for-Q">
                         <option value="text" selected>جملة</option>
                         <option value="number" >رقم</option>
                         <option value="select" >متعدد</option>

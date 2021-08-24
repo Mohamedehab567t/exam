@@ -1,4 +1,4 @@
-{% if Language == 'English' or Language is none %}
+{% if Language == 'English'  %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="form-group">
-                {{ form.email(class='form-control' , id='exampleInputEmail1'  ,placeholder='Enter your email') }}
+                {{ form.email(class='form-control' , id='exampleInputEmail1'  ,placeholder='Enter your phone') }}
             </div>
 
               <div class="my-row">
@@ -72,7 +72,7 @@
 
 </body>
 </html>
-{% elif Language =="Arabic" %}
+{% elif Language =="Arabic" or Language is none %}
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
@@ -106,7 +106,7 @@
                 </div>
             </div>
             <div class="form-group">
-                {{ form.email(class='form-control' , id='exampleInputEmail1'  ,placeholder='البريد الالكتروني') }}
+                {{ form.email(class='form-control' , id='exampleInputEmail1'  ,placeholder='رقم الهاتف') }}
             </div>
 
               <div class="my-row">

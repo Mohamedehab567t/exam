@@ -1,4 +1,4 @@
-{% if Language == 'English' or Language is none %}
+{% if Language == 'English'  %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -35,13 +35,13 @@
         {% endfor %}
         {% endif %}
         {% endwith %}
-    {% set Mes = user['Messages'] %}
+    {% set Mes = ExamsMessages %}
     {% if Mes|length == 0 %}
         <div class="SpaCon" style="text-align:center">
             <span>No Messages yet</span>
         </div>
     {% else %}
-    {% for m in user['Messages'] %}
+    {% for m in ExamsMessages %}
         <div class="s-i">
             <form class="formToJoin" action="">
                 <span data-sid="{{ current_user.id }}" id="EXAM" style="display : none">{{m}}</span>
@@ -83,14 +83,13 @@
 
     <div class="fixednav">
         <a href="{{url_for('profile')}}" class="Variable"><i class="fa fa-user i"></i></a>
-        {% if user['Messages']|length > 0 %}
+        {% if ExamsMessages|length > 0 %}
         <a href="{{url_for('Messages')}}" style="background-color : red" class="Variable message"><i class="fa fa-envelope"></i></a>
         {% else %}
         <a href="{{url_for('Messages')}}" class="Variable message"><i class="fa fa-envelope"></i></a>
         {% endif %}
         <a href="{{url_for('results')}}" id="RES" class="Variable"><i class="fa fa-certificate"></i></a>
         <a href="{{url_for('logout')}}" class="Variable"><i class="fa fa-sign-out" ></i></a>
-
     </div>
 
 </div>
@@ -104,7 +103,7 @@
 
 </body>
 </html>
-{% elif Language =="Arabic" %}
+{% elif Language =="Arabic" or Language is none %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -142,16 +141,17 @@
         {% endif %}
         {% endwith %}
 
-    {% set Mes = user['Messages'] %}
+    {% set Mes = ExamsMessages %}
     {% if Mes|length == 0 %}
         <div class="SpaCon" style="text-align:center">
             <span>لا يوجد رسائل</span>
         </div>
     {% else %}
-    {% for m in user['Messages'] %}
+    {% for m in ExamsMessages %}
         <div class="s-i">
             <form class="formToJoin" action="">
                 <span data-sid="{{ current_user.id }}" id="EXAM" style="display : none">{{m}}</span>
+                    <h3 style="text-align:center;">{{m['ExamInformation']['title']}}</h3>
                 <div class="my-row">
                     <div class="my-col">
                     {% set from = m['ExamInformation']['From'].split('T')[1] %}
@@ -164,9 +164,6 @@
                     <span>من {{from}} AM الي {{to}} AM</span>
                     {% endif %}
                     </div>
-                    <div class="my-col">
-                    <span>رمز الدخول : {{m['ExamInformation']['AccessCode']}}</span>
-                    </div>
                 </div>
                     <div class="my-row">
                     <div class="my-col">
@@ -174,6 +171,9 @@
                     </div>
                     <div class="my-col">
                         <span>مدة الامتحان : {{m['ExamInformation']['Duration']}} دقائق</span>
+                    </div>
+                    <div class="my-col">
+                        <span>سيبدأ يوم : {{m['ExamInformation']['From'].split('T')[0]}}</span>
                     </div>
                     <div class="my-col">
                         <span>سينتهي يوم : {{m['ExamInformation']['To'].split('T')[0]}}</span>
@@ -191,7 +191,7 @@
 
     <div class="fixednav">
         <a href="{{url_for('profile')}}" class="Variable"><i class="fa fa-user i"></i></a>
-        {% if user['Messages']|length > 0 %}
+        {% if ExamsMessages|length > 0 %}
         <a href="{{url_for('Messages')}}" style="background-color : red" class="Variable message"><i class="fa fa-envelope"></i></a>
         {% else %}
         <a href="{{url_for('Messages')}}" class="Variable message"><i class="fa fa-envelope"></i></a>

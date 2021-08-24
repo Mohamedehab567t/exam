@@ -30,7 +30,7 @@
         {% if S_NUM == 0 %}
         <span style="text-align:center; margin-top:10px">No Students yet</span>
         {% else %}
-        {% for one_s in students %}
+        {% for one_s in FS %}
         <div class="ws">
          {% if one_s['Addition'] %}
 <div class="first_letter alert-success">
@@ -42,12 +42,12 @@
 </div>
         {% endif %}
             <div class="infos">
-                        <span style="display:inline">Name : <span style="display:inline" class="Names">{{one_s['first_name']}} {{one_s['last_name']}}</span></span>
+                        <span>Name : {{one_s['first_name']}} {{one_s['last_name']}}</span>
                         <span>Phone Number : {{one_s['phone_number']}}</span>
                         <span>Gender : {{one_s['gender']}}</span>
                         <div class="btns">
                         <a href="#" class="btn btn-primary showST" data-sid="{{ one_s['_id'] }}"><i class="fa fa-eye showST" data-sid="{{ one_s['_id'] }}"></i></a>
-                        <a href="#/" class="btn btn-danger deleteSt" data-sid="{{ one_s['_id'] }}"><i class="fa fa-times-circle deleteSt" data-sid="{{ one_s['_id'] }}"></i></a>
+                        <a href="#" class="btn btn-danger deleteSt" data-sid="{{ one_s['_id'] }}"><i class="fa fa-times-circle deleteSt" data-sid="{{ one_s['_id'] }}"></i></a>
                         </div>
                 </div>
             </div>
@@ -67,9 +67,6 @@
 
      <h4 style="text-align:center">ابحث في الطلاب</h4>
      <div class="ConForSearch"  style="padding:5px; width:80%; margin:4px auto">
-         <div style="display:flex; flex-direction:row; gap : 5px; width:80%; margin : 2px auto" id="FByName">
-             <input type="text" id="NameOfStudent" style="flex:5" class="form-control" placeholder="اكتب اسم الطالب" autocomplete="off">
-         </div>
     <div class="SearchDiv mb-2">
     {% for obj in ConfigS %}
     {% if obj['type'] == 'select' %}
@@ -86,15 +83,13 @@
     </div>
     <div class="conOfBtn mb-4" style="display:flex; flex-direction:row; gap:5px; justify-content: center;">
         <button class="btn btn-success SearchQ">بحث</button>
-        <button class="btn btn-success All">اعرض الكل</button>
       </div>
 </div>
-    <h6 style="text-align:center" class="mt-2 mb-3"> عدد الطلاب <span id="S_NUM" style="#02ab3a !important">({{ S_NUM }})</span> </h6>
     <div class="container-of-ws" style="text-align : center">
         {% if S_NUM == 0 %}
         <span style="text-align:center; margin-top:10px"> لا يوجد طلاب </span>
         {% else %}
-        {% for one_s in students %}
+        {% for one_s in FS %}
         <div class="ws">
          {% if one_s['Addition'] %}
 <div class="first_letter alert-success">
@@ -106,13 +101,13 @@
 </div>
         {% endif %}
             <div class="infos">
-                        <span style="display:inline">الاسم : <span style="display:inline" class="Names">{{one_s['first_name']}} {{one_s['last_name']}}</span></span>
+                        <span>الاسم : {{one_s['first_name']}} {{one_s['last_name']}}</span>
                         <span>رقم الهاتف : {{one_s['phone_number']}}</span>
                         <span>النوع : {{one_s['gender']}}</span>
 
                         <div class="btns">
                         <button class="btn btn-primary showST" data-sid="{{ one_s['_id'] }}" type="button"><i  class="fa fa-eye showST" data-sid="{{ one_s['_id'] }}"></i></button>
-                        <a href="#/" class="btn btn-danger deleteSt" data-sid="{{ one_s['_id'] }}"><i class="fa fa-times-circle deleteSt" data-sid="{{ one_s['_id'] }}"></i></a>
+                        <a href="#" class="btn btn-danger deleteSt" data-sid="{{ one_s['_id'] }}"><i class="fa fa-times-circle deleteSt" data-sid="{{ one_s['_id'] }}"></i></a>
                         </div>
                 </div>
             </div>

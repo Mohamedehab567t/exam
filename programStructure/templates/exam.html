@@ -1,4 +1,4 @@
-{% if Language == 'English' or Language is none %}
+{% if Language == 'English'  %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -124,7 +124,7 @@
         <script src="{{ url_for('static' , filename='js/exam.js') }}"></script>
 </body>
 </html>
-{% elif Language =="Arabic" %}
+{% elif Language =="Arabic" or Language is none %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">

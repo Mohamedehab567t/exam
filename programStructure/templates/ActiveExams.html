@@ -1,4 +1,4 @@
-        {% if Language == 'English' or Language is none %}
+        {% if Language == 'English'%}
         {% for exam in Exams %}
         {% if exam['ExamInformation']['Status'] == 'Active' %}
         <div class="examContainer">
@@ -48,7 +48,7 @@
         {% endif %}
         {% endif %}
         {% endfor %}
-        {% elif Language =="Arabic" %}
+        {% elif Language =="Arabic" or Language is none %}
                 {% for exam in Exams %}
         {% if exam['ExamInformation']['Status'] == 'Active' %}
         <div class="examContainer">

@@ -1,4 +1,4 @@
-    {% if Language == 'English' or Language is none %}
+    {% if Language == 'English'  %}
     <div class="col-sm-12 mt-4 mb-3" style="text-align: center; overflow: auto;">
       <h3>Questions</h3>
       <table class="table">
@@ -9,7 +9,7 @@
               <th scope="col">...</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="NoNAdded">
           {% for q in question %}
             <tr>
               <td style="overflow: auto;">{{ q['Q-title'] }}</td>
@@ -20,7 +20,7 @@
           </tbody>
         </table>
     </div>
-    {% elif Language =="Arabic" %}
+    {% elif Language =="Arabic" or Language is none %}
     <div class="col-sm-12 mt-4 mb-3" style="text-align: center; overflow: auto;">
       <h3>الاسئلة</h3>
       <table class="table">
@@ -31,7 +31,7 @@
               <th scope="col">...</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="NoNAdded">
           {% for q in question %}
             <tr>
               <td style="overflow: auto;">{{ q['Q-title'] }}</td>

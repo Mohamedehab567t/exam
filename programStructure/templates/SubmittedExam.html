@@ -1,4 +1,4 @@
-       {% if Language == 'English' or Language is none %}
+       {% if Language == 'English'  %}
         {% for exam in Exams %}
         {% if exam['ExamInformation']['Status'] == 'Submitted' %}
         <div class="examContainer">
@@ -48,7 +48,7 @@
         {% endif %}
         {% endif %}
         {% endfor %}
-       {% elif Language =="Arabic" %}
+       {% elif Language =="Arabic" or Language is none %}
            {% for exam in Exams %}
         {% if exam['ExamInformation']['Status'] == 'Submitted' %}
         <div class="examContainer">
@@ -87,7 +87,7 @@
             </div>
             <hr>
             <div class="NEXT">
-                <a class="btn btn-success" href="{{ url_for('examDash' , exam_id = exam['_id'] ) }}"> Exam Dashboard </a>
+                <a class="btn btn-success" href="{{ url_for('examDash' , exam_id = exam['_id'] ) }}"> لوحة التحكم </a>
             </div>
         </div>
         {% else %}

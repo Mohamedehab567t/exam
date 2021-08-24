@@ -1,4 +1,4 @@
-{% if Language == 'English' or Language is none %}
+{% if Language == 'English'  %}
     <div class="parent">
     <div class="welcome-part alert alert-success">
         <p>Welcome admin : {{ user['first_name'] }} at <span class="Variable">{{Sett['site_name']}}</span> Dashboard </p>
@@ -16,11 +16,12 @@
             </div>
             <div class="infos">
                         <span>Name : {{one_s['first_name']}} {{one_s['last_name']}}</span>
-                        <span>Email : {{one_s['email']}}</span>
+                        <span>Phone Number : {{one_s['phone_number']}}</span>
                         <span>Gender : {{one_s['gender']}}</span>
 
                         <div class="btns">
-                        <a href="#" class="btn btn-danger refuse_WS" data-sid="{{ one_s['_id'] }}"><i class="fa fa-times-circle refuse_WS" data-sid="{{ one_s['_id'] }}"></i></a>
+                        <a href="#/" class="btn btn-success accept_WS" data-sid="{{ one_s['_id'] }}"><i class="fa fa-check-circle accept_WS" data-sid="{{ one_s['_id'] }}"></i></a>
+                        <a href="#/" class="btn btn-danger refuse_WS" data-sid="{{ one_s['_id'] }}"><i class="fa fa-times-circle refuse_WS" data-sid="{{ one_s['_id'] }}"></i></a>
                         </div>
 
                 </div>
@@ -30,7 +31,7 @@
         </div>
     </div>
 </div>
-{% elif Language =="Arabic" %}
+{% elif Language =="Arabic" or Language is none %}
     <div class="parent">
     <div class="welcome-part alert alert-success">
         <p style="float:right">مرحبا بك يا  : {{user['first_name']}} في  لوحة تحكم <span class="Variable">{{Sett['site_name']}}</span></p>
@@ -49,11 +50,12 @@
             </div>
             <div class="infos">
                         <span>Name : {{one_s['first_name']}} {{one_s['last_name']}}</span>
-                        <span>Email : {{one_s['email']}}</span>
+                        <span>Phone Number : {{one_s['phone_number']}}</span>
                         <span>Gender : {{one_s['gender']}}</span>
 
                         <div class="btns">
-                        <a href="#" class="btn btn-danger refuse_WS" data-sid="{{ one_s['_id'] }}"><i class="fa fa-times-circle refuse_WS" data-sid="{{ one_s['_id'] }}"></i></a>
+                        <a href="#/" class="btn btn-success accept_WS" data-sid="{{ one_s['_id'] }}"><i class="fa fa-check-circle accept_WS" data-sid="{{ one_s['_id'] }}"></i></a>
+                        <a href="#/" class="btn btn-danger refuse_WS" data-sid="{{ one_s['_id'] }}"><i class="fa fa-times-circle refuse_WS" data-sid="{{ one_s['_id'] }}"></i></a>
                         </div>
 
                 </div>

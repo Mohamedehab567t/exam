@@ -1,17 +1,23 @@
  {% if S_NUM == 0 %}
-        <span style="text-align:center; margin-top:10px">No Students yet</span>
+        <span style="text-align:center; margin-top:10px">لا يوجد طلاب هنا بعد</span>
         {% else %}
         {% for one_s in students %}
         <div class="ws">
+         {% if one_s['Addition'] %}
 <div class="first_letter alert-success">
     <span>{{one_s['firstletter']}}</span>
-            </div>
+</div>
+        {% else %}
+<div class="first_letter alert-danger">
+    <span>{{one_s['firstletter']}}</span>
+</div>
+        {% endif %}
             <div class="infos">
-                        <span>Name : {{one_s['first_name']}} {{one_s['last_name']}}</span>
-                        <span>Email : {{one_s['email']}}</span>
-                        <span>Gender : {{one_s['gender']}}</span>
-
+                        <span style="display:inline">الاسم : <span style="display:inline" class="Names">{{one_s['first_name']}} {{one_s['last_name']}}</span></span>
+                        <span>رقم الهاتف : {{one_s['phone_number']}}</span>
+                        <span>النوع : {{one_s['gender']}}</span>
                         <div class="btns">
+                        <a href="#" class="btn btn-primary showST" data-sid="{{ one_s['_id'] }}"><i class="fa fa-eye showST" data-sid="{{ one_s['_id'] }}"></i></a>
                         <a href="#" class="btn btn-danger deleteSt" data-sid="{{ one_s['_id'] }}"><i class="fa fa-times-circle deleteSt" data-sid="{{ one_s['_id'] }}"></i></a>
                         </div>
 
