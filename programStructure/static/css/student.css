@@ -189,4 +189,22 @@ transform: translate(-50%, -50%);
   }
 }
 
+.AdditionInformation{
+    display: grid;
+    grid-template-columns: repeat(2 , 44%);
+    justify-content: center;
+    gap: 5px;
+}
+@media screen and (max-width:400px) {
+  .AdditionInformation {
+    display:flex;
+    flex-direction: column
+  }
+}
+@media screen and (min-width:401px) and (max-width:768px) {
+  .AdditionInformation {
+    display:flex;
+    flex-direction: column
+  }
+}
 /*# sourceMappingURL=student.css.map */
