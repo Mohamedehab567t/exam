@@ -43,7 +43,6 @@ $('.deleteMSG').on('click' , function(){
     var bu = $(this)
     var Parent = $(bu).parent()
     var examTwo = $(Parent).find('#EXAM').text().replace(/'/g,'"')
-    console.log(examTwo)
     var exam = JSON.parse(examTwo)
     $.ajax({
     type: 'POST',
@@ -60,7 +59,21 @@ $('.deleteMSG').on('click' , function(){
     });
 })
 
-
+$('#DirectJoin').on('click' , function(){
+var examTwo = $('body').find('#EXAM').text().replace(/'/g,'"')
+var exam = JSON.parse(examTwo)
+$.ajax({
+type: 'POST',
+url: '/GoToExam',
+data: JSON.stringify({'id' : exam['_id']}),
+contentType: 'application/json;charset=UTF-8',
+beforeSend : function(){
+$('#DirectJoin').text('Joining . . .')
+},success : function(){
+window.location = '/StudentExam/'+exam['_id']
+}
+});
+})
 
 
 function CheckTime(from,to){

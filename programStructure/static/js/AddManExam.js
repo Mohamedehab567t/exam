@@ -154,20 +154,20 @@ var NotNon = $('#AddedQ')
 var TR = $(e.target).parents("tr:first");
 $(Non).append(TR)
 $(NotNon).prepend(TR)
-
+$('#NumberOFAdded').text('('+Array.from($(NotNon).children('tr')).length+')')
 $(e.target).addClass('ManDelete').removeClass('ManAdd')
 $(e.target).addClass('btn-danger').removeClass('btn-success')
-        var IsHere = checkCookie('Language')
-        if(IsHere){
-        var Cookie = getCookie('Language')
-        if(Cookie == "English"){
-        $(e.target).text('Delete')
-        }else if (Cookie == "Arabic"){
-        $(e.target).text('الغاء اضافة')
-        }
-        }else{
-        $(e.target).text('Delete')
-        }
+    var IsHere = checkCookie('Language')
+    if(IsHere){
+    var Cookie = getCookie('Language')
+    if(Cookie == "English"){
+    $(e.target).text('Delete')
+    }else if (Cookie == "Arabic"){
+    $(e.target).text('حذف')
+    }
+    }else{
+    $(e.target).text('حذف')
+    }
 }else if($(e.target).hasClass('ManDelete')){
 var Non = $('body').find('#NoNAdded')
 var NotNon = $('#AddedQ')
@@ -175,7 +175,7 @@ var TR = $(e.target).parents("tr:first");
 
 $(NotNon).append(TR)
 $(Non).prepend(TR)
-
+$('#NumberOFAdded').text('('+Array.from($(NotNon).children('tr')).length+')')
 $(e.target).addClass('ManAdd').removeClass('ManDelete')
 $(e.target).addClass('btn-success').removeClass('btn-danger')
         var IsHere = checkCookie('Language')
@@ -187,7 +187,7 @@ $(e.target).addClass('btn-success').removeClass('btn-danger')
         $(e.target).text('اضافة')
         }
         }else{
-        $(e.target).text('Add')
+        $(e.target).text('اضافة')
         }
 }
 

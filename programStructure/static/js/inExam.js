@@ -45,26 +45,32 @@ $('#timer').text(0)
 SubmitFunction()
 }
 }
-
+var QuestionScore = {}
+var QIDS = Array.from($('.Qid'))
 function SubmitFunction(){
 var score = 0
 var Children = Array.from($('#ExamCon *'))
+var i = 0
 Children.forEach(e =>{
 if($(e).hasClass('C') || $(e).hasClass('M')){
 if($(e).attr('data-selected') == 'true' ){
 var eScore = parseInt($(e).data('score'))
 score += eScore
+QuestionScore[$(QIDS[i]).data('sid')] = eScore
+i++;
 }
 }
 })
+
     var exam = $('#EXID').data('sid')
     $.ajax({
     type: 'POST',
     url: '/SendingSubmitting',
-    data: JSON.stringify({'id' : exam , 'score' : score}),
+    data: JSON.stringify({'id' : exam , 'score' : score , 'QuestionScore' : QuestionScore}),
     contentType: 'application/json;charset=UTF-8',
     beforeSend : function(){
     $('#SENDEXAM').text('Submitting . . .')
+    $('#SENDEXAM').prop('disabled' , true)
     },success : function(){
     window.location = '/profile'
     }
@@ -77,7 +83,6 @@ const pageAccessedByReload = (
       .map((nav) => nav.type)
       .includes('reload')
 );
-console.log(sessionStorage.getItem("Timer"))
 if(pageAccessedByReload){
 $('#timer').text(sessionStorage.getItem("Timer"))
 }

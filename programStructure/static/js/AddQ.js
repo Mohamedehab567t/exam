@@ -241,11 +241,13 @@ function AddTextedQuestion(){
        score.push(0)
        }
     })
-
-
         Q['Choices'] = ChoicesArray
         Q['score'] = score
         if(confirm("Do you want to add this question ?")){
+        var ValOBJ = QValidation(ChoicesArray , score)
+        if (!ValOBJ['go']){
+        alert(ValOBJ['message'])
+        }else{
             $.ajax({
             type: 'POST',
             url: '/AddQtoDataBase',
@@ -262,7 +264,9 @@ function AddTextedQuestion(){
             $('body').find('.ConForSingleChoice').remove()
             }
             });
-        }else{
+}
+ }
+        else{
         console.log('you Canceled')
         }
 }
@@ -336,6 +340,10 @@ function AddImagedQuestion(){
         Q['score'] = score
         if(confirm("Do you want to add this question ?"))
         {
+        var ValOBJ = QValidation(ChoicesArray , score)
+        if (!ValOBJ['go']){
+        alert(ValOBJ['message'])
+        }else{
             $.ajax({
             type: 'POST',
             url: '/AddImagedQtoDataBase',
@@ -364,7 +372,7 @@ function AddImagedQuestion(){
             }
             });
 
-        console.log(Q)
+        }
         }
         else{
         console.log('you Canceled')
@@ -394,5 +402,17 @@ function checkCookie(cname) {
     return true
     }
   }
-    
+function GetTotal(total , num){
+return total + num
+}
+function QValidation(Array1,Array2){
+        if(Array1.length < 2) {
+        return {'go' : false , 'message' : 'يجب اضافة اكثر من اختيار واحد علي الاقل'}
+        }else if (Array2.reduce(GetTotal) == 0){
+        return {'go' : false , 'message' : 'يجب تحديد اي من الاجابات صحيحه'}
+        }else{
+        return {'go' : true}
+        }
+}
 })
+
