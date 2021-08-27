@@ -1,6 +1,9 @@
 import os
 import random
 import secrets
+
+from flask_login import current_user
+
 from programStructure import app, Setting_ID
 from flask import render_template
 
@@ -61,7 +64,7 @@ def SendWaitingRequest(form):
                'gender': form.gender.data,
                'password': form.password.data,
                'type': 'student',
-               'Messages' : [],
+               'Messages': [],
                'Rank': {
                    'FullMark': 1,
                    'score': 0,
@@ -100,16 +103,34 @@ def ReturnNewStudentNumber():
     return data
 
 
-def ReturnNewStudentNumberVersionOfSearch(List):
+def ReturnNewStudentNumberVersionOfSearch(List, temp):
     students = List
     S_NUM = len(students)
-    temp2 = render_template('StudentsPart.html', students=students, S_NUM=S_NUM)
+    temp2 = render_template(temp + '.html', students=students, S_NUM=S_NUM)
     AdminHead = render_template('AdminHead.html')
     data = {
         'temp2': temp2,
         'AdminHead': AdminHead,
         'Nav': "طلابي [ " + str(S_NUM) + "]",
         'num2': str(S_NUM)
+    }
+    return data
+
+
+def ReturnStudentOfSearchInRankedAdmin(val, DB, temp):
+    AndExpressionForS = []
+    for obj in val:
+        expression = {'Addition.' + str(obj): val[obj]}
+        AndExpressionForS.append(expression)
+    global Ranked
+    try:
+        Ranked = Student.find({'type': 'student', '$and': AndExpressionForS}).sort(
+            [("Rank.rank", -1), ("Rank.FullMark", -1)])
+    except KeyError:
+        pass
+    temp2 = render_template(temp + '.html', Ranked=Ranked)
+    data = {
+        'temp2': temp2
     }
     return data
 
@@ -410,9 +431,29 @@ def GetFilteredListOnDeleteS(val):
             expression = {obj: val['AndExpression'][obj]}
             AndExpressionForQuestion.append(expression)
 
-        DS = list(Student.find({'type': 'student'},{
+        DS = list(Student.find({'type': 'student'}, {
             '$and': AndExpressionForQuestion
         }))
     else:
         DS = list(Student.find({'type': 'student'}))
     return DS
+
+
+def ReturnSToAddInActiveExam(exam):
+    StudentConfiguration = SiDB.find_one({'_id': Setting_ID})['Addition-Information']
+    Configs = []
+    AndExpression = []
+    for OBJ in StudentConfiguration:
+        if OBJ['InfoValue'] == 'Exam':
+            Configs.append(OBJ['label'])
+    for val in Configs:
+        for value in exam['StudentsInformation'][val]:
+            expression = {
+                'Addition.'+val: value
+            }
+            AndExpression.append(expression)
+
+    lst = list(Student.find({'$and': AndExpression}))
+    return lst
+
+

@@ -9,7 +9,8 @@ from .functions import SendWaitingRequest, savepic, CreateAutoExamObject, AddStu
     DeleteStudent, DoRank, CreateManualExamObject, \
     GetExamDetailsFromMessagesId, GetKeysFromQ_Configuration \
     , GetFilteredListOnDeleteQ, GetFilteredListOnSearchQ, \
-    ReturnNewStudentNumberVersionOfSearch, GetFilteredListOnSearchS, GetFilteredListOnDeleteS
+    ReturnNewStudentNumberVersionOfSearch, GetFilteredListOnSearchS, GetFilteredListOnDeleteS, \
+    ReturnStudentOfSearchInRankedAdmin, ReturnSToAddInActiveExam
 
 from flask_login import login_user, current_user, logout_user, login_required
 from .User import User
@@ -106,6 +107,7 @@ def profile():
     Admin = url_for('static', filename='css/Admin.css')
     user = Student.find_one({'_id': current_user.id})
     Sett = SiDB.find_one({'_id': Setting_ID})
+    ConfigS = Sett['Addition-Information']
     Language = request.cookies.get('Language')
     global Ranked
     if current_user.is_anonymous:
@@ -115,7 +117,8 @@ def profile():
     except KeyError:
         pass
     return render_template("student.html", bootstrap=bootstrap, normalize=normalize,
-                           student=student, Language=Language, Ranked=Ranked, font=font, Admin=Admin, Sett=Sett,
+                           student=student, ConfigS=ConfigS, Language=Language, Ranked=Ranked, font=font, Admin=Admin,
+                           Sett=Sett,
                            user=user)
 
 
@@ -226,7 +229,7 @@ def deleteSt():
     sid = request.get_json()
     DeleteStudent(sid['id'])
     StudentsAfterDelete = GetFilteredListOnDeleteS(sid)
-    data = ReturnNewStudentNumberVersionOfSearch(StudentsAfterDelete)
+    data = ReturnNewStudentNumberVersionOfSearch(StudentsAfterDelete, 'StudentsPart')
     return data
 
 
@@ -424,8 +427,9 @@ def returnExams():
 def examDash(exam_id):
     try:
         exam = ActiveExamsDB.find_one({'_id': exam_id})
-        StudentInformation = exam['StudentsInformation']
-    except TypeError:
+        NotHereStudent = ReturnSToAddInActiveExam(exam)
+        ST = exam['StudentsInformation']
+    except ValueError:
         return redirect(url_for('exams'))
     font = url_for('static', filename='css/font-awesome.min.css')
     bootstrap = url_for('static', filename='css/bootstrap.css')
@@ -437,8 +441,8 @@ def examDash(exam_id):
     if current_user.is_anonymous:
         return redirect(url_for('login'))
     return render_template('ExamDashboard.html', bootstrap=bootstrap, normalize=normalize,
-                           Admin=Admin, Language=Language, Sett=Sett, exam=exam, ST=StudentInformation, font=font,
-                           examCSS=examCSS)
+                           Admin=Admin, Language=Language, Sett=Sett, exam=exam, ST=ST, font=font,
+                           examCSS=examCSS,NotHereStudent=NotHereStudent)
 
 
 @app.route('/ExamQuestions/<int:exam_id>', methods=['GET', 'POST'])
@@ -618,7 +622,8 @@ def SendingSubmitting():
         '_id': current_user.id,
         'firstName': user['first_name'],
         'lastName': user['last_name'],
-        'score': E_info['score']
+        'score': E_info['score'],
+        'QuestionScore': E_info['QuestionScore']
     }
     ActiveExamsDB.update_one(exam, {
         '$push': {
@@ -773,7 +778,8 @@ def RankingA():
         Ranked = Student.find({'type': 'student'}).sort([("Rank.rank", -1), ("Rank.FullMark", -1)])
     except KeyError:
         pass
-    return render_template('RankingInAdmin.html', ConfigS=ConfigS ,font=font, Sett=Sett, user=user, Ranked=Ranked, bootstrap=bootstrap,
+    return render_template('RankingInAdmin.html', ConfigS=ConfigS, font=font, Sett=Sett, user=user, Ranked=Ranked,
+                           bootstrap=bootstrap,
                            normalize=normalize, A=A)
 
 
@@ -825,7 +831,7 @@ def UpdateQuestionFromBank(id):
     E_info = request.get_json()
     QDB.update_one({'_id': id}, {
         '$set': {
-            'Q-title' : E_info['title'],
+            'Q-title': E_info['title'],
             'Choices': E_info['Choices'],
             'score': E_info['score']
         }
@@ -839,7 +845,7 @@ def UpdateQuestionFromBank(id):
 @login_required
 def GetFilteredQuestion():
     val = request.get_json()
-    Questions = GetFilteredListOnSearchQ(val,QDB)
+    Questions = GetFilteredListOnSearchQ(val, QDB)
     return render_template('ReturnOneQuestionAfterFiltered.html', Questions=Questions)
 
 
@@ -856,4 +862,78 @@ def DeleteBankQ():
 def GetFilteredStudent():
     val = request.get_json()
     FS = GetFilteredListOnSearchS(val, Student)
-    return ReturnNewStudentNumberVersionOfSearch(FS)
+    return ReturnNewStudentNumberVersionOfSearch(FS, 'StudentsPart')
+
+
+@app.route('/GetFilteredStudentRankedAdmin', methods=['POST', 'GET'])
+@login_required
+def GetFilteredStudentRankedAdmin():
+    val = request.get_json()
+    return ReturnStudentOfSearchInRankedAdmin(val, Student, 'GetFilteredRanked')
+
+
+@app.route('/GetFilteredStudentRankedStudent', methods=['POST', 'GET'])
+@login_required
+def GetFilteredStudentRankedStudent():
+    val = request.get_json()
+    return ReturnStudentOfSearchInRankedAdmin(val, Student, 'GetFilteredRankedInStudent')
+
+
+@app.route('/ShowStudentAnswer', methods=['POST', 'GET'])
+@login_required
+def ShowStudentAnswer():
+    global val
+    if request.method == 'POST':
+        val = request.get_json()
+    QU = []
+    font = url_for('static', filename='css/font-awesome.min.css')
+    bootstrap = url_for('static', filename='css/bootstrap.css')
+    normalize = url_for('static', filename='css/normalize.css')
+    Admin = url_for('static', filename='css/Admin.css')
+    examCSS = url_for('static', filename='css/ExamPR.css')
+    Sett = SiDB.find_one({'_id': Setting_ID})
+    for key in val:
+        Q = QDB.find_one({'_id': int(key)})
+        QU.append(Q)
+    return render_template('StudentAnswers.html', font=font, bootstrap=bootstrap
+                           , normalize=normalize, Admin=Admin
+                           , examCSS=examCSS, Sett=Sett,val=val,QU=QU)
+
+
+@app.route('/showDirectAccess/<int:id>', methods=['POST', 'GET'])
+@login_required
+def showDirectAccess(id):
+    ActiveExamsDB.update_one({'_id' : id},{
+        '$set' : {
+            'showDirectAccess': 'show'
+        }
+    })
+    flash('تم الاظهار')
+    return redirect(url_for('examDash' , exam_id = id))
+
+
+@app.route('/AddStudentToActiveExam', methods=['POST', 'GET'])
+@login_required
+def AddStudentToActiveExam():
+    INFO = request.get_json()
+    exam = ActiveExamsDB.find_one({'_id': INFO['Eid']})
+    student = Student.find_one({'_id': INFO['Sid']})
+    if INFO['status'] == 'Active' :
+        ActiveExamsDB.update_one(exam, {
+            '$push': {
+                'StudentsInformation.Absent': student
+            }
+        })
+    elif INFO['status'] == 'Published':
+        ActiveExamsDB.update_one(exam, {
+            '$push': {
+                'StudentsInformation.Absent': student
+            }
+        })
+        Student.update_one(student, {
+            '$push': {
+                'Messages': {'_id': exam['_id']}
+            }
+        })
+    Absent = exam['StudentsInformation']['Absent']
+    return render_template('ReturnAbsentStudentAfterAddedActice.html', Absent=Absent)
