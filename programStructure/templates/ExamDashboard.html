@@ -189,6 +189,7 @@
         {% endfor %}
         {% endif %}
         {% endwith %}
+
         <div class="col-sm-12 StudentStatus">
             <div class="row">
             <div class="col-sm-4 absent">
@@ -201,7 +202,7 @@
                         <th scope="col">الاسم الاخير</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="AbsentStudent">
                     {% for s in ST['Absent'] %}
                       <tr>
                         <td>{{s['first_name']}}</td>
@@ -214,6 +215,7 @@
                 <span style="margin : 5px auto;">لا يوجد غائبين</span>
                 {% endif %}
             </div>
+
             <div class="col-sm-4 attended">
                 <h3>الحاضرين</h3>
                 {% if ST['Attended']|length > 0 %}
@@ -253,7 +255,7 @@
                       <tr>
                         <td>{{s['firstName']}}</td>
                         <td>{{s['lastName']}}</td>
-                        <td>{{s['score']}}</td>
+                        <td>{{exam['ExamInformation']['FullMark']}} / {{s['score']}} </td>
                       </tr>
                     {% endfor %}
                     </tbody>
@@ -265,11 +267,13 @@
         </div>
         </div>
         <div class="ExamButtons">
-
+            {% if exam['ExamInformation']['Status'] == 'Active'%}
+            <a class="btn btn-primary" id="ActiveAddStudent">اضافة طالب</a>
+            {% endif %}
             <a class="btn btn-success" href="{{ url_for('examQ' , exam_id=exam['_id']) }}">معاينة</a>
             {% if exam['ExamInformation']['Status'] != 'Submitted'%}
             {% if exam['ExamInformation']['Status'] == 'Published' %}
-            <button disabled class="btn btn-success">نشر</button>
+            <a href="{{  url_for('showDirectAccess' , id = exam['_id']) }}" class="btn btn-primary">اظهار دخول مباشر</a>
             {% else %}
             <a class="btn btn-success" href="{{ url_for('ExamPublish' , exam_id=exam['_id']) }}">نشر</a>
             {% endif %}
@@ -280,6 +284,38 @@
         </div>
 
 
+        <div class="Action" style="padding:15px">
+        <div style="background-color:white; width:100%; padding : 5px;" class="studentNotHere">
+            <h4 style="text-align:center"> اضافة طالب  </h4>
+            <div class="container">
+          <table class="table" style="text-align:center">
+          <thead>
+            <tr style="text-align:center">
+              <th scope="col">الاسم الاول</th>
+              <th scope="col">الاسم الثاني</th>
+              <th scope="col">...</th>
+            </tr>
+          </thead>
+          <tbody id="NotHere">
+          {% for student in NotHereStudent %}
+          {% if exam['ExamInformation']['Status'] == 'Active' %}
+          {% if student not in ST['Absent'] %}
+            <tr style="text-align:center">
+              <td >{{student['first_name']}}</td>
+              <td >{{student['last_name']}}</td>
+              <td ><button class="btn btn-primary AddStudent" data-status="{{ exam['ExamInformation']['Status'] }}" data-eid="{{exam['_id']}}"  data-sid="{{ student['_id'] }}">اضافة</button></td>
+            </tr>
+         {% endif %}
+         {% endif %}
+          {% endfor %}
+          </tbody>
+        </table>
+                </div>
+        </div>
+            <div class="ExamButtons">
+            <button class="btn btn-light" style="color:#212529; width:150px;" id="close">اغلاق</button>
+            </div>
+        </div>
 
 
         <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>

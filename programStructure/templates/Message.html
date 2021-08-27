@@ -181,7 +181,12 @@
                     </div>
                 <small class="mb-3" style="display:block;color:red" id="msg"></small>
                 <button type="submit" id="join" class="btn btn-success mb-3">دخول</button>
-                  <button type="button" class="btn btn-danger mb-3 deleteMSG">حذف</button>
+                {% if m['showDirectAccess'] %}
+                {% if m['showDirectAccess'] == 'show' %}
+                <button type="button" id="DirectJoin" class="btn btn-primary mb-3">دخول مباشر</button>
+                  {% endif %}
+                  {% endif %}
+                <button type="button" class="btn btn-danger mb-3 deleteMSG">حذف</button>
             </form>
         </div>
         <hr>

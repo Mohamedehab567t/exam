@@ -136,7 +136,7 @@
     <link rel="stylesheet" href="{{normalize}}">
     <link rel="stylesheet" href="{{Admin}}">
     <link rel="stylesheet" href="{{student}}">
-
+    <link rel="stylesheet" href="{{url_for('static', filename='css/Bank.css')}}">
     <title>الصفحة الشخصية</title>
 </head>
 <body style="direction : rtl">
@@ -149,19 +149,23 @@
                     <div class="clearfix"></div>
         <p style="float:right">هنا يمكنك التحكم في معلوماتك الشخصية و استقبال رسائل الامتحانات و رؤية الدرجات</p>
                 <div class="clearfix"></div>
+        <p style="float:right">وللدعم الفني او المشاكل التواصل مع شركة SkySoft علي رقم : 01027708044</p>
+        <div class="clearfix"></div>
     </div>
 
-            {% if user['Results'] %}
+    {% if user['Results'] %}
     {% for r in user['Results']  %}
     {% if r['status'] == 'Unseen' %}
+    {% if loop.index == user['Results']|length %}
     <div class="welcome-part alert alert-success">
-       <span class="Variable">تم ارسال نتائج اخر امتحاناتك</span>
+       <span class="Variable">لديك نتائج غير مقروءة يرجي الدخول علي <i class="fa fa-certificate" style="color:#02ab3a"></i> </span>
     </div>
+        {% endif %}
     {% endif %}
     {% endfor %}
     {% endif %}
 
-                {% with m = get_flashed_messages()%}
+        {% with m = get_flashed_messages()%}
         {% if m %}
         {% for message in m %}
         <div class="alert alert-success" style="
@@ -247,7 +251,26 @@
 
 
   <div class="container">
+             <h4 style="text-align:center">ابحث في الطلاب</h4>
+      <div class="SearchDiv mb-2">
+    {% for obj in ConfigS %}
+    {% if obj['type'] == 'select' %}
+        <select class="form-control" name="{{obj['label']}}">
+            <option value="" selected>اختر {{obj['label']}}</option>
+            {% for option in obj['values'] %}
+            <option value="{{option}}" >{{option}}</option>
+            {% endfor %}
+        </select>
+    {% endif %}
+    {%else%}
+        <input type="text"  class="form-control" placeholder="{{obj}}">
+    {% endfor %}
+    </div>
+          <div class="conOfBtn mb-4" style="display:flex; flex-direction:row; gap:5px; justify-content: center;">
+        <button class="btn btn-success" id="SearchQ">بحث</button>
+      </div>
     <h3 style="text-align: center;" class="m-3">الترتيب العام الطلبة</h3>
+            <div class="ConOfRanked">
         {% if Ranked %}
   <table class="table mt-3 mb-5">
     <thead>
@@ -303,12 +326,12 @@
         <h6 style="text-align: center;" class="m-5">لا يوجد طلبة الان</h6>
     {% endif %}
 </div>
+</div>
                 <hr class="mt-3 mb-2">
     </div>
 
         <div class="fixednav">
             <a href="#" class="Variable"><i class="fa fa-user i"></i></a>
-            <a href="#" id="langChange" class="Variable"><i style="font-weight:800">EN</i></a>
             {% if user['Messages']|length > 0 %}
             <a href="{{url_for('Messages')}}" style="background-color : red" class="Variable message"><i class="fa fa-envelope"></i></a>
             {% else %}
