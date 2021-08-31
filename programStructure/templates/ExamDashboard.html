@@ -248,6 +248,9 @@
                         <th scope="col">الاسم الاول</th>
                         <th scope="col">الاسم الاخير</th>
                         <th scope="col">الدرجة</th>
+                      {% if exam['showAnswers'] and exam['showAnswers'] == 'show'  %}
+                      <th scope="col">اجابات</th>
+                      {% endif %}
                       </tr>
                     </thead>
                     <tbody>
@@ -256,6 +259,10 @@
                         <td>{{s['firstName']}}</td>
                         <td>{{s['lastName']}}</td>
                         <td>{{exam['ExamInformation']['FullMark']}} / {{s['score']}} </td>
+                        {% if exam['showAnswers'] and exam['showAnswers'] == 'show'  %}
+                         <td style="display:none" class="ObjText">{{ s['QuestionScore'] }}</td>
+                          <td><button class="btn btn-primary ShowAnswer"><i class="fa fa-eye" style="color:white"></i> </button> </td>
+                        {% endif %}
                       </tr>
                     {% endfor %}
                     </tbody>
@@ -273,13 +280,18 @@
             <a class="btn btn-success" href="{{ url_for('examQ' , exam_id=exam['_id']) }}">معاينة</a>
             {% if exam['ExamInformation']['Status'] != 'Submitted'%}
             {% if exam['ExamInformation']['Status'] == 'Published' %}
+            <a class="btn btn-primary" id="PublishedAddStudent">اضافة طالب</a>
             <a href="{{  url_for('showDirectAccess' , id = exam['_id']) }}" class="btn btn-primary">اظهار دخول مباشر</a>
             {% else %}
             <a class="btn btn-success" href="{{ url_for('ExamPublish' , exam_id=exam['_id']) }}">نشر</a>
             {% endif %}
             <a class="btn btn-danger" href="{{ url_for('ExamDelete' , exam_id=exam['_id']) }}">حذف</a>
             {% else %}
+            {%if exam['r'] == 'true' %}
+            <a class="btn btn-secondary" style="pointer-events: none;" href="#/">تم ارسال الدرجات</a>
+            {% else %}
             <a class="btn btn-primary" href="{{ url_for('SendingResult' , exam_id=exam['_id']) }}">ارسال الدرجات</a>
+            {% endif %}
             {% endif %}
         </div>
 
@@ -297,8 +309,8 @@
             </tr>
           </thead>
           <tbody id="NotHere">
+        {% if exam['ExamInformation']['Status'] == 'Active' %}
           {% for student in NotHereStudent %}
-          {% if exam['ExamInformation']['Status'] == 'Active' %}
           {% if student not in ST['Absent'] %}
             <tr style="text-align:center">
               <td >{{student['first_name']}}</td>
@@ -306,14 +318,22 @@
               <td ><button class="btn btn-primary AddStudent" data-status="{{ exam['ExamInformation']['Status'] }}" data-eid="{{exam['_id']}}"  data-sid="{{ student['_id'] }}">اضافة</button></td>
             </tr>
          {% endif %}
-         {% endif %}
           {% endfor %}
+            {% elif exam['ExamInformation']['Status'] == 'Published' %}
+            {% for student in NotHereStudentPublished %}
+                <tr style="text-align:center">
+              <td >{{student['first_name']}}</td>
+              <td >{{student['last_name']}}</td>
+              <td ><button class="btn btn-primary AddStudent" data-status="{{ exam['ExamInformation']['Status'] }}" data-eid="{{exam['_id']}}"  data-sid="{{ student['_id'] }}">اضافة</button></td>
+            </tr>
+            {% endfor %}
+           {% endif %}
           </tbody>
         </table>
                 </div>
         </div>
             <div class="ExamButtons">
-            <button class="btn btn-light" style="color:#212529; width:150px;" id="close">اغلاق</button>
+            <button class="btn btn-light" style="color:#212529; width:150px;" id="close">حفظ</button>
             </div>
         </div>
 

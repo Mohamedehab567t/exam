@@ -75,7 +75,11 @@
                     الاسئلة
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
                     <a class="dropdown-item" href="{{ url_for('AddingQ') }}">اضافة اسئلة</a>
+                      {% if Sett['ShowPiece'] == True %}
+                    <a class="dropdown-item" href="{{ url_for('AddingP') }}">اضافة قطعة</a>
+                      {% endif %}
                     <a class="dropdown-item" href="{{ url_for('BankOfQuestion') }}">بنك الاسئلة</a>
                   </div>
                 </li>

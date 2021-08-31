@@ -150,7 +150,9 @@
     {% for m in ExamsMessages %}
         <div class="s-i">
             <form class="formToJoin" action="">
-                <span data-sid="{{ current_user.id }}" id="EXAM" style="display : none">{{m}}</span>
+                <span data-sid="{{ current_user.id }}" id="EXAM" style="display : none">
+                    {{m['ExamInformation']['From'].split('T')|join(',')}}&{{m['ExamInformation']['To'].split('T')|join(',')}}&{{m['_id']}}
+                </span>
                     <h3 style="text-align:center;">{{m['ExamInformation']['title']}}</h3>
                 <div class="my-row">
                     <div class="my-col">

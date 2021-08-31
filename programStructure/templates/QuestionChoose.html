@@ -33,11 +33,19 @@
           </thead>
           <tbody id="NoNAdded">
           {% for q in question %}
+          {% if q['kind'] == 'Q' %}
             <tr>
               <td style="overflow: auto;">{{ q['Q-title'] }}</td>
               <td>{{ q['Q-type'] }}</td>
               <td> <button data-sid="{{q['_id']}}" class="btn btn-success ManAdd"> اضافة </button> </td>
             </tr>
+          {% elif q['kind'] == 'P' %}
+            <tr>
+              <td style="overflow: auto;">{{ q['P-title'] }}</td>
+              <td>قطعة</td>
+              <td> <button data-sid="{{q['_id']}}" class="btn btn-success ManAdd"> اضافة </button> </td>
+            </tr>
+          {% endif %}
           {% endfor %}
           </tbody>
         </table>

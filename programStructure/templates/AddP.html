@@ -1,0 +1,211 @@
+{% if Language == 'English'  %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC&display=swap" rel="stylesheet">
+    <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
+    <link rel="stylesheet" href="{{bootstrap}}">
+    <link rel="stylesheet" href="{{font}}">
+    <link rel="stylesheet" href="{{normalize}}">
+    <link rel="stylesheet" href="{{Admin}}">
+    <link rel="stylesheet" href="{{settings}}">
+
+    <title>Add Questions</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand Variable" href="#">{{Sett['site_name']}}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('dashboard')}}">Back</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+    </header>
+<div class="parent">
+    <div class="welcome-part alert alert-success">
+        <p>Welcome admin : {{ user['first_name'] }} at <span class="Variable">{{Sett['site_name']}}</span> Dashboard </p>
+        <p>this is page is for adding a questions that you can use in (Add auto exam) or
+        (Add manual exam)
+        </p>
+    </div>
+     <div class="si">
+        <h3>Add Question</h3>
+        <div class="si-cont">
+        <span>Add one question per time</span>
+
+            <form action="/AddTheImage" class="AddQForm" method="POST" enctype="multipart/form-data">
+                <div class="my-row Q-Configuration">
+                    <input type="text" class="form-control si-addition" id="Q-title"  placeholder="Title of the question">
+
+                    <div  class="ImagePurpose hide">
+                    <input type="file" id="Fake" class="ImagePurpose" name="titleImage">
+                    </div>
+
+                    <select name="TypeOfQ" class="form-control si-addition" id="Q-type">
+                        <option value="" selected>select type</option>
+                        <option value="text" >text</option>
+                        <option value="images" >With images</option>
+                    </select>
+                    {% if Sett['Q-Configuration'] %}
+                    {% for q in Sett['Q-Configuration'] %}
+                    {% if q['type'] == 'select' %}
+                    <select name="TypeOfQ" class="form-control si-addition" id="{{ q['label'] }}">
+                        <option value="" selected>select {{ q['label'] }}</option>
+                        {% for v in q['values'] %}
+                        <option value="{{v}}" >{{v}}</option>
+                        {% endfor %}
+                    </select>
+                    {% else %}
+                    <input type="text" class="form-control si-addition" id="{{ q['label'] }}"  placeholder="{{ q['label'] }}">
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                  <button type="button" id="AddChoiceBtn" class="btn btn-success hide">Add Choice</button>
+                </div>
+
+                <div class="form-group QChoices hide">
+
+                </div>
+                  <button type="submit" class="btn btn-success" id="AddQToDataBase" style="margin: 5px auto;">Add Question</button>
+            </form>
+
+        </div>
+    </div>
+    </div>
+
+
+
+        <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/AddQ.js') }}"></script>
+</body>
+</html>
+{% elif Language =="Arabic" or Language is none %}
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC&display=swap" rel="stylesheet">
+    <script src="{{ url_for('static' , filename='js/jquery-3.5.1.js') }}"></script>
+    <link rel="stylesheet" href="{{bootstrap}}">
+    <link rel="stylesheet" href="{{font}}">
+    <link rel="stylesheet" href="{{normalize}}">
+    <link rel="stylesheet" href="{{Admin}}">
+    <link rel="stylesheet" href="{{settings}}">
+
+    <title>اضافة قطعة</title>
+</head>
+<body style="direction : rtl">
+    <header>
+    {% include 'BackNav.html' %}
+    </header>
+<div class="parent">
+    <div class="welcome-part alert alert-success">
+        <p style="float:right">مرحبا بك يا  : {{user['first_name']}} في  لوحة تحكم <span class="Variable">{{Sett['site_name']}}</span></p>
+        <div class="clearfix"></div>
+        <p style="float:right">هذه صفحة اضافة قطعة التي يمكنك استخدامها في الامتحانات التلقائية او اليدوية</p>
+        <div class="clearfix"></div>
+    </div>
+
+
+     <div class="si">
+          <h5 style="text-align:center">اضافة قطعة</h5>
+        <div class="si-cont">
+    <div class="form-group mb-3" style="width:90%; margin:2px auto">
+
+        <div class="container">
+            <div id="editor-menu" style="">
+                <button id="bold-button" title="Bold"> <b>B</b> </button>
+                <button id="underline-button" title="Underline"> <u>U</u> </button>
+            </div>
+        </div>
+        <div class="have" style="direction:rtl">
+            <div id="editor-text" class="form-control" contenteditable="true" spellcheck="false" style="min-height:150px; overflow:auto; direction:rtl"></div>
+        </div>
+    </div>
+        <input type="text" class="form-control si-addition mb-3" id="PTitle"  placeholder="عنوان القطعة">
+            <div class="P-Configuration">
+                    {% if Sett['Q-Configuration'] %}
+                    {% for q in Sett['Q-Configuration'] %}
+                    {% if q['type'] == 'select' %}
+                    <select name="TypeOfQ" class="form-control si-addition mb-3" id="{{ q['label'] }}">
+                        <option value="" selected>select {{ q['label'] }}</option>
+                        {% for v in q['values'] %}
+                        <option value="{{v}}" >{{v}}</option>
+                        {% endfor %}
+                    </select>
+                    {% else %}
+                    <input type="text" class="form-control si-addition mb-3" id="{{ q['label'] }}"  placeholder="{{ q['label'] }}">
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+            </div>
+        <h3>اضافة سؤال علي القطعة</h3>
+        <span style="float:right">اضف سؤال واحد كل مرة</span>
+            <div class="clearfix"></div>
+            <form action="" class="AddQForm" method="POST" enctype="multipart/form-data">
+                <div class="my-row Q-Configuration">
+                    <input type="text" class="form-control si-addition" id="Q-title"  placeholder="عنوان السؤال">
+
+                    <div  class="ImagePurpose hide">
+                    <input type="file" id="Fake" class="ImagePurpose" name="titleImage">
+                    </div>
+
+                    <select name="TypeOfQ" class="form-control si-addition" id="Q-type">
+                        <option value="" selected>اختر نوع</option>
+                        <option value="text" >نص</option>
+                    </select>
+                  <button type="button"id="AddChoiceBtn" class="btn btn-success hide">اضافة اختيار</button>
+                </div>
+
+                <div class="form-group QChoices hide">
+
+                </div>
+
+                <div class="BTNS" style="display:flex">
+                <button type="submit" class="btn btn-success" id="AddQOfPToDataBase" style="margin:2px auto">اضافة سؤال</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    </div>
+        <div style="text-align:center" class="ConSpan mt-3 mb-3">
+          <div class="conOfBtn" style="display:flex; gap:6px; justify-content: center;">
+                <a href="{{url_for('BankOfQuestion')}}" class="btn btn-success">بنك الاسئلة</a>
+                <button type="submit" class="btn btn-success" id="AddPToDataBase" style="">اضافة القطعة</button>
+          </div>
+    </div>
+
+
+        <script src="{{ url_for('static' , filename='js/popper.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/bootstrap.js') }}"></script>
+        <script src="{{ url_for('static' , filename='js/AddP.js') }}"></script>
+    <script>
+        document.querySelector('#bold-button').addEventListener('click', function() {
+        document.execCommand('bold');
+        });
+
+        // Underline menu
+        document.querySelector('#underline-button').addEventListener('click', function() {
+        document.execCommand('underline');
+        });
+    </script>
+</body>
+</html>
+    {% endif %}
+

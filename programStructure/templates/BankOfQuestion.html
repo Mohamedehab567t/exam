@@ -52,6 +52,7 @@
          {% if Q|length > 0 %}
          <div class="BankQ" id="BankQ" style="Width:100%; border:2px solid #02ab3a; padding:10px ">
         {% for q in Q %}
+         {% if q['kind'] == 'Q' %}
         <div class="card mb-2" id="{{q['_id']}}card">
               <div class="card-header" style="text-align:center">
                   <span style="font-weight:700">{{loop.index}}</span>
@@ -63,6 +64,7 @@
                   </div>
 
                   <div class="clearfix"></div>
+
                 {% if q['Q-type'] == 'text' %}
                   {% for choice in q['Choices'] %}
                   <div class="row">
@@ -87,7 +89,49 @@
               </div>
         </div>
              <hr>
+             {% elif q['kind'] == 'P' %}
+             <div class="card mb-2" id="{{q['_id']}}card">
+              <div class="card-header" style="text-align:center">
+                  <span style="font-weight:700">{{loop.index}}</span>
+              </div>
+         <div class="have" style="direction:rtl">
+             <span class="htmlOfP" style="display:none">{{ q['P-content'] }}</span>
+            <div class="form-control editor-text" contenteditable="false" spellcheck="false" style="min-height:100px; overflow:auto; direction:rtl">
+            </div>
+        </div>
+                 {% for qq in q['P-Questions'] %}
+                   <div class="card-body">
+                  <h6 style="text-align:center">عنوان السؤال</h6>
+                  <div class="form-group">
+                      <input style="width : 100%" type="text" id="{{qq['_id']}}title" value="{{qq['Q-title']}}" class="form-control titles">
+                  </div>
+
+                  <div class="clearfix"></div>
+
+                {% if qq['Q-type'] == 'text' %}
+                  {% for choice in qq['Choices'] %}
+                  <div class="row">
+                      <div class="col">
+                  <div class="form-group">
+                      <input  type="text" value="{{choice[0]}}" class="form-control {{qq['_id']}}choice">
+                  </div>
+                      </div>
+                      <div class="col">
+                <div class="form-group">
+                      <input type="text" value="{{qq['score'][loop.index -1 ]}}" class="form-control {{qq['_id']}}score">
+                  </div>
+                      </div>
+                  </div>
+
+                  {% endfor %}
+                  {% endif %}
+              </div>
+                 {% endfor %}
+        </div>
+             <hr>
+             {% endif %}
             {% endfor %}
+
          </div>
          {% else %}
         <div style="text-align:center" class="ConSpan mt-3">
@@ -97,6 +141,7 @@
           </div>
            </div>
          {% endif %}
+
      </div>
 
     </div>

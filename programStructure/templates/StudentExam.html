@@ -41,9 +41,10 @@
 
     <div id="ExamCon" class="container">
         {% for q in QU %}
-        <h5 data-sid="{{ q['_id'] }}" style="text-align: center;" class="mb-1 Qid">Question {{ loop.index }}</h5>
+        {% if q['kind'] == 'Q' %}
+        <h5 data-sid="{{ q['_id'] }}" style="text-align: center;" class="mb-1 mt-1 Qid">سؤال {{ loop.index }}</h5>
         {% if q['Q-type'] == "text"  %}
-        <div class="TextQ mt-3" style="padding: 5px; border: .5px solid grey;">
+        <div class="TextQ QUES mt-3" style="padding: 5px; border: .5px solid grey;">
             <p class="title">
             {{q['Q-title']}}
             </p>
@@ -51,7 +52,7 @@
                 {% for choice in q['Choices'] %}
                 {% set cLoop = loop %}
                 {% for c in choice %}
-                <div data-score="{{ q['score'][cLoop.index - 1] }}" class="choice C">
+                <div data-score="{{ q['score'][cLoop.index - 1] }}" class="choice Qkind C">
                     <span>{{c}}</span>
                 </div>
                 {% endfor %}
@@ -61,7 +62,7 @@
         </div>
         {% elif q['Q-type'] == "images" %}
 
-        <div class="ImageQ mt-3" style="padding: 5px; border: .5px solid grey;">
+        <div class="ImageQ QUES mt-3" style="padding: 5px; border: .5px solid grey;">
 
             <p class="title">
                 {{q['Q-title']}}
@@ -83,12 +84,12 @@
                 {% if choice|length == 1 %}
 
                 {% if c['type'] == 'text' %}
-                <div class="ChoiceText M" data-score="{{ q['score'][xLoop.index - 1] }}">
+                <div class="ChoiceText Qkind M" data-score="{{ q['score'][xLoop.index - 1] }}">
                     <span> {{c['value']}} </span>
                 </div>
                 {% elif c['type'] == 'image' %}
 
-                <div class="ChoiceImage M" data-score="{{ q['score'][xLoop.index - 1] }}">
+                <div class="ChoiceImage Qkind M" data-score="{{ q['score'][xLoop.index - 1] }}">
                     <img src="{{url_for('static' , filename='images/')}}{{c['value']}}{{q['_id']}}{{c['Extension']}}"  alt="">
                 </div>
                 <div class="SHOWCHOICEPHOTO" id="{{c['value']}}">
@@ -102,7 +103,7 @@
                 {% else %}
 
                 {% if c['type'] == 'image' %}
-                <div class="ChoiceBoth M" data-score="{{ q['score'][xLoop.index - 1] }}">
+                <div class="ChoiceBoth Qkind M" data-score="{{ q['score'][xLoop.index - 1] }}">
                     <img src="{{url_for('static' , filename='images/')}}{{c['value']}}{{q['_id']}}{{c['Extension']}}" alt="">
                 </div>
                 <div class="SHOWCHOICEPHOTO" id="{{c['value']}}">
@@ -122,6 +123,35 @@
 
     {% endif %}
         <hr>
+    {% elif q['kind'] == 'P' %}
+        <h5 data-sid="{{q['_id']}}" style="text-align: center;" class="mb-1 mt-1 Qid">سؤال {{ loop.index }}</h5>
+    <div class="TextQ Passage mt-3" style="padding: 5px; border: .5px solid grey;">
+        {% for qq in q['P-Questions']  %}
+     <h5 data-sid="{{ qq['_id'] }}" style="text-align: center;" class="mb-1 mt-1 Pid">سؤل القطعة رقم {{ loop.index }}</h5>
+         <div class="have" style="direction:rtl">
+             <span class="htmlOfP" style="display:none">{{ q['P-content'] }}</span>
+            <div class="form-control editor-text" contenteditable="false" spellcheck="false" style="min-height:100px; overflow:auto; direction:rtl">
+            </div>
+        </div>
+
+            <p class="title mt-2 mb-2">
+                {{qq['Q-title']}}
+            </p>
+            <div class="choices">
+                {% for choice in qq['Choices'] %}
+                {% set outerLoop = loop  %}
+                {% for c in choice %}
+                <div class="choice Pkind C" data-score="{{ qq['score'][outerLoop.index - 1] }}">
+                    <span>{{c}}</span>
+                </div>
+                {% endfor %}
+
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+    {% endif %}
     {% endfor %}
     </div>
 
