@@ -255,6 +255,8 @@ def CreateAutoExamObject(INFO):
     Exam['ExamInformation'] = ExamObject
     Exam['QuestionInformation'] = QuestionObject
     Exam['StudentsInformation'] = StudentsObject
+    Exam['r'] = 'false'
+    Exam['showAnswers'] = 'show'
     Exam['Questions'] = E_Q
 
     ActiveExamsDB.insert_one(Exam)
@@ -324,6 +326,8 @@ def CreateManualExamObject(INFO):
     Exam['ExamInformation'] = ExamObject
     Exam['QuestionInformation'] = QuestionObject
     Exam['StudentsInformation'] = StudentsObject
+    Exam['r'] = 'false'
+    Exam['showAnswers'] = 'show'
     ActiveExamsDB.insert_one(Exam)
     data = {
         'list': Multiple_Content,
@@ -449,7 +453,7 @@ def ReturnSToAddInActiveExam(exam):
     for val in Configs:
         for value in exam['StudentsInformation'][val]:
             expression = {
-                'Addition.'+val: value
+                'Addition.' + val: value
             }
             AndExpression.append(expression)
 
@@ -457,3 +461,29 @@ def ReturnSToAddInActiveExam(exam):
     return lst
 
 
+def GetAbsentFromPublished(exam_id):
+    exam = ActiveExamsDB.find_one({'_id': exam_id})
+    S = []
+    for user in exam['StudentsInformation']['Absent']:
+        S.append(user['_id'])
+    for user in exam['StudentsInformation']['Attended']:
+        S.append(user['_id'])
+    StudentConfiguration = SiDB.find_one({'_id': Setting_ID})['Addition-Information']
+    Configs = []
+    AndExpression = []
+    for OBJ in StudentConfiguration:
+        if OBJ['InfoValue'] == 'Exam':
+            Configs.append(OBJ['label'])
+    for val in Configs:
+        for value in exam['StudentsInformation'][val]:
+            expression = {
+                'Addition.' + val: value
+            }
+            AndExpression.append(expression)
+
+    lst = list(Student.find({'$and': AndExpression}))
+    lst2 = []
+    for usr in lst:
+        if usr['_id'] not in S:
+            lst2.append(usr)
+    return lst2

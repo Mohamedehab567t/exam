@@ -10,7 +10,7 @@ from .functions import SendWaitingRequest, savepic, CreateAutoExamObject, AddStu
     GetExamDetailsFromMessagesId, GetKeysFromQ_Configuration \
     , GetFilteredListOnDeleteQ, GetFilteredListOnSearchQ, \
     ReturnNewStudentNumberVersionOfSearch, GetFilteredListOnSearchS, GetFilteredListOnDeleteS, \
-    ReturnStudentOfSearchInRankedAdmin, ReturnSToAddInActiveExam
+    ReturnStudentOfSearchInRankedAdmin, ReturnSToAddInActiveExam, GetAbsentFromPublished
 
 from flask_login import login_user, current_user, logout_user, login_required
 from .User import User
@@ -139,6 +139,7 @@ def dashboard():
         students = list(Student.find({'type': 'student'}))
         Sett = SiDB.find_one({'_id': Setting_ID})
         Language = request.cookies.get('Language')
+        Q = list(QDB.find())
         return render_template("Admin.html", bootstrap=bootstrap, normalize=normalize,
                                Admin=Admin, user=user, font=font, students=students, waiting=waiting, s=S_NUM,
                                ws=WS_NUM, Language=Language, Bank=Bank, Sett=Sett)
@@ -428,6 +429,7 @@ def examDash(exam_id):
     try:
         exam = ActiveExamsDB.find_one({'_id': exam_id})
         NotHereStudent = ReturnSToAddInActiveExam(exam)
+        NotHereStudentPublished = GetAbsentFromPublished(exam_id)
         ST = exam['StudentsInformation']
     except ValueError:
         return redirect(url_for('exams'))
@@ -442,7 +444,8 @@ def examDash(exam_id):
         return redirect(url_for('login'))
     return render_template('ExamDashboard.html', bootstrap=bootstrap, normalize=normalize,
                            Admin=Admin, Language=Language, Sett=Sett, exam=exam, ST=ST, font=font,
-                           examCSS=examCSS,NotHereStudent=NotHereStudent)
+                           examCSS=examCSS, NotHereStudent=NotHereStudent,
+                           NotHereStudentPublished=NotHereStudentPublished)
 
 
 @app.route('/ExamQuestions/<int:exam_id>', methods=['GET', 'POST'])
@@ -557,7 +560,7 @@ def DeleteMSG():
 @login_required
 def GoToExam():
     E_info = request.get_json()
-    exam = ActiveExamsDB.find_one({'_id': E_info['id']})
+    exam = ActiveExamsDB.find_one({'_id': int(E_info['id'])})
     user = Student.find_one({'_id': current_user.id})
     ActiveExamsDB.update(exam,
                          {'$pull': {
@@ -565,22 +568,28 @@ def GoToExam():
                                  '_id': user['_id']
                              }
                          }})
-
-    if user not in exam['StudentsInformation']['Attended']:
+    Language = request.cookies.get('Language')
+    if user in exam['StudentsInformation']['Attended']:
+        if Language == 'English' or Language is None:
+            flash('You attended before')
+            return redirect(url_for('Messages'))
+        elif Language == 'Arabic':
+            flash('لقد حضرت من قبل')
+            return redirect(url_for('Messages'))
+    elif user not in exam['StudentsInformation']['Attended']:
         ActiveExamsDB.update({'_id': exam['_id']}, {
             '$push': {
                 'StudentsInformation.Attended': user
             }
         })
-
-    for m in user['Messages']:
-        if m['_id'] == E_info['id']:
-            Student.update(user,
-                           {'$pull': {
-                               'Messages': {
-                                   '_id': E_info['id']
-                               }
-                           }})
+        for m in user['Messages']:
+            if m['_id'] == exam['_id']:
+                Student.update(user,
+                               {'$pull': {
+                                   'Messages': {
+                                       '_id': exam['_id']
+                                   }
+                               }})
 
     return 'OKAY'
 
@@ -597,16 +606,8 @@ def StudentExam(exam_id):
     examCSS = url_for('static', filename='css/ExamPR.css')
     user = Student.find_one({'_id': current_user.id})
     Sett = SiDB.find_one({'_id': Setting_ID})
-    Language = request.cookies.get('Language')
     if current_user.is_anonymous:
         return redirect(url_for('login'))
-    if user in exam['StudentsInformation']['Attended']:
-        if Language == 'English' or Language is None:
-            flash('You attended before')
-            return redirect(url_for('Messages'))
-        elif Language == 'Arabic':
-            flash('لقد حضرت من قبل')
-            return redirect(url_for('Messages'))
     return render_template('StudentExam.html', bootstrap=bootstrap, normalize=normalize,
                            Admin=Admin, Sett=Sett, exam=exam, QU=Questions, font=font, examCSS=examCSS)
 
@@ -652,6 +653,11 @@ def SendingResult(exam_id):
             }
         })
         DoRank(user, exam, Submit)
+    ActiveExamsDB.update_one({'_id': exam_id}, {
+        '$set': {
+            'r': 'true'
+        }
+    })
 
     Language = request.cookies.get('Language')
     if Language == 'English' or Language is None:
@@ -743,9 +749,18 @@ def UpQOfManToMongo():
     exam = ActiveExamsDB.find_one({'_id': E_info['id']})
 
     for Question in E_Q:
-        Score = list(Question['score'])
-        for score in Score:
-            FullMark += int(score)
+        if Question['kind'] == 'Q':
+            Score = list(Question['score'])
+            for score in Score:
+                FullMark += int(score)
+        elif Question['kind'] == 'P':
+            qs = Question['P-Questions']
+            Score = []
+            for s in qs:
+                Score.append(s['score'])
+            for score in Score:
+                for s in score:
+                    FullMark += int(s)
 
     ActiveExamsDB.update_one(exam, {
         '$set': {
@@ -897,28 +912,28 @@ def ShowStudentAnswer():
         QU.append(Q)
     return render_template('StudentAnswers.html', font=font, bootstrap=bootstrap
                            , normalize=normalize, Admin=Admin
-                           , examCSS=examCSS, Sett=Sett,val=val,QU=QU)
+                           , examCSS=examCSS, Sett=Sett, val=val, QU=QU)
 
 
 @app.route('/showDirectAccess/<int:id>', methods=['POST', 'GET'])
 @login_required
 def showDirectAccess(id):
-    ActiveExamsDB.update_one({'_id' : id},{
-        '$set' : {
+    ActiveExamsDB.update_one({'_id': id}, {
+        '$set': {
             'showDirectAccess': 'show'
         }
     })
     flash('تم الاظهار')
-    return redirect(url_for('examDash' , exam_id = id))
+    return redirect(url_for('examDash', exam_id=id))
 
 
-@app.route('/AddStudentToActiveExam', methods=['POST', 'GET'])
+@app.route('/AddStudentToExam', methods=['POST', 'GET'])
 @login_required
-def AddStudentToActiveExam():
+def AddStudentToExam():
     INFO = request.get_json()
     exam = ActiveExamsDB.find_one({'_id': INFO['Eid']})
     student = Student.find_one({'_id': INFO['Sid']})
-    if INFO['status'] == 'Active' :
+    if INFO['status'] == 'Active':
         ActiveExamsDB.update_one(exam, {
             '$push': {
                 'StudentsInformation.Absent': student
@@ -935,5 +950,29 @@ def AddStudentToActiveExam():
                 'Messages': {'_id': exam['_id']}
             }
         })
-    Absent = exam['StudentsInformation']['Absent']
-    return render_template('ReturnAbsentStudentAfterAddedActice.html', Absent=Absent)
+    return 'Done'
+
+
+@app.route('/AddingP', methods=['POST', 'GET'])
+@login_required
+def AddingP():
+    font = url_for('static', filename='css/font-awesome.min.css')
+    bootstrap = url_for('static', filename='css/bootstrap.css')
+    normalize = url_for('static', filename='css/normalize.css')
+    Admin = url_for('static', filename='css/Admin.css')
+    settings = url_for('static', filename='css/settings.css')
+    if current_user.is_anonymous:
+        return redirect(url_for('login'))
+    user = Student.find_one({'_id': current_user.id})
+    Sett = SiDB.find_one({'_id': Setting_ID})
+    Language = request.cookies.get('Language')
+    return render_template('AddP.html', bootstrap=bootstrap, normalize=normalize,
+                           Admin=Admin, user=user, font=font, Language=Language, settings=settings, Sett=Sett)
+
+
+@app.route('/AddPtoDataBase', methods=['POST', 'GET'])
+@login_required
+def AddPtoDataBase():
+    sid = request.get_json()
+    QDB.insert_one(sid)
+    return "Your Passage added"
