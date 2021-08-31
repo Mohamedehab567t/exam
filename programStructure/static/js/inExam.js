@@ -52,16 +52,41 @@ var score = 0
 var Children = Array.from($('#ExamCon *'))
 var i = 0
 Children.forEach(e =>{
-if($(e).hasClass('C') || $(e).hasClass('M')){
-if($(e).attr('data-selected') == 'true' ){
-var eScore = parseInt($(e).data('score'))
+if($(e).hasClass('QUES')){
+var Choices = Array.from($(e).find('.choice'))
+Choices.forEach(el => {
+if($(el).hasClass('C') || $(el).hasClass('M')){
+if($(el).attr('data-selected') == 'true' ){
+var eScore = parseInt($(el).data('score'))
 score += eScore
-QuestionScore[$(QIDS[i]).data('sid')] = eScore
+QuestionScore[$(QIDS[i]).data('sid')] = {'mark' : eScore , 'selected' : $(el).text().trim()}
 i++;
 }
 }
 })
+}else if ($(e).hasClass('Passage')){
+var ques = Array.from($(e).find('.Pid'))
+var PQ = {}
+var o = 0
+var ChoicesOfQP = Array.from($(e).find('.choice'))
+console.log(ChoicesOfQP)
+ChoicesOfQP.forEach(er => {
+if($(er).hasClass('C')){
+if($(er).attr('data-selected') == 'true' ){
+var eScore = parseInt($(er).data('score'))
+score += eScore
+PQ[$(ques[o]).data('sid')] = {'mark' : eScore , 'selected' : $(er).text().trim()}
+o++;
+}
+}
+})
 
+QuestionScore[$(QIDS[i]).data('sid')] = PQ
+i++;
+}
+
+})
+console.log(QuestionScore)
     var exam = $('#EXID').data('sid')
     $.ajax({
     type: 'POST',
@@ -87,4 +112,9 @@ if(pageAccessedByReload){
 $('#timer').text(sessionStorage.getItem("Timer"))
 }
 
+var Spans = Array.from($('.htmlOfP'))
+Spans.forEach(e => {
+var getEditor = $(e).siblings('.editor-text')
+$(getEditor).html($(e).text())
+})
 })

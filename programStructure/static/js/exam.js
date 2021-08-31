@@ -3,18 +3,23 @@ $('.Loading').attr('style' , 'display : none !important;')
 
 $('.ShowAnswer').on('click' , function(){
 var OBJ = $(this).closest('td')
+var BTN = $(this)
 var answers = ReturnJson(OBJ)
-console.log(answers)
     $.ajax({
     type: 'POST',
     url: '/ShowStudentAnswer',
     data: JSON.stringify(answers),
     contentType: 'application/json;charset=UTF-8',
+    beforeSend : function(){
+    $(BTN).html('<i class="fa fa-spinner fa-spin" style="color:white" ></i>')
+    },
+    complete: function(){
+    $(BTN).html('<i class="fa fa-eye" style="color:white"></i>')
+    },
     success : function(data){
     window.open('/ShowStudentAnswer','_blank')
     }
     });
-
 })
 
 $('#Active').on('click' , function(){
@@ -89,7 +94,7 @@ $('.AddStudent').on('click' , function(){
     var btn = $(this)
     $.ajax({
     type: 'POST',
-    url: '/AddStudentToActiveExam',
+    url: '/AddStudentToExam',
     contentType: 'application/json;charset=UTF-8',
     data : JSON.stringify({'Sid' : SID , 'Eid' : EID , 'status' : Status}),
     beforeSend : function(){

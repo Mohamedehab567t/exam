@@ -3,23 +3,22 @@ history.pushState(null,  document.title, location.href);
 $('.formToJoin').on('submit' , function(e){
 
 
-var examTwo = $(this).find('#EXAM').text().replace(/'/g,'"')
-var exam = JSON.parse(examTwo)
-var StartOfExamHours = exam['ExamInformation']['From'].split('T')
-var EndOfExamHours = exam['ExamInformation']['To'].split('T')
+var examTwo = $(this).find('#EXAM').text().trim().split('&')
+var StartOfExamHours = examTwo[0].split(',')
+var EndOfExamHours = examTwo[1].split(',')
+var ExamID = examTwo[2]
 var o = CheckTime(StartOfExamHours,EndOfExamHours)
-
 if(o['join']){
    var bu = $(this).find('#join')
    $.ajax({
    type: 'POST',
    url: '/GoToExam',
-   data: JSON.stringify({'id' : exam['_id']}),
+   data: JSON.stringify({'id' : ExamID}),
    contentType: 'application/json;charset=UTF-8',
    beforeSend : function(){
    $(bu).text('Joining . . .')
    },success : function(){
-   window.location = '/StudentExam/'+exam['_id']
+   window.location = '/StudentExam/'+ExamID
    }
    });
 }else{
@@ -42,12 +41,12 @@ e.preventDefault()
 $('.deleteMSG').on('click' , function(){
     var bu = $(this)
     var Parent = $(bu).parent()
-    var examTwo = $(Parent).find('#EXAM').text().replace(/'/g,'"')
-    var exam = JSON.parse(examTwo)
+var examTwo = $(this).find('#EXAM').text().trim().split('&')
+var ExamID = examTwo[2]
     $.ajax({
     type: 'POST',
     url: '/DeleteMSG',
-    data: JSON.stringify({'id' : exam['_id']}),
+    data: JSON.stringify({'id' : ExamID}),
     contentType: 'application/json;charset=UTF-8',
     beforeSend : function(){
     $(bu).text('Deleting . . .')
@@ -60,17 +59,17 @@ $('.deleteMSG').on('click' , function(){
 })
 
 $('#DirectJoin').on('click' , function(){
-var examTwo = $('body').find('#EXAM').text().replace(/'/g,'"')
-var exam = JSON.parse(examTwo)
+var examTwo = $(this).find('#EXAM').text().trim().split('&')
+var ExamID = examTwo[2]
 $.ajax({
 type: 'POST',
 url: '/GoToExam',
-data: JSON.stringify({'id' : exam['_id']}),
+data: JSON.stringify({'id' : ExamID}),
 contentType: 'application/json;charset=UTF-8',
 beforeSend : function(){
 $('#DirectJoin').text('Joining . . .')
 },success : function(){
-window.location = '/StudentExam/'+exam['_id']
+window.location = '/StudentExam/'+ExamID
 }
 });
 })
@@ -80,8 +79,12 @@ function CheckTime(from,to){
 var DateFrom = from[0]
 var TimeFrom = from[1]
 
+
 var DateTo = to[0]
 var TimeTo = to[1]
+
+console.log(DateTo)
+console.log(TimeTo)
 
 var partsFrom = DateFrom.split('-')
 var partsFromTime = TimeFrom.split(':')

@@ -145,4 +145,11 @@ AndExpression[key] = $(e).val()
 return AndExpression
 }
 
+
+var Spans = Array.from($('.htmlOfP'))
+Spans.forEach(e => {
+var getEditor = $(e).siblings('.editor-text')
+$(getEditor).html($(e).text())
+})
+
 })

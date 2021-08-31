@@ -40,5 +40,9 @@ $(e).css('background-color' , 'aliceblue')
 }
 })
 }
-
+var Spans = Array.from($('.htmlOfP'))
+Spans.forEach(e => {
+var getEditor = $(e).siblings('.editor-text')
+$(getEditor).html($(e).text())
+})
 })

@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    var Passage = {}
+    var PassageQ = []
 // AddQ
     var count = -1
     $('#Q-type').on('change' , function(){
@@ -77,7 +79,7 @@ $(document).ready(function(){
         var q_right = document.createElement('button')
         $(q_right).addClass('btn btn-success MakeItRight')
         $(q_right).attr('type' , 'button')
-        
+
         var IsHere = checkCookie('Language')
         if(IsHere){
         var Cookie = getCookie('Language')
@@ -90,7 +92,7 @@ $(document).ready(function(){
        $(q_right).text('Right')
         }
 
-        
+
         $(q_right).css({"margin-left" : "5px" ,
         "font-size" : "11px"})
 
@@ -128,7 +130,7 @@ $(document).ready(function(){
 
 
 
-    $('.AddQForm').on('submit' , function(e){
+    $('#AddQOfPToDataBase').on('click' , function(e){
     var si_addition = Array.from($('.si-addition'))
     var bool = CheckIfEmpty(si_addition)
     if(bool == false ){
@@ -144,7 +146,42 @@ $(document).ready(function(){
     e.preventDefault()
     })
 
+$('#AddPToDataBase').on('click' , function(){
+Passage['_id'] = Math.floor(Math.random() * 1000000000)
+Passage['P-title'] = $('#PTitle').val()
+Passage['P-content'] = $('#editor-text').html()
+var divChild = Array.from($('.P-Configuration *'))
 
+divChild.forEach(e =>{
+if($(e).is('input') || $(e).is('select') ){
+var eID = $(e).attr('id')
+var eVal = $(e).val()
+Passage[eID] = eVal
+}
+})
+Passage['P-Questions'] = PassageQ
+       if(PassageQ.length > 0){
+        $.ajax({
+        type: 'POST',
+        url: '/AddPtoDataBase',
+        data: JSON.stringify(Passage),
+        contentType: 'application/json;charset=UTF-8',
+        beforeSend : function(){
+        $('#AddPToDataBase').text('Loading . . .')
+        },
+        complete: function(){
+        $('#AddPToDataBase').text('اضافة قطعة')
+        },
+        success : function(data){
+        alert(data)
+        $('#exampleFormControlTextarea1').val('')
+        $('body').find('.ConForSingleChoice').remove()
+        }
+        });
+            }else{
+            alert('اضف علي الاقل سؤال واحد')
+            }
+})
     function MakeItRight(e , className , count){
 
     var classArray = Array.from($('.'+className))
@@ -243,28 +280,15 @@ function AddTextedQuestion(){
     })
         Q['Choices'] = ChoicesArray
         Q['score'] = score
-        Q['kind'] = 'Q'
+        Passage['kind'] = 'P'
         if(confirm("Do you want to add this question ?")){
         var ValOBJ = QValidation(ChoicesArray , score)
         if (!ValOBJ['go']){
         alert(ValOBJ['message'])
         }else{
-            $.ajax({
-            type: 'POST',
-            url: '/AddQtoDataBase',
-            data: JSON.stringify(Q),
-            contentType: 'application/json;charset=UTF-8',
-            beforeSend : function(){
-            $('#AddQToDataBase').text('Loading . . .')
-            },
-            complete: function(){
-            $('#AddQToDataBase').text('اضافة السؤال')
-            },
-            success : function(data){
-            $('#Q-title').val('')
-            $('body').find('.ConForSingleChoice').remove()
-            }
-            });
+        PassageQ.push(Q)
+        $('#Q-title').val('')
+        $('body').find('.ConForSingleChoice').remove()
 }
  }
         else{
@@ -272,114 +296,6 @@ function AddTextedQuestion(){
         }
 }
 
-
-
-
-function AddImagedQuestion(){
-    var Q = {}
-    Q['_id'] = Math.floor(Math.random() * 1000000)
-    var ChoicesArray = []
-    var score = []
-    var Choice = []
-    var divChild = Array.from($('.Q-Configuration *'))
-    var ChoicesDiv = Array.from($('.ConForSingleChoice'))
-    var form_data = new FormData()
-    divChild.forEach(e =>{
-    if($(e).is('input') || $(e).is('select') ){
-    var eID = $(e).attr('id')
-    var eVal = $(e).val()
-    Q[eID] = eVal
-
-    }
-    })
-
-
-    ChoicesDiv.forEach(e => {
-    var Choice = []
-    var input = Array.from($(e).children())
-    input.forEach(e => {
-    if($(e).is('input')){
-    if($(e).val() != ""){
-        if($(e).attr('type') == 'file'){
-        var file = $(e).prop('files')[0]
-        var Name = file.name
-        var FileObject = {
-        'value' : Name,
-        'type' : 'image' ,
-        'Extension' : Name.substr(Name.lastIndexOf('.'))
-        }
-        Choice.push(FileObject)
-        }else {
-        var TextObject = {
-        'value' : $(e).val(),
-        'type' : 'text'
-        }
-        Choice.push(TextObject)
-        }
-
-    }
-    }
-    })
-       ChoicesArray.push(Choice)
-       if($(e).data('score')){
-       score.push(1)
-       }else{
-       score.push(0)
-       }
-    })
-
-    var FilesInput = Array.from($('.AddQForm input'))
-
-    FilesInput.forEach(e => {
-            if($(e).hasClass('ImagePurpose')){
-            var file_data = $(e).prop('files')[0];
-             form_data.append($(e).attr('name'), file_data)
-        }
-    })
-
-        Q['Choices'] = ChoicesArray
-        Q['score'] = score
-        Q['kind'] = 'Q'
-        if(confirm("Do you want to add this question ?"))
-        {
-        var ValOBJ = QValidation(ChoicesArray , score)
-        if (!ValOBJ['go']){
-        alert(ValOBJ['message'])
-        }else{
-            $.ajax({
-            type: 'POST',
-            url: '/AddImagedQtoDataBase',
-            data: JSON.stringify(Q),
-            contentType: 'application/json;charset=UTF-8',
-            success : function(){
-            $.ajax({
-            type: 'POST',
-            url: '/AddTheImage',
-            data: form_data,
-            contentType: false,
-            processData : false,
-            beforeSend : function(){
-            $('#AddQToDataBase').text('Loading . . .')
-            },
-            complete: function(){
-            $('#AddQToDataBase').text('Done')
-            },
-            success : function(data){
-            window.location.reload()
-            },
-            error : function(date){
-            alert(data)
-            }
-            });
-            }
-            });
-
-        }
-        }
-        else{
-        console.log('you Canceled')
-        }
-}
     function getCookie(cname) {
   let name = cname + "=";
   let decodedCookie = decodeURIComponent(document.cookie);
