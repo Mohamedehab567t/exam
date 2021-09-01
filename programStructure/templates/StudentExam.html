@@ -84,12 +84,12 @@
                 {% if choice|length == 1 %}
 
                 {% if c['type'] == 'text' %}
-                <div class="ChoiceText Qkind M" data-score="{{ q['score'][xLoop.index - 1] }}">
+                <div class="ChoiceText choice Qkind M" data-score="{{ q['score'][xLoop.index - 1] }}">
                     <span> {{c['value']}} </span>
                 </div>
                 {% elif c['type'] == 'image' %}
 
-                <div class="ChoiceImage Qkind M" data-score="{{ q['score'][xLoop.index - 1] }}">
+                <div class="ChoiceImage choice Qkind M" data-score="{{ q['score'][xLoop.index - 1] }}">
                     <img src="{{url_for('static' , filename='images/')}}{{c['value']}}{{q['_id']}}{{c['Extension']}}"  alt="">
                 </div>
                 <div class="SHOWCHOICEPHOTO" id="{{c['value']}}">
@@ -103,7 +103,7 @@
                 {% else %}
 
                 {% if c['type'] == 'image' %}
-                <div class="ChoiceBoth Qkind M" data-score="{{ q['score'][xLoop.index - 1] }}">
+                <div class="ChoiceBoth choice Qkind M" data-score="{{ q['score'][xLoop.index - 1] }}">
                     <img src="{{url_for('static' , filename='images/')}}{{c['value']}}{{q['_id']}}{{c['Extension']}}" alt="">
                 </div>
                 <div class="SHOWCHOICEPHOTO" id="{{c['value']}}">
@@ -126,6 +126,7 @@
     {% elif q['kind'] == 'P' %}
         <h5 data-sid="{{q['_id']}}" style="text-align: center;" class="mb-1 mt-1 Qid">سؤال {{ loop.index }}</h5>
     <div class="TextQ Passage mt-3" style="padding: 5px; border: .5px solid grey;">
+            <h4 style="text-align:center" class="mt-2 mb-2">{{q['P-title']}}</h4>
         {% for qq in q['P-Questions']  %}
      <h5 data-sid="{{ qq['_id'] }}" style="text-align: center;" class="mb-1 mt-1 Pid">سؤل القطعة رقم {{ loop.index }}</h5>
          <div class="have" style="direction:rtl">

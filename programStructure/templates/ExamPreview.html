@@ -237,6 +237,7 @@
         <hr>
     {% elif q['kind'] == 'P' %}
         <div class="TextQ mt-3" style="padding: 5px; border: .5px solid grey;">
+            <h4 style="text-align:center" class="mt-2 mb-2">{{q['P-title']}}</h4>
         {% for qq in q['P-Questions']  %}
          <div class="have" style="direction:rtl">
              <span class="htmlOfP" style="display:none">{{ q['P-content'] }}</span>

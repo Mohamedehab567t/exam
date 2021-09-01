@@ -23,7 +23,7 @@
         {% if q['kind'] == 'Q' %}
         {% if q['Q-type'] == "text"  %}
         <div class="TextQ QUES mt-3" style="padding: 5px; border: .5px solid grey;">
-        <h5 data-sid="{{ q['_id'] }}"  class="mb-1 Qid">Question {{ loop.index }}</h5>
+        <h5 data-sid="{{ q['_id'] }}"  class="mb-1 Qid">سؤال {{ loop.index }}</h5>
             <p class="title">
             {{q['Q-title']}}
             </p>
@@ -47,7 +47,7 @@
         {% elif q['Q-type'] == "images" %}
 
         <div class="ImageQ QUES mt-3" style="padding: 5px; border: .5px solid grey;">
-
+        <h5 style="text-align:center" data-sid="{{ q['_id'] }}"  class="mb-1 Qid">سؤال {{ loop.index }}</h5>
             <p class="title">
                 {{q['Q-title']}}
             </p>
@@ -102,6 +102,12 @@
                 {% endfor %}
                 {% endfor %}
                 </div>
+                        <div class="QA mt-2 mb-2" style="text-align:center">
+                <span style="
+                        border: .5px solid gainsboro;
+                        padding: 5px;
+                        background-color: cornsilk;"></span>
+            </div>
         </div>
 
 
@@ -110,6 +116,7 @@
     {% elif q['kind'] == 'P' %}
                 <h5 style="text-align: center;" class="mb-1 mt-1 PID" data-sid="{{q['_id']}}">سؤال {{ loop.index }}</h5>
             <div class="TextQ Passage mt-3" style="padding: 5px; border: .5px solid grey;">
+                            <h4 style="text-align:center" class="mt-2 mb-2">{{q['P-title']}}</h4>
         {% for qq in q['P-Questions']  %}
      <h5 style="text-align: center;" class="mb-1 mt-1 Qid">سؤل القطعة رقم {{ loop.index }}</h5>
          <div class="have" style="direction:rtl">
