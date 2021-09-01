@@ -53,13 +53,20 @@ var Children = Array.from($('#ExamCon *'))
 var i = 0
 Children.forEach(e =>{
 if($(e).hasClass('QUES')){
+console.log($(e).find('.choice'))
 var Choices = Array.from($(e).find('.choice'))
 Choices.forEach(el => {
 if($(el).hasClass('C') || $(el).hasClass('M')){
 if($(el).attr('data-selected') == 'true' ){
 var eScore = parseInt($(el).data('score'))
 score += eScore
+var FirstChild = $(el).children()[0]
+if($(FirstChild).is('img')){
+QuestionScore[$(QIDS[i]).data('sid')] = {'mark' : eScore , 'selected' : 'اختيار رقم '+(Choices.indexOf(el)+1)}
+}else{
 QuestionScore[$(QIDS[i]).data('sid')] = {'mark' : eScore , 'selected' : $(el).text().trim()}
+}
+
 i++;
 }
 }
@@ -69,7 +76,6 @@ var ques = Array.from($(e).find('.Pid'))
 var PQ = {}
 var o = 0
 var ChoicesOfQP = Array.from($(e).find('.choice'))
-console.log(ChoicesOfQP)
 ChoicesOfQP.forEach(er => {
 if($(er).hasClass('C')){
 if($(er).attr('data-selected') == 'true' ){

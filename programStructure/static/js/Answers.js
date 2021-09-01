@@ -1,4 +1,7 @@
 $('.QA span').hide()
+$('.SHOWPHOTO').hide()
+$('.SHOWCHOICEPHOTO').hide()
+$('.SHOWCHOICEPHOTOBOTH').hide()
 $(document).ready(function(){
 var QuestionsText = Array.from($('.TextQ'))
 var QuestionsImage = Array.from($('.ImageQ'))
@@ -38,6 +41,20 @@ $(qa).show()
 }
 })
 
+QuestionsImage.forEach(e => {
+if($(e).hasClass('QUES')){
+var ChoiceDiv = $(e).find('.choices')
+var Score = Answers[$(e).find('.Qid').data('sid')]['mark']
+if(Score > 0) {
+$(e).find('.Qid').attr('style' , 'color : white; text-align:center; background-color:green')
+}else{
+$(e).find('.Qid').attr('style' , 'color : white; text-align:center; background-color:red')
+}
+var qa = $(e).find('.QA span')
+$(qa).text('الطالب اختار : '+ Answers[$(e).find('.Qid').data('sid')]['selected'])
+$(qa).show()
+}
+})
 
 var Spans = Array.from($('.htmlOfP'))
 Spans.forEach(e => {
