@@ -24,8 +24,12 @@ def load_user(id):
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('redirectto'))
+    try:
+        if current_user.is_authenticated:
+            return redirect(url_for('redirectto'))
+    except TypeError:
+        session.clear()
+        return redirect(url_for('login'))
     font = url_for('static', filename='css/font-awesome.min.css')
     bootstrap = url_for('static', filename='css/bootstrap.css')
     normalize = url_for('static', filename='css/normalize.css')
@@ -907,9 +911,12 @@ def ShowStudentAnswer():
     Admin = url_for('static', filename='css/Admin.css')
     examCSS = url_for('static', filename='css/ExamPR.css')
     Sett = SiDB.find_one({'_id': Setting_ID})
-    for key in val:
-        Q = QDB.find_one({'_id': int(key)})
-        QU.append(Q)
+    try :
+        for key in val:
+            Q = QDB.find_one({'_id': int(key)})
+            QU.append(Q)
+    except KeyError and TypeError:
+        redirect(url_for('ShowStudentAnswer'))
     return render_template('StudentAnswers.html', font=font, bootstrap=bootstrap
                            , normalize=normalize, Admin=Admin
                            , examCSS=examCSS, Sett=Sett, val=val, QU=QU)
