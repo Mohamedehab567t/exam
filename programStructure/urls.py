@@ -915,7 +915,7 @@ def ShowStudentAnswer():
         for key in val:
             Q = QDB.find_one({'_id': int(key)})
             QU.append(Q)
-    except KeyError and TypeError:
+    except NameError:
         redirect(url_for('ShowStudentAnswer'))
     return render_template('StudentAnswers.html', font=font, bootstrap=bootstrap
                            , normalize=normalize, Admin=Admin
